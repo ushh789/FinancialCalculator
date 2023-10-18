@@ -8,4 +8,7 @@ public abstract class Deposit {
     protected char currency;
     protected LocalDate startDate;
     protected LocalDate endDate;
+
+    protected abstract float countProfit();
+
 }
