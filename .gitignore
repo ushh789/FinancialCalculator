@@ -83,6 +83,7 @@ workspace.xml
 /**/workspace.xml
 /**/*.iml
 /**/*.ucls
+/.gradle
 
 /**/frontend/static/
 /**/frontend/*.png
