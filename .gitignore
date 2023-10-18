@@ -52,7 +52,7 @@ replay_pid*
 /.project
 /.checkstyle
 /reports/
-/.idea/
+.idea/
 /out/
 /shelf/
 /resources/static/
@@ -138,4 +138,3 @@ workspace.xml
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
-
