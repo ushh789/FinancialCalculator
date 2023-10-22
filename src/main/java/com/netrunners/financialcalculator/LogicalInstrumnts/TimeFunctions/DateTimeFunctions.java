@@ -38,8 +38,11 @@ public class DateTimeFunctions {
         int nextQuarter = currentQuarter % 4 + 1;
         int yearToAdd = (nextQuarter == 1) ? 1 : 0;
         int monthToAdd = (nextQuarter - 1) * 3;
-
         return LocalDate.of(currentDate.getYear() + yearToAdd, monthToAdd + 1, 1);
+    }
+
+    public static LocalDate getFirstDayOfNextYear(LocalDate currentDate){
+        return LocalDate.of(currentDate.getYear() + 1, 1, 1);
     }
 
     public static int countDaysBetweenDates(LocalDate startDate, LocalDate endDate) {
