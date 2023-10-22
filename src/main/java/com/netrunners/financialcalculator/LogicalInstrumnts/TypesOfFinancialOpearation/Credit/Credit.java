@@ -9,5 +9,6 @@ public abstract class Credit {
     protected LocalDate startDate;
     protected LocalDate endDate;
 
+    protected abstract float countLoan();
 
 }
