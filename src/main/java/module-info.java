@@ -6,6 +6,8 @@ module com.netrunners.financialcalculator {
     requires org.controlsfx.controls;
     requires com.dlsc.formsfx;
     requires org.kordamp.ikonli.javafx;
+    requires java.datatransfer;
+    requires java.desktop;
 
 
     opens com.netrunners.financialcalculator to javafx.fxml;
