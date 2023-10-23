@@ -22,7 +22,6 @@ public class StartMenuController {
     void initialize() {
         DepositButton.setOnAction(event -> {
             try {
-                // Завантажуємо FXML файл для нового вікна
                 FXMLLoader fxmlLoader = new FXMLLoader(StartMenu.class.getResource("DepositMenu.fxml"));
                 Stage stage = new Stage();
                 stage.setTitle("Deposit Menu");
@@ -32,8 +31,6 @@ public class StartMenuController {
                 stage.setMaxWidth(620);
                 stage.setMinHeight(820);
                 stage.setMinWidth(620);
-
-
                 stage.show();
             } catch (IOException e) {
                 e.printStackTrace();
