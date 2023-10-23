@@ -8,6 +8,9 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.Button;
+
+import static com.netrunners.financialcalculator.controllers.closeWindow.closeCurrentWindow;
 
 public class CreditMenuController {
 
@@ -30,10 +33,19 @@ public class CreditMenuController {
     private MenuItem PaymentOption4;
 
     @FXML
+    private Button creditSaveResult;
+
+    @FXML
+    private Button creditViewResult;
+
+    @FXML
     private TextField annualPercentInput;
 
     @FXML
     private CheckBox checkPaymentHolidays;
+
+    @FXML
+    private Button closeWindow;
 
     @FXML
     private DatePicker contractBeginning;
@@ -86,6 +98,9 @@ public class CreditMenuController {
             paymentOption.setText(PaymentOption4.getText());
         });
 
+        closeWindow.setOnAction(event -> {
+            closeCurrentWindow(closeWindow.getScene());
+        });
     }
 
 }
