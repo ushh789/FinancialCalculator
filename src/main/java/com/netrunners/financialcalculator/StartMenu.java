@@ -7,7 +7,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-import java.util.Objects;
 
 
 public class StartMenu extends Application {

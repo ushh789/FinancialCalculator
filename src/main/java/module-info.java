@@ -10,4 +10,6 @@ module com.netrunners.financialcalculator {
 
     opens com.netrunners.financialcalculator to javafx.fxml;
     exports com.netrunners.financialcalculator;
+    opens com.netrunners.financialcalculator.controllers;
+
 }
