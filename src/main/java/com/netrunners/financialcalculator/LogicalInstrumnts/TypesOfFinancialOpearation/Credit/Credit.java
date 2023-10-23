@@ -2,13 +2,20 @@ package com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpe
 
 import java.time.LocalDate;
 
-public abstract class Credit {
+public class Credit {
     protected float loan;
     protected float annualPercent;
-    protected char currency;
     protected LocalDate startDate;
     protected LocalDate endDate;
+    public Credit(float loan, float annualPercent, LocalDate startDate, LocalDate endDate){
+        this.loan = loan;
+        this.annualPercent = annualPercent;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
 
-    protected abstract float countLoan();
+    protected float countLoan(){
+        return 0;
+    }
 
 }
