@@ -12,19 +12,17 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.control.Alert.AlertType;
 
-
-import java.awt.*;
-import java.io.BufferedReader;
-import java.io.File;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
+import java.lang.reflect.Type;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 import java.util.List;
-import java.util.Optional;
 
 import static com.netrunners.financialcalculator.StartMenu.startMenuScene;
 import static com.netrunners.financialcalculator.controllers.closeWindow.closeCurrentWindow;
-
 
 public class StartMenuController {
 
@@ -41,7 +39,7 @@ public class StartMenuController {
     private MenuItem creditButtonMenu;
 
     @FXML
-    private MenuBar menuBar;
+    private MenuItem languageButton;
 
     @FXML
     private MenuItem darkTheme;
@@ -60,6 +58,33 @@ public class StartMenuController {
 
     @FXML
     private MenuItem openFileButton;
+
+    @FXML
+    private MenuItem saveAsButton;
+
+    @FXML
+    private MenuItem saveButton;
+
+    @FXML
+    private Menu themeButton;
+
+    @FXML
+    private Menu viewButton;
+
+    @FXML
+    private Menu newButton;
+
+    @FXML
+    private Menu fileButton;
+
+    @FXML
+    private Menu settingsButton;
+
+    @FXML
+    private Menu aboutButton;
+
+    @FXML
+    private Label financialCalculatorLabel;
 
     @FXML
     void initialize() {
@@ -85,7 +110,7 @@ public class StartMenuController {
             }
         });
 
-        CreditButton.setOnAction(event ->{
+        CreditButton.setOnAction(event -> {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(StartMenu.class.getResource("CreditMenu.fxml"));
                 Stage stage = new Stage();
@@ -106,7 +131,7 @@ public class StartMenuController {
             }
         });
 
-        depositButtonMenu.setOnAction(event ->{
+        depositButtonMenu.setOnAction(event -> {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(StartMenu.class.getResource("DepositMenu.fxml"));
                 Stage stage = new Stage();
@@ -126,7 +151,7 @@ public class StartMenuController {
                 e.printStackTrace();
             }
         });
-        creditButtonMenu.setOnAction(event ->{
+        creditButtonMenu.setOnAction(event -> {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(StartMenu.class.getResource("CreditMenu.fxml"));
                 Stage stage = new Stage();
@@ -196,7 +221,7 @@ public class StartMenuController {
                     "Financial Calculator by Netrunners" empowers individuals, students, professionals, and business owners to make informed decisions about their financial affairs. Whether you're planning to save money or seeking insights into loan repayments, this versatile tool offers a comprehensive set of features to help you on your financial journey. Start making smarter financial decisions today with this powerful yet user-friendly financial calculator.""");
             alert.showAndWait();
         });
-        exitApp.setOnAction(event ->{
+        exitApp.setOnAction(event -> {
             for (Scene scene : StartMenu.openScenes) {
                 closeCurrentWindow(scene);
             }
@@ -228,7 +253,7 @@ public class StartMenuController {
                 }
             }
         });
-        openFileButton.setOnAction(event ->{
+        openFileButton.setOnAction(event -> {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Open Resource File");
             fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json"));
@@ -245,7 +270,119 @@ public class StartMenuController {
                 }
             }
         });
+        saveAsButton.setOnAction(event -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Save As");
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("Text Files", "*.txt"),
+                    new FileChooser.ExtensionFilter("JSON Files", "*.json"),
+                    new FileChooser.ExtensionFilter("All Files", "*.*")
+            );
+            File file = fileChooser.showSaveDialog(null);
+
+            if (file != null) {
+                try {
+                    FileWriter fileWriter = new FileWriter(file);
+                    fileWriter.write("Your content here");
+                    fileWriter.close();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+        languageButton.setOnAction(event -> {
+            List<String> choices = new ArrayList<>();
+            choices.add("English");
+            choices.add("Українська");
+            choices.add("Español");
+            choices.add("Français");
+            choices.add("Deutsch");
+            choices.add("Czech");
+            choices.add("Polski");
+            choices.add("Nederlands");
+            choices.add("日本語");
+            choices.add("中国人");
+            ChoiceDialog<String> dialog = new ChoiceDialog<>("English", choices);
+            dialog.setTitle("Choose Language");
+            Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+            stage.getIcons().add(new Image("file:src/main/resources/com/netrunners/financialcalculator/assets/Logo.png"));
+            dialog.setHeaderText(null);
+            dialog.setContentText("Choose your language:");
+
+            Optional<String> result = dialog.showAndWait();
+            if (result.isPresent()) {
+                switch (result.get()) {
+                    case "English" -> setLanguage("en");
+                    case "Українська" -> setLanguage("uk");
+                    case "Español" -> setLanguage("es");
+                    case "Français" -> setLanguage("fr");
+                    case "Deutsch" -> setLanguage("de");
+                    case "Czech" -> setLanguage("cs");
+                    case "Polski" -> setLanguage("pl");
+                    case "Nederlands" -> setLanguage("nl");
+                    case "日本語" -> setLanguage("ja");
+                    case "中国人" -> setLanguage("zh");
+                }
+            }
+        });
+
 
     }
 
+    public void setLanguage(String language) {
+        try {
+            // Load the JSON file
+            Gson gson = new Gson();
+            Type type = new TypeToken<Map<String, List<String>>>() {
+            }.getType();
+
+            // Use InputStreamReader with UTF-8 encoding
+            try (InputStreamReader reader = new InputStreamReader(new FileInputStream("languages.json"), StandardCharsets.UTF_8)) {
+                Map<String, List<String>> json = gson.fromJson(reader, type);
+
+                // Define language index based on language code
+                Map<String, Integer> languageIndexMap = Map.of(
+                        "en", 0,
+                        "uk", 1,
+                        "es", 2,
+                        "fr", 3,
+                        "de", 4,
+                        "cs", 5,
+                        "pl", 6,
+                        "nl", 7,
+                        "ja", 8,
+                        "zh", 9
+                );
+                int index = languageIndexMap.getOrDefault(language, -1);
+
+                // Update the text of all controls using the JSON file
+                CreditButton.setText(json.get("CreditButton").get(index));
+                DepositButton.setText(json.get("DepositButton").get(index));
+                depositButtonMenu.setText(json.get("depositButtonMenu").get(index));
+                creditButtonMenu.setText(json.get("creditButtonMenu").get(index));
+                languageButton.setText(json.get("languageButton").get(index));
+                saveAsButton.setText(json.get("saveAsButton").get(index));
+                saveButton.setText(json.get("saveButton").get(index));
+                openFileButton.setText(json.get("openFileButton").get(index));
+                fileButton.setText(json.get("fileButton").get(index));
+                darkTheme.setText(json.get("darkTheme").get(index));
+                lightTheme.setText(json.get("lightTheme").get(index));
+                themeButton.setText(json.get("themeButton").get(index));
+                viewButton.setText(json.get("viewButton").get(index));
+                newButton.setText(json.get("newButton").get(index));
+                aboutUs.setText(json.get("aboutUs").get(index));
+                exitApp.setText(json.get("exitApp").get(index));
+                currency.setText(json.get("currency").get(index));
+                financialCalculatorLabel.setText(json.get("financialCalculatorLabel").get(index));
+                settingsButton.setText(json.get("settingsButton").get(index));
+                aboutButton.setText(json.get("aboutButton").get(index));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
 }
+

@@ -19,7 +19,6 @@
   "holidaysEnding": ["End of holidays", "Кінець канікул", "Fin de las vacaciones", "Fin des vacances", "Ende der Ferien", "Konec dovolené", "Koniec wakacji", "Einde van de vakantie", "休暇の終了", "假期结束"],
   "loanInput": ["Loan", "Позика", "Préstamo", "Prêt", "Darlehen", "Půjčka", "Pożyczka", "Lening", "ローン", "贷款"],
   "paymentOption": ["Payment option", "Тип оплати", "Opción de pago", "Option de paiement", "Zahlungsoption", "Platební možnost", "Opcja płatności", "Betalingsmogelijkheid", "支払いオプション", "支付选项"],
-  "menuBar": ["Menu", "Меню", "Menú", "Menu", "Menü", "Menu", "Menu", "Menu", "メニュー", "菜单"],
   "darkTheme": ["Dark theme", "Темна тема", "Tema oscuro", "Thème sombre", "Dunkles Thema", "Tmavé téma", "Ciemny motyw", "Donker thema", "ダークテーマ", "暗黑主题"],
   "lightTheme": ["Light theme", "Світла тема", "Tema claro", "Thème clair", "Helles Thema", "Světlé téma", "Jasny motyw", "Licht thema", "ライトテーマ", "明亮主题"],
   "aboutUs": ["About us", "Про нас", "Sobre nosotros", "À propos de nous", "Über uns", "O nás", "O nas", "Over ons", "私たちについて", "关于我们"],
@@ -41,6 +40,10 @@
   "viewButton": ["View", "Переглянути", "Ver", "Voir", "Ansehen", "Zobrazit", "Wyświetl", "Bekijken", "表示する", "查看"],
   "newButton": ["New", "Новий", "Nuevo", "Nouveau", "Neu", "Nový", "Nowy", "Nieuw", "新しい", "新的"],
   "fileButton": ["File", "Файл", "Archivo", "Fichier", "Datei", "Soubor", "Plik", "Bestand", "ファイル","文件"],
-  "financialCalculatorLabel": ["Financial Calculator","Фінансовий калькулятор","Calculadora financiera","Calculatrice financière","Finanzrechner","Finanční kalkulačka","Kalkulator finansowy","Financiële rekenmachine","金融計算機","金融计算器"]
-
+  "financialCalculatorLabel": ["Financial Calculator","Фінансовий калькулятор","Calculadora financiera","Calculatrice financière","Finanzrechner","Finanční kalkulačka","Kalkulator finansowy","Financiële rekenmachine","金融計算機","金融计算器"],
+  "settingsButton": ["Settings", "Налаштування", "Configuración", "Paramètres", "Einstellungen", "Nastavení", "Ustawienia", "Instellingen", "設定", "设置"],
+  "saveAsButton": ["Save As", "Зберегти як", "Guardar como", "Enregistrer sous", "Speichern unter", "Uložit jako", "Zapisz jako", "Opslaan als", "名前を付けて保存", "另存为"],
+  "themeButton": ["Theme", "Тема", "Tema", "Thème", "Thema", "Téma", "Motyw", "Thema", "テーマ", "主题"],
+  "aboutButton": ["About us", "Про нас", "Sobre nosotros", "À propos de nous", "Über uns", "O nás", "O nas","Over ons","私たちについて","关于我们"],
+  "languageButton": ["Change Language", "Змінити мову", "Cambiar idioma", "Changer de langue", "Sprache ändern", "Změnit jazyk", "Zmień język", "Taal wijzigen", "言語を変更する", "更改语言"]
 }

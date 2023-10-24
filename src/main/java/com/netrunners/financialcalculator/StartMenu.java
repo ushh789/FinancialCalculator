@@ -42,6 +42,7 @@ public class StartMenu extends Application {
         primaryStage.maxWidthProperty().setValue(600);
         primaryStage.minHeightProperty().setValue(620);
         primaryStage.minWidthProperty().setValue(620);
+        primaryStage.getScene().getStylesheets().add(currentTheme);
         startMenuScene = primaryStage.getScene();
         StartMenu.openScenes.add(startMenuScene);
         primaryStage.show();
@@ -56,6 +57,7 @@ public class StartMenu extends Application {
     }
 
     public static void main(String[] args) {
+        System.setProperty("file.encoding", "UTF-8");
         launch(args);
     }
 }
