@@ -8,9 +8,13 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.awt.*;
-
+import java.util.ArrayList;
+import java.util.List;
 
 public class StartMenu extends Application {
+    public static Scene startMenuScene;
+    public static List<Scene> openScenes = new ArrayList<>();
+    public static String currentTheme = "file:src/main/resources/com/netrunners/financialcalculator/assets/lightTheme.css";
     @Override
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader fxmlLoader =new FXMLLoader(StartMenu.class.getResource("StartMenu.fxml"));
@@ -30,6 +34,8 @@ public class StartMenu extends Application {
         primaryStage.maxWidthProperty().setValue(600);
         primaryStage.minHeightProperty().setValue(620);
         primaryStage.minWidthProperty().setValue(620);
+        startMenuScene = primaryStage.getScene();
+        StartMenu.openScenes.add(startMenuScene);
         primaryStage.show();
 
     }

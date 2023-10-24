@@ -24,24 +24,24 @@
                         <MenuItem mnemonicParsing="false" text="Open" />
                         <MenuItem mnemonicParsing="false" text="Save" />
                         <MenuItem mnemonicParsing="false" text="Save As" />
-                        <MenuItem mnemonicParsing="false" text="Exit" />
+                        <MenuItem fx:id="exitApp" mnemonicParsing="false" text="Exit" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="View">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Dark Theme" />
-                        <MenuItem mnemonicParsing="false" text="Light Theme" />
+                        <MenuItem fx:id="darkTheme" mnemonicParsing="false" text="Dark Theme" />
+                        <MenuItem fx:id="lightTheme" mnemonicParsing="false" text="Light Theme" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Settings">
                     <items>
                         <MenuItem mnemonicParsing="false" text="Language" />
-                        <MenuItem mnemonicParsing="false" text="Currency" />
+                        <MenuItem fx:id="currency" mnemonicParsing="false" text="Currency" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="About">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="About us" />
+                        <MenuItem fx:id="aboutUs" mnemonicParsing="false" text="About us" />
                     </items>
                 </Menu>
             </menus>
@@ -64,7 +64,7 @@
                 <Font size="14.0" />
             </font>
         </Label>
-      <TextField fx:id="investInput" layoutX="123.0" layoutY="157.0" prefHeight="51.0" prefWidth="364.0" promptText="Investsment">
+      <TextField fx:id="investInput" layoutX="123.0" layoutY="157.0" prefHeight="51.0" prefWidth="364.0" promptText="Investment">
          <font>
             <Font size="24.0" />
          </font>
@@ -74,8 +74,8 @@
             <Font size="24.0" />
          </font>
       </TextField>
-      <DatePicker fx:id="depositConctractBeginning" layoutX="123.0" layoutY="298.0" prefHeight="25.0" prefWidth="174.0" promptText="Contract beginning date" />
-      <DatePicker fx:id="depositConctractEnding" layoutX="316.0" layoutY="298.0" promptText="Contract ending date" />
+      <DatePicker fx:id="depositContractBeginning" layoutX="123.0" layoutY="298.0" prefHeight="25.0" prefWidth="174.0" promptText="Contract beginning date" />
+      <DatePicker fx:id="depositContractEnding" layoutX="316.0" layoutY="298.0" promptText="Contract ending date" />
       <MenuButton fx:id="depositWithdrawalOption" layoutX="359.0" layoutY="353.0" mnemonicParsing="false" text="Withdrawal option">
         <items>
             <MenuItem fx:id="WithdrawalOption1" mnemonicParsing="false" text="Monthly" />
@@ -90,7 +90,7 @@
       </MenuButton>
       <CheckBox fx:id="depositCapitalizationCheck" layoutX="125.0" layoutY="344.0" mnemonicParsing="false" text="Capitalization" />
       <CheckBox fx:id="depositEarlyWithdrawalCheck" layoutX="125.0" layoutY="365.0" mnemonicParsing="false" text="Early withdrawal" />
-      <DatePicker fx:id="depositWithdrawalDate" layoutX="125.0" layoutY="389.0" prefHeight="25.0" prefWidth="131.0" promptText="Witthdrawal date" />
+      <DatePicker fx:id="depositWithdrawalDate" layoutX="125.0" layoutY="389.0" prefHeight="25.0" prefWidth="131.0" promptText="Withdrawal date" />
       <Button fx:id="depositViewResult" layoutX="236.0" layoutY="436.0" mnemonicParsing="false" text="View result">
          <font>
             <Font size="24.0" />

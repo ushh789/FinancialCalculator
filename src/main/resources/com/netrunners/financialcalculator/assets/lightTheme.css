@@ -1,0 +1,26 @@
+.root {
+    -fx-background-color: #f0f0f0;
+    -fx-base: #ffffff;
+    -fx-control-inner-background: #ffffff;
+    -fx-accent: #0096c9;
+    -fx-default-button: #0096c9;
+    -fx-focus-color: #039ed3;
+    -fx-faint-focus-color: #039ed322;
+    -fx-selection-bar: #0096c9;
+    -fx-selection-bar-non-focused: #039ed322;
+}
+
+.text-input {
+    -fx-highlight-fill: #0096c9;
+    -fx-highlight-text-fill: black;
+}
+
+.menu-bar {
+    -fx-background-color: linear-gradient(to bottom, #ffffff, #ffffff 0%, #ffffff 90%, #ffffff 100%);
+    -fx-border-color: gray;
+    -fx-border-width: 0 0 1 0;
+}
+
+.menu-bar .label {
+    -fx-text-fill: black;
+}

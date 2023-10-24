@@ -11,7 +11,7 @@
 
 <AnchorPane maxHeight="600.0" maxWidth="600.0" minHeight="620.0" minWidth="620.0" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.netrunners.financialcalculator.StartMenuController">
    <children>
-     <MenuBar layoutX="-9.0" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="609.0" scaleZ="90.0" AnchorPane.leftAnchor="-10.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+     <MenuBar fx:id="menuBar" layoutX="-9.0" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="609.0" scaleZ="90.0" AnchorPane.leftAnchor="-10.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
        <menus>
          <Menu mnemonicParsing="false" text="File">
            <items>
@@ -19,24 +19,24 @@
              <MenuItem mnemonicParsing="false" text="Open" />
              <MenuItem mnemonicParsing="false" text="Save" />
              <MenuItem mnemonicParsing="false" text="Save As" />
-             <MenuItem mnemonicParsing="false" text="Exit" />
+             <MenuItem fx:id="exitApp" mnemonicParsing="false" text="Exit" />
            </items>
          </Menu>
          <Menu mnemonicParsing="false" text="View">
            <items>
-             <MenuItem mnemonicParsing="false" text="Dark Theme" />
-             <MenuItem mnemonicParsing="false" text="Light Theme" />
+             <MenuItem fx:id="darkTheme" mnemonicParsing="false" text="Dark Theme" />
+             <MenuItem fx:id="lightTheme" mnemonicParsing="false" text="Light Theme" />
            </items>
          </Menu>
          <Menu mnemonicParsing="false" text="Settings">
            <items>
              <MenuItem mnemonicParsing="false" text="Language" />
-             <MenuItem mnemonicParsing="false" text="Currency" />
+             <MenuItem fx:id="currency" mnemonicParsing="false" text="Currency" />
            </items>
          </Menu>
          <Menu mnemonicParsing="false" text="About">
            <items>
-             <MenuItem mnemonicParsing="false" text="About us" />
+             <MenuItem fx:id="aboutUs" mnemonicParsing="false" text="About us" />
            </items>
          </Menu>
        </menus>
@@ -59,7 +59,7 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <Button fx:id="DepositButton" alignment="TOP_LEFT" mnemonicParsing="false"  text="Deposit" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="250.0">
+      <Button fx:id="DepositButton" alignment="TOP_LEFT" mnemonicParsing="false" text="Deposit" AnchorPane.leftAnchor="100.0" AnchorPane.topAnchor="250.0">
          <font>
             <Font size="35.0" />
          </font>
