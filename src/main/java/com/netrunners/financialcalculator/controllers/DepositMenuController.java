@@ -2,6 +2,7 @@ package com.netrunners.financialcalculator.controllers;
 
 import static com.netrunners.financialcalculator.controllers.closeWindow.closeCurrentWindow;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -13,6 +14,7 @@ import java.time.format.DateTimeFormatter;
 
 import com.netrunners.financialcalculator.StartMenu;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -73,6 +75,12 @@ public class DepositMenuController {
 
     @FXML
     private MenuBar menuBar;
+
+    @FXML
+    private MenuItem depositButtonMenu;
+
+    @FXML
+    private MenuItem creditButtonMenu;
 
     @FXML
     private MenuItem darkTheme;
@@ -212,6 +220,46 @@ public class DepositMenuController {
             if (dateBeginning != null) {
                 long daysBetween = ChronoUnit.DAYS.between(dateBeginning, dateEnding);
                 System.out.printf("Days between: %d%n", daysBetween);
+            }
+        });
+        depositButtonMenu.setOnAction(event ->{
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(StartMenu.class.getResource("DepositMenu.fxml"));
+                Stage stage = new Stage();
+                stage.setTitle("Deposit Menu");
+                Scene scene = new Scene(fxmlLoader.load());
+                scene.getStylesheets().add(StartMenu.currentTheme);
+                stage.setScene(scene);
+                StartMenu.openScenes.add(scene);
+                stage.getIcons().add(new Image("file:src/main/resources/com/netrunners/financialcalculator/assets/Logo.png"));
+                stage.setMaxHeight(820);
+                stage.setMaxWidth(620);
+                stage.setMinHeight(820);
+                stage.setMinWidth(620);
+                stage.show();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        creditButtonMenu.setOnAction(event ->{
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(StartMenu.class.getResource("CreditMenu.fxml"));
+                Stage stage = new Stage();
+                stage.setTitle("Credit Menu");
+                Scene scene = new Scene(fxmlLoader.load());
+                scene.getStylesheets().add(StartMenu.currentTheme);
+                stage.setScene(scene);
+                StartMenu.openScenes.add(scene);
+                stage.getIcons().add(new Image("file:src/main/resources/com/netrunners/financialcalculator/assets/Logo.png"));
+                stage.setMaxHeight(820);
+                stage.setMaxWidth(620);
+                stage.setMinHeight(820);
+                stage.setMinWidth(620);
+                stage.show();
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
     }

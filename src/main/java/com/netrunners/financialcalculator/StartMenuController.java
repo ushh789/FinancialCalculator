@@ -4,15 +4,25 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.control.Alert.AlertType;
 
+
+import java.awt.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.netrunners.financialcalculator.StartMenu.startMenuScene;
 import static com.netrunners.financialcalculator.controllers.closeWindow.closeCurrentWindow;
 
 
@@ -23,6 +33,12 @@ public class StartMenuController {
 
     @FXML
     private Button DepositButton;
+
+    @FXML
+    private MenuItem depositButtonMenu;
+
+    @FXML
+    private MenuItem creditButtonMenu;
 
     @FXML
     private MenuBar menuBar;
@@ -41,6 +57,9 @@ public class StartMenuController {
 
     @FXML
     private MenuItem currency;
+
+    @FXML
+    private MenuItem openFileButton;
 
     @FXML
     void initialize() {
@@ -67,6 +86,47 @@ public class StartMenuController {
         });
 
         CreditButton.setOnAction(event ->{
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(StartMenu.class.getResource("CreditMenu.fxml"));
+                Stage stage = new Stage();
+                stage.setTitle("Credit Menu");
+                Scene scene = new Scene(fxmlLoader.load());
+                scene.getStylesheets().add(StartMenu.currentTheme);
+                stage.setScene(scene);
+                StartMenu.openScenes.add(scene);
+                stage.getIcons().add(new Image("file:src/main/resources/com/netrunners/financialcalculator/assets/Logo.png"));
+                stage.setMaxHeight(820);
+                stage.setMaxWidth(620);
+                stage.setMinHeight(820);
+                stage.setMinWidth(620);
+                stage.show();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        depositButtonMenu.setOnAction(event ->{
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(StartMenu.class.getResource("DepositMenu.fxml"));
+                Stage stage = new Stage();
+                stage.setTitle("Deposit Menu");
+                Scene scene = new Scene(fxmlLoader.load());
+                scene.getStylesheets().add(StartMenu.currentTheme);
+                stage.setScene(scene);
+                StartMenu.openScenes.add(scene);
+                stage.getIcons().add(new Image("file:src/main/resources/com/netrunners/financialcalculator/assets/Logo.png"));
+                stage.setMaxHeight(820);
+                stage.setMaxWidth(620);
+                stage.setMinHeight(820);
+                stage.setMinWidth(620);
+                stage.show();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        creditButtonMenu.setOnAction(event ->{
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(StartMenu.class.getResource("CreditMenu.fxml"));
                 Stage stage = new Stage();
@@ -168,6 +228,24 @@ public class StartMenuController {
                 }
             }
         });
+        openFileButton.setOnAction(event ->{
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Open Resource File");
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json"));
+            File file = fileChooser.showOpenDialog(startMenuScene.getWindow());
+            if (file != null) {
+                System.out.println("File opened: " + file.getName());
+                try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        System.out.println(line);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
     }
 
 }
