@@ -24,7 +24,7 @@ public abstract class Deposit implements Savable {
     protected LocalDate earlyWithdrawalDate;
 
     protected abstract float countProfit();
-    public Deposit(int investment, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, LocalDate earlyWithdrawalDate, int withdrawalOption){
+    public Deposit(float investment, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, LocalDate earlyWithdrawalDate, int withdrawalOption){
         this.investment = investment;
         this.currency = currency;
         this.annualPercent = annualPercent;
@@ -33,7 +33,7 @@ public abstract class Deposit implements Savable {
         this.earlyWithdrawalDate = earlyWithdrawalDate;
         this.withdrawalOption = withdrawalOption;
     }
-    public Deposit(int investment, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, int withdrawalOption){
+    public Deposit(float investment, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, int withdrawalOption){
         this.investment = investment;
         this.currency = currency;
         this.annualPercent = annualPercent;

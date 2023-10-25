@@ -2,23 +2,19 @@ package com.netrunners.financialcalculator.Controllers;
 
 import java.io.IOException;
 import java.net.URL;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import com.netrunners.financialcalculator.ErrorHandling.ErrorChecker;
 import com.netrunners.financialcalculator.StartMenu;
 import com.netrunners.financialcalculator.VisualInstruments.LanguageManager;
-import com.netrunners.financialcalculator.LogicalInstrumnts.TimeFunctions.DatePickerRestrictions;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-;
 
 import static com.netrunners.financialcalculator.Controllers.closeWindow.closeCurrentWindow;
 
@@ -165,16 +161,10 @@ public class CreditMenuController {
     }
     @FXML
     void initialize() {
-        DatePickerRestrictions.setDatePickerRestrictions(contractBeginning, contractEnding);
-        DatePickerRestrictions.setDatePickerRestrictions(holidaysBeginning, holidaysEnding);
         updateText();
         LanguageManager.getInstance().languageProperty().addListener((observable, oldValue, newValue) -> {
             updateText();
         });
-        ErrorChecker.ErrorListener(contractBeginning);
-        ErrorChecker.ErrorListener(contractEnding);
-        ErrorChecker.ErrorListener(holidaysBeginning);
-        ErrorChecker.ErrorListener(holidaysEnding);
         holidaysBeginning.setVisible(false);
         holidaysBeginning.setDisable(true);
         holidaysEnding.setVisible(false);
@@ -356,10 +346,6 @@ public class CreditMenuController {
                     case "中国人" -> setLanguage("zh");
                 }
             }
-        });
-        creditSaveResult.setOnAction(event -> {
-            System.out.print("Holiday ending date:");
-            System.out.println(holidaysEnding.getValue());
         });
     }
     public void setLanguage(String language) {

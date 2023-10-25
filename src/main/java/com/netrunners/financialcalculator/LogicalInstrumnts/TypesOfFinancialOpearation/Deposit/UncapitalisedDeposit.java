@@ -6,11 +6,11 @@ import java.time.LocalDate;
 import java.util.Map;
 
 public class UncapitalisedDeposit extends Deposit{
-    public UncapitalisedDeposit(int investment, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, LocalDate earlyWithdrawalDate, int withdrawalOption) {
+    public UncapitalisedDeposit(float investment, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, LocalDate earlyWithdrawalDate, int withdrawalOption) {
         super(investment, currency, annualPercent, startDate, endDate, earlyWithdrawalDate, withdrawalOption);
     }
 
-    public UncapitalisedDeposit(int investment, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, int withdrawalOption) {
+    public UncapitalisedDeposit(float investment, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, int withdrawalOption) {
         super(investment, currency, annualPercent, startDate, endDate, withdrawalOption);
     }
 

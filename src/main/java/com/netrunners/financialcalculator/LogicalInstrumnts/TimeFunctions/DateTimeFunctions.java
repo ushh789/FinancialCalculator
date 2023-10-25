@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 public class DateTimeFunctions {
     public static LocalDate dateFormer(String dateString) {
         try {
-            String dateRegex = "(\\d{1,2})-(\\d{1,2})-(\\d{4})";
+            String dateRegex = "(\\d{1,2}).(\\d{1,2}).(\\d{4})";
             Pattern pattern = Pattern.compile(dateRegex);
             Matcher matcher = pattern.matcher(dateString);
             if (matcher.find()) {

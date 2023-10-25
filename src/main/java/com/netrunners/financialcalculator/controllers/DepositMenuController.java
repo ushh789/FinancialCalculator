@@ -13,6 +13,10 @@ import java.util.ResourceBundle;
 import java.time.format.DateTimeFormatter;
 
 import com.netrunners.financialcalculator.ErrorHandling.InputFieldErrors;
+import com.netrunners.financialcalculator.LogicalInstrumnts.TimeFunctions.DateTimeFunctions;
+import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Deposit.CapitalisedDeposit;
+import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Deposit.Deposit;
+import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Deposit.UncapitalisedDeposit;
 import com.netrunners.financialcalculator.StartMenu;
 import com.netrunners.financialcalculator.VisualInstruments.LanguageManager;
 import javafx.fxml.FXML;
@@ -129,7 +133,9 @@ public class DepositMenuController {
     @FXML
     private Menu viewButton;
 
-    public void updateText(){
+    private String userSelectedCurrency;
+
+    public void updateText() {
         creditButtonMenu.setText(LanguageManager.getInstance().getTranslation("creditButtonMenu"));
         depositButtonMenu.setText(LanguageManager.getInstance().getTranslation("depositButtonMenu"));
         languageButton.setText(LanguageManager.getInstance().getTranslation("languageButton"));
@@ -167,7 +173,7 @@ public class DepositMenuController {
     }
 
     @FXML
-    void initialize(){
+    void initialize() {
 
         updateText();
         LanguageManager.getInstance().languageProperty().addListener((observable, oldValue, newValue) -> {
@@ -177,10 +183,10 @@ public class DepositMenuController {
         depositWithdrawalDate.setDisable(true);
         closeWindow.setOnAction(event -> closeCurrentWindow(closeWindow.getScene()));
         depositEarlyWithdrawalCheck.setOnAction(event -> {
-            if(depositEarlyWithdrawalCheck.isSelected()){
+            if (depositEarlyWithdrawalCheck.isSelected()) {
                 depositWithdrawalDate.setVisible(true);
                 depositWithdrawalDate.setDisable(false);
-            }else{
+            } else {
                 depositWithdrawalDate.setVisible(false);
                 depositWithdrawalDate.setDisable(true);
             }
@@ -239,7 +245,7 @@ public class DepositMenuController {
                     "Financial Calculator by Netrunners" empowers individuals, students, professionals, and business owners to make informed decisions about their financial affairs. Whether you're planning to save money or seeking insights into loan repayments, this versatile tool offers a comprehensive set of features to help you on your financial journey. Start making smarter financial decisions today with this powerful yet user-friendly financial calculator.""");
             alert.showAndWait();
         });
-        exitApp.setOnAction(event ->{
+        exitApp.setOnAction(event -> {
             for (Scene scene : StartMenu.openScenes) {
                 closeCurrentWindow(scene);
             }
@@ -270,8 +276,9 @@ public class DepositMenuController {
 
                 }
             }
+            userSelectedCurrency = dialog.getSelectedItem();
         });
-        depositContractBeginning.setOnAction(event ->{
+        depositContractBeginning.setOnAction(event -> {
             LocalDate dateBeginning = depositContractBeginning.getValue();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
             String formattedDateBeginning = dateBeginning.format(formatter);
@@ -284,7 +291,7 @@ public class DepositMenuController {
             }
         });
 
-        depositContractEnding.setOnAction(event ->{
+        depositContractEnding.setOnAction(event -> {
             LocalDate dateEnding = depositContractEnding.getValue();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
             String formattedDateEnding = dateEnding.format(formatter);
@@ -296,7 +303,7 @@ public class DepositMenuController {
                 System.out.printf("Days between: %d%n", daysBetween);
             }
         });
-        depositButtonMenu.setOnAction(event ->{
+        depositButtonMenu.setOnAction(event -> {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(StartMenu.class.getResource("DepositMenu.fxml"));
                 Stage stage = new Stage();
@@ -316,7 +323,7 @@ public class DepositMenuController {
                 e.printStackTrace();
             }
         });
-        creditButtonMenu.setOnAction(event ->{
+        creditButtonMenu.setOnAction(event -> {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(StartMenu.class.getResource("CreditMenu.fxml"));
                 Stage stage = new Stage();
@@ -371,12 +378,45 @@ public class DepositMenuController {
                 }
             }
         });
+
         depositSaveResult.setOnAction(event -> {
-            if(InputFieldErrors.checkIfCorrectNumberGiven(investInput) && InputFieldErrors.checkIfCorrectNumberGiven(depositAnnualPercentInput)){
-                System.out.println("correct data given!");
+            if (InputFieldErrors.checkIfCorrectNumberGiven(investInput) &&
+                    InputFieldErrors.checkIfCorrectNumberGiven(depositAnnualPercentInput) &&
+                    InputFieldErrors.withdrawalOptionIsSelected(depositWithdrawalOption)) {
+                float investment = Float.parseFloat(investInput.getText());
+                float annualPercent = Float.parseFloat(depositAnnualPercentInput.getText());
+                String depositCurrency = userSelectedCurrency;
+                int withdrawalOptionSelected = -1000;
+                switch (depositWithdrawalOption.getText()) {
+                    case "Monthly" -> withdrawalOptionSelected = 1;
+                    case "Quarterly" -> withdrawalOptionSelected = 2;
+                    case "Yearly" -> withdrawalOptionSelected = 3;
+                    case "At the end" -> withdrawalOptionSelected = 4;
+                }
+                LocalDate contractStartDate = depositContractBeginning.getValue();
+                LocalDate contractEndDate = depositContractEnding.getValue();
+                if (depositCapitalizationCheck.isSelected()) {
+                    if (depositEarlyWithdrawalCheck.isSelected()) {
+                        LocalDate earlyWithdrawal = depositWithdrawalDate.getValue();
+                        Deposit deposit = new CapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate, earlyWithdrawal, withdrawalOptionSelected);
+                        deposit.save("temp1");
+                        System.out.println("saved temp1");
+                    }
+                    else {
+                        Deposit deposit = new CapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate,withdrawalOptionSelected);
+                        deposit.save("temp2");
+                        System.out.println("seved temp2");
+                    }
+                }
+                else {
+                    Deposit deposit = new UncapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate,withdrawalOptionSelected);
+                    deposit.save("temp3");
+                    System.out.println("seved temp3");
+                }
             }
         });
     }
+
     public void setLanguage(String language) {
         LanguageManager.getInstance().setLanguage(language);
         creditButtonMenu.setText(LanguageManager.getInstance().getTranslation("creditButtonMenu"));
@@ -414,7 +454,7 @@ public class DepositMenuController {
         WithdrawalOption4.setText(LanguageManager.getInstance().getTranslation("WithdrawalOption4"));
 
     }
-    }
+}
 
 
 
