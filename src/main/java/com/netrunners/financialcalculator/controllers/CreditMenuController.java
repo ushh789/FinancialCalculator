@@ -162,7 +162,6 @@ public class CreditMenuController {
     }
     @FXML
     void initialize() {
-        //Test commit
         DatePickerRestrictions.setDatePickerRestrictions(contractBeginning, contractEnding);
         DatePickerRestrictions.setDatePickerRestrictions(holidaysBeginning, holidaysEnding);
         updateText();
