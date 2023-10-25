@@ -1,6 +1,5 @@
 package com.netrunners.financialcalculator;
 
-import com.google.gson.Gson;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Credit.Credit;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Credit.CreditWithHolidays;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Deposit.CapitalisedDeposit;
@@ -13,8 +12,6 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.awt.*;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +34,7 @@ public class StartMenu extends Application {
             }
 
         }
+
         primaryStage.setScene(new Scene(fxmlLoader.load(), 600, 600));
         primaryStage.maxHeightProperty().setValue(600);
         primaryStage.maxWidthProperty().setValue(600);
@@ -47,17 +45,10 @@ public class StartMenu extends Application {
         StartMenu.openScenes.add(startMenuScene);
         primaryStage.show();
 
-        LocalDate l1 = LocalDate.now();
-        LocalDate l2 = LocalDate.now();
-        Deposit d = new CapitalisedDeposit(1200,"UAH", 5.0f, l1,l2, 2);
-        d.save();
 
-        Credit c = new CreditWithHolidays(1200, "UAH", 5.0f, l1,l2, 2, l1,l2);
-        c.save();
     }
 
     public static void main(String[] args) {
-        System.setProperty("file.encoding", "UTF-8");
         launch(args);
     }
 }

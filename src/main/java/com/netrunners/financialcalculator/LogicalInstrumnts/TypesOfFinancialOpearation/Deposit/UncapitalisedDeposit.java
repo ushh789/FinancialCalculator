@@ -21,8 +21,8 @@ public class UncapitalisedDeposit extends Deposit{
 
 
     @Override
-    public void save() {
-        super.save();
+    public void save(String filename) {
+        super.save(filename);
     }
 
     protected JsonObject getJsonObject() {

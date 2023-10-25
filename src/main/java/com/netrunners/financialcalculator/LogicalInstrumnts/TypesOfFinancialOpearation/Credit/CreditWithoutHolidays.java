@@ -14,6 +14,11 @@ public class CreditWithoutHolidays extends Credit implements Savable{
     }
 
     @Override
+    public void save(String filename) {
+        super.save(filename);
+    }
+
+    @Override
     protected JsonObject getJsonObject() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("operation", "Credit");

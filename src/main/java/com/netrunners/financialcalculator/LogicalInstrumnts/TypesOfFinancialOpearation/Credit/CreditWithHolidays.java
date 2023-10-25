@@ -23,8 +23,8 @@ public class CreditWithHolidays extends Credit implements Savable {
     }
 
     @Override
-    public void save() {
-        super.save();
+    public void save(String filename) {
+        super.save(filename);
     }
 
     @Override
