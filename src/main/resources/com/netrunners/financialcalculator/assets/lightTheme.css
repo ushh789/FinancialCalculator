@@ -17,10 +17,14 @@
 
 .menu-bar {
     -fx-background-color: linear-gradient(to bottom, #ffffff, #ffffff 0%, #ffffff 90%, #ffffff 100%);
-    -fx-border-color: gray;
+    -fx-border-color: rgb(128, 128, 128);
     -fx-border-width: 0 0 1 0;
 }
 
 .menu-bar .label {
     -fx-text-fill: black;
+}
+
+.text-field{
+    -fx-prompt-text-fill: lightgray;
 }
