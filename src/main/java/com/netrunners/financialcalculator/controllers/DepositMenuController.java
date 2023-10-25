@@ -13,11 +13,15 @@ import java.util.ResourceBundle;
 import java.time.format.DateTimeFormatter;
 
 import com.netrunners.financialcalculator.StartMenu;
+import com.netrunners.financialcalculator.VisualInstruments.LanguageManager;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.HPos;
+import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 public class DepositMenuController {
@@ -27,9 +31,6 @@ public class DepositMenuController {
 
     @FXML
     private URL location;
-
-    @FXML
-    private Button closeWindow;
 
     @FXML
     private MenuItem WithdrawalOption1;
@@ -44,7 +45,28 @@ public class DepositMenuController {
     private MenuItem WithdrawalOption4;
 
     @FXML
+    private Menu aboutButton;
+
+    @FXML
+    private MenuItem aboutUs;
+
+    @FXML
+    private Button closeWindow;
+
+    @FXML
+    private MenuItem creditButtonMenu;
+
+    @FXML
+    private MenuItem currency;
+
+    @FXML
+    private MenuItem darkTheme;
+
+    @FXML
     private TextField depositAnnualPercentInput;
+
+    @FXML
+    private MenuItem depositButtonMenu;
 
     @FXML
     private CheckBox depositCapitalizationCheck;
@@ -59,6 +81,9 @@ public class DepositMenuController {
     private CheckBox depositEarlyWithdrawalCheck;
 
     @FXML
+    private Label depositLabel;
+
+    @FXML
     private Button depositSaveResult;
 
     @FXML
@@ -71,34 +96,85 @@ public class DepositMenuController {
     private MenuButton depositWithdrawalOption;
 
     @FXML
+    private MenuItem exitApp;
+
+    @FXML
+    private Menu fileButton;
+
+    @FXML
     private TextField investInput;
 
     @FXML
-    private MenuBar menuBar;
-
-    @FXML
-    private MenuItem depositButtonMenu;
-
-    @FXML
-    private MenuItem creditButtonMenu;
-
-    @FXML
-    private MenuItem darkTheme;
+    private MenuItem languageButton;
 
     @FXML
     private MenuItem lightTheme;
 
     @FXML
-    private MenuItem aboutUs;
+    private Menu newButton;
 
     @FXML
-    private MenuItem exitApp;
+    private MenuItem openFileButton;
 
     @FXML
-    private MenuItem currency;
+    private MenuItem saveAsButton;
+
+    @FXML
+    private MenuItem saveButton;
+
+    @FXML
+    private Menu settingsButton;
+
+    @FXML
+    private Menu themeButton;
+
+    @FXML
+    private Menu viewButton;
+
+    public void updateText(){
+        creditButtonMenu.setText(LanguageManager.getInstance().getTranslation("creditButtonMenu"));
+        depositButtonMenu.setText(LanguageManager.getInstance().getTranslation("depositButtonMenu"));
+        languageButton.setText(LanguageManager.getInstance().getTranslation("languageButton"));
+        darkTheme.setText(LanguageManager.getInstance().getTranslation("darkTheme"));
+        lightTheme.setText(LanguageManager.getInstance().getTranslation("lightTheme"));
+        aboutUs.setText(LanguageManager.getInstance().getTranslation("aboutUs"));
+        exitApp.setText(LanguageManager.getInstance().getTranslation("exitApp"));
+        currency.setText(LanguageManager.getInstance().getTranslation("currency"));
+        openFileButton.setText(LanguageManager.getInstance().getTranslation("openFileButton"));
+        saveAsButton.setText(LanguageManager.getInstance().getTranslation("saveAsButton"));
+        saveButton.setText(LanguageManager.getInstance().getTranslation("saveButton"));
+        themeButton.setText(LanguageManager.getInstance().getTranslation("themeButton"));
+        viewButton.setText(LanguageManager.getInstance().getTranslation("viewButton"));
+        newButton.setText(LanguageManager.getInstance().getTranslation("newButton"));
+        fileButton.setText(LanguageManager.getInstance().getTranslation("fileButton"));
+        settingsButton.setText(LanguageManager.getInstance().getTranslation("settingsButton"));
+        aboutButton.setText(LanguageManager.getInstance().getTranslation("aboutButton"));
+        closeWindow.setText(LanguageManager.getInstance().getTranslation("closeWindow"));
+        depositLabel.setText(LanguageManager.getInstance().getTranslation("DepositButton"));
+        depositCapitalizationCheck.setText(LanguageManager.getInstance().getTranslation("depositCapitalizationCheck"));
+        depositEarlyWithdrawalCheck.setText(LanguageManager.getInstance().getTranslation("depositEarlyWithdrawalCheck"));
+        depositWithdrawalOption.setText(LanguageManager.getInstance().getTranslation("depositWithdrawalOption"));
+        depositSaveResult.setText(LanguageManager.getInstance().getTranslation("creditSaveResult"));
+        depositViewResult.setText(LanguageManager.getInstance().getTranslation("creditViewResult"));
+        depositAnnualPercentInput.setPromptText(LanguageManager.getInstance().getTranslation("depositAnnualPercentInput"));
+        investInput.setPromptText(LanguageManager.getInstance().getTranslation("investInput"));
+        depositContractBeginning.setPromptText(LanguageManager.getInstance().getTranslation("depositContractBeginning"));
+        depositContractEnding.setPromptText(LanguageManager.getInstance().getTranslation("depositContractEnding"));
+        depositWithdrawalDate.setPromptText(LanguageManager.getInstance().getTranslation("depositWithdrawalDate"));
+        WithdrawalOption1.setText(LanguageManager.getInstance().getTranslation("WithdrawalOption1"));
+        WithdrawalOption2.setText(LanguageManager.getInstance().getTranslation("WithdrawalOption2"));
+        WithdrawalOption3.setText(LanguageManager.getInstance().getTranslation("WithdrawalOption3"));
+        WithdrawalOption4.setText(LanguageManager.getInstance().getTranslation("WithdrawalOption4"));
+
+    }
 
     @FXML
     void initialize(){
+
+        updateText();
+        LanguageManager.getInstance().languageProperty().addListener((observable, oldValue, newValue) -> {
+            updateText();
+        });
         depositWithdrawalDate.setVisible(false);
         depositWithdrawalDate.setDisable(true);
         closeWindow.setOnAction(event -> closeCurrentWindow(closeWindow.getScene()));
@@ -262,8 +338,81 @@ public class DepositMenuController {
                 e.printStackTrace();
             }
         });
+        languageButton.setOnAction(event -> {
+            List<String> choices = new ArrayList<>();
+            choices.add("English");
+            choices.add("Українська");
+            choices.add("Español");
+            choices.add("Français");
+            choices.add("Deutsch");
+            choices.add("Czech");
+            choices.add("Polski");
+            choices.add("Nederlands");
+            choices.add("日本語");
+            choices.add("中国人");
+            ChoiceDialog<String> dialog = new ChoiceDialog<>("English", choices);
+            dialog.setTitle("Choose Language");
+            Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+            stage.getIcons().add(new Image("file:src/main/resources/com/netrunners/financialcalculator/assets/Logo.png"));
+            dialog.setHeaderText(null);
+            dialog.setContentText("Choose your language:");
+
+            Optional<String> result = dialog.showAndWait();
+            if (result.isPresent()) {
+                switch (result.get()) {
+                    case "English" -> setLanguage("en");
+                    case "Українська" -> setLanguage("uk");
+                    case "Español" -> setLanguage("es");
+                    case "Français" -> setLanguage("fr");
+                    case "Deutsch" -> setLanguage("de");
+                    case "Czech" -> setLanguage("cs");
+                    case "Polski" -> setLanguage("pl");
+                    case "Nederlands" -> setLanguage("nl");
+                    case "日本語" -> setLanguage("ja");
+                    case "中国人" -> setLanguage("zh");
+                }
+            }
+        });
+    }
+    public void setLanguage(String language) {
+        LanguageManager.getInstance().setLanguage(language);
+        creditButtonMenu.setText(LanguageManager.getInstance().getTranslation("creditButtonMenu"));
+        depositButtonMenu.setText(LanguageManager.getInstance().getTranslation("depositButtonMenu"));
+        languageButton.setText(LanguageManager.getInstance().getTranslation("languageButton"));
+        darkTheme.setText(LanguageManager.getInstance().getTranslation("darkTheme"));
+        lightTheme.setText(LanguageManager.getInstance().getTranslation("lightTheme"));
+        aboutUs.setText(LanguageManager.getInstance().getTranslation("aboutUs"));
+        exitApp.setText(LanguageManager.getInstance().getTranslation("exitApp"));
+        currency.setText(LanguageManager.getInstance().getTranslation("currency"));
+        openFileButton.setText(LanguageManager.getInstance().getTranslation("openFileButton"));
+        saveAsButton.setText(LanguageManager.getInstance().getTranslation("saveAsButton"));
+        saveButton.setText(LanguageManager.getInstance().getTranslation("saveButton"));
+        themeButton.setText(LanguageManager.getInstance().getTranslation("themeButton"));
+        viewButton.setText(LanguageManager.getInstance().getTranslation("viewButton"));
+        newButton.setText(LanguageManager.getInstance().getTranslation("newButton"));
+        fileButton.setText(LanguageManager.getInstance().getTranslation("fileButton"));
+        settingsButton.setText(LanguageManager.getInstance().getTranslation("settingsButton"));
+        aboutButton.setText(LanguageManager.getInstance().getTranslation("aboutButton"));
+        closeWindow.setText(LanguageManager.getInstance().getTranslation("closeWindow"));
+        depositLabel.setText(LanguageManager.getInstance().getTranslation("DepositButton"));
+        depositCapitalizationCheck.setText(LanguageManager.getInstance().getTranslation("depositCapitalizationCheck"));
+        depositEarlyWithdrawalCheck.setText(LanguageManager.getInstance().getTranslation("depositEarlyWithdrawalCheck"));
+        depositWithdrawalOption.setText(LanguageManager.getInstance().getTranslation("depositWithdrawalOption"));
+        depositSaveResult.setText(LanguageManager.getInstance().getTranslation("creditSaveResult"));
+        depositViewResult.setText(LanguageManager.getInstance().getTranslation("creditViewResult"));
+        depositAnnualPercentInput.setPromptText(LanguageManager.getInstance().getTranslation("depositAnnualPercentInput"));
+        investInput.setPromptText(LanguageManager.getInstance().getTranslation("investInput"));
+        depositContractBeginning.setPromptText(LanguageManager.getInstance().getTranslation("depositContractBeginning"));
+        depositContractEnding.setPromptText(LanguageManager.getInstance().getTranslation("depositContractEnding"));
+        depositWithdrawalDate.setPromptText(LanguageManager.getInstance().getTranslation("depositWithdrawalDate"));
+        WithdrawalOption1.setText(LanguageManager.getInstance().getTranslation("WithdrawalOption1"));
+        WithdrawalOption2.setText(LanguageManager.getInstance().getTranslation("WithdrawalOption2"));
+        WithdrawalOption3.setText(LanguageManager.getInstance().getTranslation("WithdrawalOption3"));
+        WithdrawalOption4.setText(LanguageManager.getInstance().getTranslation("WithdrawalOption4"));
+
+    }
     }
 
-}
+
 
 

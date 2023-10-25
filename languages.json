@@ -1,5 +1,5 @@
 {
-  "DepositButton": ["Deposit", "Вклад", "Depósito", "Dépôt", "Einzahlung", "Vklad", "Wpłata", "Storting", "預金", "存款"],
+  "DepositButton": ["Deposit", "Депозит", "Depósito", "Dépôt", "Einzahlung", "Vklad", "Wpłata", "Storting", "預金", "存款"],
   "CreditButton": ["Credit", "Кредит", "Crédito", "Crédit", "Kredit", "Úvěr", "Kredyt", "Krediet", "クレジット", "信用"],
   "openFileButton": ["Open file", "Відкрити файл", "Abrir archivo", "Ouvrir le fichier", "Datei öffnen", "Otevřít soubor", "Otwórz plik", "Bestand openen", "ファイルを開く", "打开文件"],
   "PaymentOption1": ["Monthly", "Щомісячно", "Mensual", "Mensuel", "Monatlich", "Měsíčně", "Co miesiąc", "Maandelijks", "毎月", "每月"],
@@ -37,7 +37,7 @@
   "WithdrawalOption3": ["Yearly", "Щорічно", "Anual", "Annuel", "Jährlich", "Ročně", "Rocznie", "Jaarlijks", "年次", "每年"],
   "WithdrawalOption4": ["At the end", "В кінці терміну", "Al final", "À la fin", "Am Ende", "Na konci", "Na koniec", "Aan het einde", "終了時に", "期末"],
   "saveButton": ["Save", "Зберегти", "Guardar", "Enregistrer", "Speichern", "Uložit", "Zapisz", "Opslaan", "保存する", "保存"],
-  "viewButton": ["View", "Переглянути", "Ver", "Voir", "Ansehen", "Zobrazit", "Wyświetl", "Bekijken", "表示する", "查看"],
+  "viewButton": ["View", "Вигляд", "Ver", "Voir", "Ansehen", "Zobrazit", "Wyświetl", "Bekijken", "表示する", "查看"],
   "newButton": ["New", "Новий", "Nuevo", "Nouveau", "Neu", "Nový", "Nowy", "Nieuw", "新しい", "新的"],
   "fileButton": ["File", "Файл", "Archivo", "Fichier", "Datei", "Soubor", "Plik", "Bestand", "ファイル","文件"],
   "financialCalculatorLabel": ["Financial Calculator","Фінансовий калькулятор","Calculadora financiera","Calculatrice financière","Finanzrechner","Finanční kalkulačka","Kalkulator finansowy","Financiële rekenmachine","金融計算機","金融计算器"],

@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 import com.netrunners.financialcalculator.StartMenu;
+import com.netrunners.financialcalculator.VisualInstruments.LanguageManager;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -18,7 +19,6 @@ import javafx.stage.Stage;
 import static com.netrunners.financialcalculator.controllers.closeWindow.closeCurrentWindow;
 
 public class CreditMenuController {
-
     @FXML
     private ResourceBundle resources;
 
@@ -38,16 +38,10 @@ public class CreditMenuController {
     private MenuItem PaymentOption4;
 
     @FXML
-    private MenuItem depositButtonMenu;
+    private Menu aboutButton;
 
     @FXML
-    private MenuItem creditButtonMenu;
-
-    @FXML
-    private Button creditSaveResult;
-
-    @FXML
-    private Button creditViewResult;
+    private MenuItem aboutUs;
 
     @FXML
     private TextField annualPercentInput;
@@ -65,37 +59,112 @@ public class CreditMenuController {
     private DatePicker contractEnding;
 
     @FXML
+    private MenuItem creditButtonMenu;
+
+    @FXML
+    private Label creditLabel;
+
+    @FXML
+    private Button creditSaveResult;
+
+    @FXML
+    private Button creditViewResult;
+
+    @FXML
+    private MenuItem currency;
+
+    @FXML
+    private MenuItem darkTheme;
+
+    @FXML
+    private MenuItem depositButtonMenu;
+
+    @FXML
+    private MenuItem exitApp;
+
+    @FXML
+    private Menu fileButton;
+
+    @FXML
     private DatePicker holidaysBeginning;
 
     @FXML
     private DatePicker holidaysEnding;
 
     @FXML
-    private TextField loanInput;
-
-    @FXML
-    private MenuButton paymentOption;
-
-    @FXML
-    private MenuBar menuBar;
-
-    @FXML
-    private MenuItem darkTheme;
+    private MenuItem languageButton;
 
     @FXML
     private MenuItem lightTheme;
 
     @FXML
-    private MenuItem aboutUs;
+    private TextField loanInput;
 
     @FXML
-    private MenuItem exitApp;
+    private MenuItem openFileButton;
 
     @FXML
-    private MenuItem currency;
+    private MenuButton paymentOption;
 
+    @FXML
+    private MenuItem saveAsButton;
+
+    @FXML
+    private MenuItem saveButton;
+
+    @FXML
+    private Menu settingsButton;
+
+    @FXML
+    private Menu themeButton;
+
+    @FXML
+    private Menu viewButton;
+
+    @FXML
+    private MenuItem newButton;
+
+    public void updateText() {
+        creditButtonMenu.setText(LanguageManager.getInstance().getTranslation("creditButtonMenu"));
+        depositButtonMenu.setText(LanguageManager.getInstance().getTranslation("depositButtonMenu"));
+        languageButton.setText(LanguageManager.getInstance().getTranslation("languageButton"));
+        darkTheme.setText(LanguageManager.getInstance().getTranslation("darkTheme"));
+        lightTheme.setText(LanguageManager.getInstance().getTranslation("lightTheme"));
+        aboutUs.setText(LanguageManager.getInstance().getTranslation("aboutUs"));
+        exitApp.setText(LanguageManager.getInstance().getTranslation("exitApp"));
+        currency.setText(LanguageManager.getInstance().getTranslation("currency"));
+        openFileButton.setText(LanguageManager.getInstance().getTranslation("openFileButton"));
+        saveAsButton.setText(LanguageManager.getInstance().getTranslation("saveAsButton"));
+        saveButton.setText(LanguageManager.getInstance().getTranslation("saveButton"));
+        themeButton.setText(LanguageManager.getInstance().getTranslation("themeButton"));
+        viewButton.setText(LanguageManager.getInstance().getTranslation("viewButton"));
+        newButton.setText(LanguageManager.getInstance().getTranslation("newButton"));
+        fileButton.setText(LanguageManager.getInstance().getTranslation("fileButton"));
+        settingsButton.setText(LanguageManager.getInstance().getTranslation("settingsButton"));
+        aboutButton.setText(LanguageManager.getInstance().getTranslation("aboutButton"));
+        closeWindow.setText(LanguageManager.getInstance().getTranslation("closeWindow"));
+        creditLabel.setText(LanguageManager.getInstance().getTranslation("CreditButton"));
+        loanInput.setPromptText(LanguageManager.getInstance().getTranslation("loanInput"));
+        annualPercentInput.setPromptText(LanguageManager.getInstance().getTranslation("annualPercentInput"));
+        contractBeginning.setPromptText(LanguageManager.getInstance().getTranslation("contractBeginning"));
+        contractEnding.setPromptText(LanguageManager.getInstance().getTranslation("contractEnding"));
+        paymentOption.setText(LanguageManager.getInstance().getTranslation("paymentOption"));
+        checkPaymentHolidays.setText(LanguageManager.getInstance().getTranslation("checkPaymentHolidays"));
+        holidaysBeginning.setPromptText(LanguageManager.getInstance().getTranslation("holidaysBeginning"));
+        holidaysEnding.setPromptText(LanguageManager.getInstance().getTranslation("holidaysEnding"));
+        creditSaveResult.setText(LanguageManager.getInstance().getTranslation("creditSaveResult"));
+        creditViewResult.setText(LanguageManager.getInstance().getTranslation("creditViewResult"));
+        PaymentOption1.setText(LanguageManager.getInstance().getTranslation("PaymentOption1"));
+        PaymentOption2.setText(LanguageManager.getInstance().getTranslation("PaymentOption2"));
+        PaymentOption3.setText(LanguageManager.getInstance().getTranslation("PaymentOption3"));
+        PaymentOption4.setText(LanguageManager.getInstance().getTranslation("PaymentOption4"));
+    }
     @FXML
     void initialize() {
+        updateText();
+        LanguageManager.getInstance().languageProperty().addListener((observable, oldValue, newValue) -> {
+            updateText();
+        });
         holidaysBeginning.setVisible(false);
         holidaysBeginning.setDisable(true);
         holidaysEnding.setVisible(false);
@@ -242,6 +311,83 @@ public class CreditMenuController {
                 e.printStackTrace();
             }
         });
+
+        languageButton.setOnAction(event -> {
+            List<String> choices = new ArrayList<>();
+            choices.add("English");
+            choices.add("Українська");
+            choices.add("Español");
+            choices.add("Français");
+            choices.add("Deutsch");
+            choices.add("Czech");
+            choices.add("Polski");
+            choices.add("Nederlands");
+            choices.add("日本語");
+            choices.add("中国人");
+            ChoiceDialog<String> dialog = new ChoiceDialog<>("English", choices);
+            dialog.setTitle("Choose Language");
+            Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+            stage.getIcons().add(new Image("file:src/main/resources/com/netrunners/financialcalculator/assets/Logo.png"));
+            dialog.setHeaderText(null);
+            dialog.setContentText("Choose your language:");
+
+            Optional<String> result = dialog.showAndWait();
+            if (result.isPresent()) {
+                switch (result.get()) {
+                    case "English" -> setLanguage("en");
+                    case "Українська" -> setLanguage("uk");
+                    case "Español" -> setLanguage("es");
+                    case "Français" -> setLanguage("fr");
+                    case "Deutsch" -> setLanguage("de");
+                    case "Czech" -> setLanguage("cs");
+                    case "Polski" -> setLanguage("pl");
+                    case "Nederlands" -> setLanguage("nl");
+                    case "日本語" -> setLanguage("ja");
+                    case "中国人" -> setLanguage("zh");
+                }
+            }
+        });
+    }
+    public void setLanguage(String language) {
+        LanguageManager.getInstance().setLanguage(language);
+        creditButtonMenu.setText(LanguageManager.getInstance().getTranslation("creditButtonMenu"));
+        depositButtonMenu.setText(LanguageManager.getInstance().getTranslation("depositButtonMenu"));
+        languageButton.setText(LanguageManager.getInstance().getTranslation("languageButton"));
+        darkTheme.setText(LanguageManager.getInstance().getTranslation("darkTheme"));
+        lightTheme.setText(LanguageManager.getInstance().getTranslation("lightTheme"));
+        aboutUs.setText(LanguageManager.getInstance().getTranslation("aboutUs"));
+        exitApp.setText(LanguageManager.getInstance().getTranslation("exitApp"));
+        currency.setText(LanguageManager.getInstance().getTranslation("currency"));
+        openFileButton.setText(LanguageManager.getInstance().getTranslation("openFileButton"));
+        saveAsButton.setText(LanguageManager.getInstance().getTranslation("saveAsButton"));
+        saveButton.setText(LanguageManager.getInstance().getTranslation("saveButton"));
+        themeButton.setText(LanguageManager.getInstance().getTranslation("themeButton"));
+        viewButton.setText(LanguageManager.getInstance().getTranslation("viewButton"));
+        newButton.setText(LanguageManager.getInstance().getTranslation("newButton"));
+        fileButton.setText(LanguageManager.getInstance().getTranslation("fileButton"));
+        settingsButton.setText(LanguageManager.getInstance().getTranslation("settingsButton"));
+        aboutButton.setText(LanguageManager.getInstance().getTranslation("aboutButton"));
+        closeWindow.setText(LanguageManager.getInstance().getTranslation("closeWindow"));
+        creditLabel.setText(LanguageManager.getInstance().getTranslation("CreditButton"));
+        loanInput.setPromptText(LanguageManager.getInstance().getTranslation("loanInput"));
+        annualPercentInput.setPromptText(LanguageManager.getInstance().getTranslation("annualPercentInput"));
+        contractBeginning.setPromptText(LanguageManager.getInstance().getTranslation("contractBeginning"));
+        contractEnding.setPromptText(LanguageManager.getInstance().getTranslation("contractEnding"));
+        paymentOption.setText(LanguageManager.getInstance().getTranslation("paymentOption"));
+        checkPaymentHolidays.setText(LanguageManager.getInstance().getTranslation("checkPaymentHolidays"));
+        holidaysBeginning.setPromptText(LanguageManager.getInstance().getTranslation("holidaysBeginning"));
+        holidaysEnding.setPromptText(LanguageManager.getInstance().getTranslation("holidaysEnding"));
+        creditSaveResult.setText(LanguageManager.getInstance().getTranslation("creditSaveResult"));
+        creditViewResult.setText(LanguageManager.getInstance().getTranslation("creditViewResult"));
+        PaymentOption1.setText(LanguageManager.getInstance().getTranslation("PaymentOption1"));
+        PaymentOption2.setText(LanguageManager.getInstance().getTranslation("PaymentOption2"));
+        PaymentOption3.setText(LanguageManager.getInstance().getTranslation("PaymentOption3"));
+        PaymentOption4.setText(LanguageManager.getInstance().getTranslation("PaymentOption4"));
     }
 
 }
+
+
+
+
+

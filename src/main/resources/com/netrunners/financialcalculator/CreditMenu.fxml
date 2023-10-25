@@ -16,25 +16,25 @@
 
 <AnchorPane maxHeight="600.0" maxWidth="600.0" minHeight="620.0" minWidth="620.0" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.netrunners.financialcalculator.controllers.CreditMenuController">
     <children>
-        <MenuBar fx:id="menuBar" layoutX="-9.0" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="609.0" scaleZ="90.0" AnchorPane.leftAnchor="-10.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <MenuBar layoutX="-9.0" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="609.0" scaleZ="90.0" AnchorPane.leftAnchor="-10.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <menus>
-                <Menu mnemonicParsing="false" text="File">
+                <Menu fx:id="fileButton" mnemonicParsing="false" text="File">
                     <items>
-                        <Menu mnemonicParsing="false" text="New">
+                        <Menu fx:id="newButton" mnemonicParsing="false" text="New">
                             <items>
                                 <MenuItem fx:id="depositButtonMenu" mnemonicParsing="false" text="Deposit" />
                                 <MenuItem fx:id="creditButtonMenu" mnemonicParsing="false" text="Credit" />
                             </items>
                         </Menu>
-                        <MenuItem mnemonicParsing="false" text="Open" />
-                        <MenuItem mnemonicParsing="false" text="Save" />
-                        <MenuItem mnemonicParsing="false" text="Save As" />
+                        <MenuItem fx:id="openFileButton" mnemonicParsing="false" text="Open" />
+                        <MenuItem fx:id="saveButton" mnemonicParsing="false" text="Save" />
+                        <MenuItem fx:id="saveAsButton" mnemonicParsing="false" text="Save As" />
                         <MenuItem fx:id="exitApp" mnemonicParsing="false" text="Exit" />
                     </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="View">
+                <Menu fx:id="viewButton" mnemonicParsing="false" text="View">
                     <items>
-                        <Menu mnemonicParsing="false" text="Theme">
+                        <Menu fx:id="themeButton" mnemonicParsing="false" text="Theme">
                             <items>
                                 <MenuItem fx:id="darkTheme" mnemonicParsing="false" text="Dark" />
                                 <MenuItem fx:id="lightTheme" mnemonicParsing="false" text="Light" />
@@ -42,20 +42,20 @@
                         </Menu>
                     </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Settings">
+                <Menu fx:id="settingsButton" mnemonicParsing="false" text="Settings">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Language" />
+                        <MenuItem fx:id="languageButton" mnemonicParsing="false" text="Language" />
                         <MenuItem fx:id="currency" mnemonicParsing="false" text="Currency" />
                     </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="About">
+                <Menu fx:id="aboutButton" mnemonicParsing="false" text="About">
                     <items>
                         <MenuItem fx:id="aboutUs" mnemonicParsing="false" text="About us" />
                     </items>
                 </Menu>
             </menus>
         </MenuBar>
-        <Label alignment="CENTER" layoutX="-5.0" layoutY="72.0" text="Credit" AnchorPane.leftAnchor="-5.0" AnchorPane.rightAnchor="5.0">
+        <Label fx:id="creditLabel" alignment="CENTER" layoutX="-5.0" layoutY="72.0" text="Credit" AnchorPane.leftAnchor="-5.0" AnchorPane.rightAnchor="5.0">
             <font>
                 <Font name="Leelawadee UI Bold" size="48.0" />
             </font>
@@ -100,17 +100,17 @@
         <CheckBox fx:id="checkPaymentHolidays" layoutX="366.0" layoutY="342.0" mnemonicParsing="false" text="&quot;Payment holidays&quot;" />
         <DatePicker fx:id="holidaysBeginning" layoutX="335.0" layoutY="369.0" prefHeight="25.0" prefWidth="155.0" promptText="&quot;Holidays&quot; beginning" />
         <DatePicker fx:id="holidaysEnding" layoutX="335.0" layoutY="402.0" prefHeight="25.0" prefWidth="155.0" promptText="&quot;Holidays&quot; ending" />
-        <Button fx:id="creditViewResult" layoutX="236.0" layoutY="436.0" mnemonicParsing="false" text="View result">
+        <Button fx:id="creditViewResult" layoutX="165.0" layoutY="436.0" mnemonicParsing="false" prefWidth="290.0" text="View result">
             <font>
                 <Font size="24.0" />
             </font>
         </Button>
-        <Button fx:id="creditSaveResult" layoutX="237.0" layoutY="498.0" mnemonicParsing="false" text="Save result">
+        <Button fx:id="creditSaveResult" layoutX="165.0" layoutY="497.0" mnemonicParsing="false" prefWidth="290.0" text="Save result">
             <font>
                 <Font size="24.0" />
             </font>
         </Button>
-        <Button fx:id="closeWindow" layoutX="276.0" layoutY="556.0" mnemonicParsing="false" style="-fx-background-color: #F08080;" text="Close">
+        <Button fx:id="closeWindow" layoutX="260.0" layoutY="556.0" mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: #F08080;" text="Close">
             <font>
                 <Font size="18.0" />
             </font>

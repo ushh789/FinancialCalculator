@@ -1,11 +1,11 @@
 package com.netrunners.financialcalculator;
 
+import com.netrunners.financialcalculator.VisualInstruments.LanguageManager;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
@@ -86,9 +86,34 @@ public class StartMenuController {
     @FXML
     private Label financialCalculatorLabel;
 
+    public void updateText(){
+        DepositButton.setText(LanguageManager.getInstance().getTranslation("DepositButton"));
+        CreditButton.setText(LanguageManager.getInstance().getTranslation("CreditButton"));
+        creditButtonMenu.setText(LanguageManager.getInstance().getTranslation("creditButtonMenu"));
+        depositButtonMenu.setText(LanguageManager.getInstance().getTranslation("depositButtonMenu"));
+        languageButton.setText(LanguageManager.getInstance().getTranslation("languageButton"));
+        darkTheme.setText(LanguageManager.getInstance().getTranslation("darkTheme"));
+        lightTheme.setText(LanguageManager.getInstance().getTranslation("lightTheme"));
+        aboutUs.setText(LanguageManager.getInstance().getTranslation("aboutUs"));
+        exitApp.setText(LanguageManager.getInstance().getTranslation("exitApp"));
+        currency.setText(LanguageManager.getInstance().getTranslation("currency"));
+        openFileButton.setText(LanguageManager.getInstance().getTranslation("openFileButton"));
+        saveAsButton.setText(LanguageManager.getInstance().getTranslation("saveAsButton"));
+        saveButton.setText(LanguageManager.getInstance().getTranslation("saveButton"));
+        themeButton.setText(LanguageManager.getInstance().getTranslation("themeButton"));
+        viewButton.setText(LanguageManager.getInstance().getTranslation("viewButton"));
+        newButton.setText(LanguageManager.getInstance().getTranslation("newButton"));
+        fileButton.setText(LanguageManager.getInstance().getTranslation("fileButton"));
+        settingsButton.setText(LanguageManager.getInstance().getTranslation("settingsButton"));
+        aboutButton.setText(LanguageManager.getInstance().getTranslation("aboutButton"));
+        financialCalculatorLabel.setText(LanguageManager.getInstance().getTranslation("financialCalculatorLabel"));
+    }
     @FXML
     void initialize() {
-
+        updateText();
+        LanguageManager.getInstance().languageProperty().addListener((observable, oldValue, newValue) -> {
+            updateText();
+        });
         DepositButton.setOnAction(event -> {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(StartMenu.class.getResource("DepositMenu.fxml"));
@@ -330,59 +355,27 @@ public class StartMenuController {
     }
 
     public void setLanguage(String language) {
-        try {
-            // Load the JSON file
-            Gson gson = new Gson();
-            Type type = new TypeToken<Map<String, List<String>>>() {
-            }.getType();
-
-            // Use InputStreamReader with UTF-8 encoding
-            try (InputStreamReader reader = new InputStreamReader(new FileInputStream("languages.json"), StandardCharsets.UTF_8)) {
-                Map<String, List<String>> json = gson.fromJson(reader, type);
-
-                // Define language index based on language code
-                Map<String, Integer> languageIndexMap = Map.of(
-                        "en", 0,
-                        "uk", 1,
-                        "es", 2,
-                        "fr", 3,
-                        "de", 4,
-                        "cs", 5,
-                        "pl", 6,
-                        "nl", 7,
-                        "ja", 8,
-                        "zh", 9
-                );
-                int index = languageIndexMap.getOrDefault(language, -1);
-
-                // Update the text of all controls using the JSON file
-                CreditButton.setText(json.get("CreditButton").get(index));
-                DepositButton.setText(json.get("DepositButton").get(index));
-                depositButtonMenu.setText(json.get("depositButtonMenu").get(index));
-                creditButtonMenu.setText(json.get("creditButtonMenu").get(index));
-                languageButton.setText(json.get("languageButton").get(index));
-                saveAsButton.setText(json.get("saveAsButton").get(index));
-                saveButton.setText(json.get("saveButton").get(index));
-                openFileButton.setText(json.get("openFileButton").get(index));
-                fileButton.setText(json.get("fileButton").get(index));
-                darkTheme.setText(json.get("darkTheme").get(index));
-                lightTheme.setText(json.get("lightTheme").get(index));
-                themeButton.setText(json.get("themeButton").get(index));
-                viewButton.setText(json.get("viewButton").get(index));
-                newButton.setText(json.get("newButton").get(index));
-                aboutUs.setText(json.get("aboutUs").get(index));
-                exitApp.setText(json.get("exitApp").get(index));
-                currency.setText(json.get("currency").get(index));
-                financialCalculatorLabel.setText(json.get("financialCalculatorLabel").get(index));
-                settingsButton.setText(json.get("settingsButton").get(index));
-                aboutButton.setText(json.get("aboutButton").get(index));
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
+        LanguageManager.getInstance().setLanguage(language);
+        DepositButton.setText(LanguageManager.getInstance().getTranslation("DepositButton"));
+        CreditButton.setText(LanguageManager.getInstance().getTranslation("CreditButton"));
+        creditButtonMenu.setText(LanguageManager.getInstance().getTranslation("creditButtonMenu"));
+        depositButtonMenu.setText(LanguageManager.getInstance().getTranslation("depositButtonMenu"));
+        languageButton.setText(LanguageManager.getInstance().getTranslation("languageButton"));
+        darkTheme.setText(LanguageManager.getInstance().getTranslation("darkTheme"));
+        lightTheme.setText(LanguageManager.getInstance().getTranslation("lightTheme"));
+        aboutUs.setText(LanguageManager.getInstance().getTranslation("aboutUs"));
+        exitApp.setText(LanguageManager.getInstance().getTranslation("exitApp"));
+        currency.setText(LanguageManager.getInstance().getTranslation("currency"));
+        openFileButton.setText(LanguageManager.getInstance().getTranslation("openFileButton"));
+        saveAsButton.setText(LanguageManager.getInstance().getTranslation("saveAsButton"));
+        saveButton.setText(LanguageManager.getInstance().getTranslation("saveButton"));
+        themeButton.setText(LanguageManager.getInstance().getTranslation("themeButton"));
+        viewButton.setText(LanguageManager.getInstance().getTranslation("viewButton"));
+        newButton.setText(LanguageManager.getInstance().getTranslation("newButton"));
+        fileButton.setText(LanguageManager.getInstance().getTranslation("fileButton"));
+        settingsButton.setText(LanguageManager.getInstance().getTranslation("settingsButton"));
+        aboutButton.setText(LanguageManager.getInstance().getTranslation("aboutButton"));
+        financialCalculatorLabel.setText(LanguageManager.getInstance().getTranslation("financialCalculatorLabel"));
     }
 }
 
