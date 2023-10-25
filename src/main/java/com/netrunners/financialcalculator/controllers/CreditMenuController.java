@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 
 import com.netrunners.financialcalculator.StartMenu;
 import com.netrunners.financialcalculator.VisualInstruments.LanguageManager;
+import com.netrunners.financialcalculator.LogicalInstrumnts.TimeFunctions.DatePickerRestrictions;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -161,6 +162,8 @@ public class CreditMenuController {
     }
     @FXML
     void initialize() {
+        DatePickerRestrictions.setDatePickerRestrictions(contractBeginning, contractEnding);
+        DatePickerRestrictions.setDatePickerRestrictions(holidaysBeginning, holidaysEnding);
         updateText();
         LanguageManager.getInstance().languageProperty().addListener((observable, oldValue, newValue) -> {
             updateText();

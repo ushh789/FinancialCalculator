@@ -6,12 +6,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.time.format.DateTimeFormatter;
 
+import com.netrunners.financialcalculator.LogicalInstrumnts.TimeFunctions.DatePickerRestrictions;
 import com.netrunners.financialcalculator.StartMenu;
 import com.netrunners.financialcalculator.VisualInstruments.LanguageManager;
 import javafx.fxml.FXML;
@@ -20,6 +18,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 public class DepositMenuController {
 
@@ -172,6 +171,8 @@ public class DepositMenuController {
         LanguageManager.getInstance().languageProperty().addListener((observable, oldValue, newValue) -> {
             updateText();
         });
+        DatePickerRestrictions.setDatePickerRestrictions(depositContractBeginning, depositContractEnding);
+
         depositWithdrawalDate.setVisible(false);
         depositWithdrawalDate.setDisable(true);
         closeWindow.setOnAction(event -> closeCurrentWindow(closeWindow.getScene()));
@@ -202,6 +203,9 @@ public class DepositMenuController {
                 scene.getStylesheets().clear();
                 scene.getStylesheets().add(StartMenu.currentTheme);
             }
+        });
+        depositSaveResult.setOnAction(event ->{
+            System.out.print("Save");
         });
         aboutUs.setOnAction(event -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -370,7 +374,9 @@ public class DepositMenuController {
                 }
             }
         });
+
     }
+
     public void setLanguage(String language) {
         LanguageManager.getInstance().setLanguage(language);
         creditButtonMenu.setText(LanguageManager.getInstance().getTranslation("creditButtonMenu"));

@@ -107,6 +107,8 @@ public class StartMenuController implements LanguageUpdater {
     }
     @FXML
     void initialize() {
+        saveButton.setDisable(true);
+        saveAsButton.setDisable(true);
         updateText();
         LanguageManager.getInstance().languageProperty().addListener((observable, oldValue, newValue) -> updateText());
         DepositButton.setOnAction(event -> {
