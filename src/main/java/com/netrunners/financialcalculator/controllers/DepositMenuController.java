@@ -375,7 +375,9 @@ public class DepositMenuController {
             if(InputFieldErrors.checkIfCorrectNumberGiven(investInput) && InputFieldErrors.checkIfCorrectNumberGiven(depositAnnualPercentInput)){
                 System.out.println("correct data given!");
             }
+            System.out.println(depositWithdrawalOption.getText());
         });
+
     }
     public void setLanguage(String language) {
         LanguageManager.getInstance().setLanguage(language);

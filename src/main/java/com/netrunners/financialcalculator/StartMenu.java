@@ -2,6 +2,7 @@ package com.netrunners.financialcalculator;
 
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Credit.Credit;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Credit.CreditWithHolidays;
+import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Credit.CreditWithoutHolidays;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Deposit.CapitalisedDeposit;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Deposit.Deposit;
 import javafx.application.Application;
@@ -35,6 +36,8 @@ public class StartMenu extends Application {
 
         }
 
+
+
         primaryStage.setScene(new Scene(fxmlLoader.load(), 600, 600));
         primaryStage.maxHeightProperty().setValue(600);
         primaryStage.maxWidthProperty().setValue(600);
@@ -44,7 +47,6 @@ public class StartMenu extends Application {
         startMenuScene = primaryStage.getScene();
         StartMenu.openScenes.add(startMenuScene);
         primaryStage.show();
-
 
     }
 
