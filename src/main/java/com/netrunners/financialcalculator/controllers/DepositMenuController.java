@@ -414,7 +414,9 @@ public class DepositMenuController {
                     System.out.println("seved temp3");
                 }
             }
+            System.out.println(depositWithdrawalOption.getText());
         });
+
     }
 
     public void setLanguage(String language) {

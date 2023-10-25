@@ -14,8 +14,8 @@ public class CreditWithoutHolidays extends Credit implements Savable{
     }
 
     @Override
-    public void save(String filename) {
-        super.save(filename);
+    public void save() {
+        super.save();
     }
 
     @Override

@@ -5,7 +5,10 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.netrunners.financialcalculator.LogicalInstrumnts.FileInstruments.Savable;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TimeFunctions.LocalDateAdapter;
+import com.netrunners.financialcalculator.StartMenu;
+import javafx.stage.FileChooser;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -33,19 +36,28 @@ public class Credit implements Savable {
         return 0;
     }
 
-    @Override
-    public void save(String filename) {
+
+    public void save() {
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
                 .create();
         JsonObject jsonObject = getJsonObject();
         String json = gson.toJson(jsonObject);
-        try (FileWriter writer = new FileWriter("saves/" + filename + ".json")){
-            writer.write(json);
-        }
-        catch (IOException e){
-            e.getMessage();
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save Data");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("JSON Files", "*.json"));
+        File file = fileChooser.showSaveDialog(null); // stage is your JavaFX stage
+
+        if (file != null) {
+            try (FileWriter writer = new FileWriter(file)){
+                writer.write(json);
+            }
+            catch (IOException e){
+                e.getMessage();
+            }
         }
     }
 
@@ -58,6 +70,7 @@ public class Credit implements Savable {
         jsonObject.addProperty("endDate", this.endDate.toString());
         return jsonObject;
     }
+
 
     @Override
     public void open() {

@@ -55,14 +55,14 @@ public abstract class Deposit implements Savable {
     }
 
     @Override
-    public void save(String filename) {
+    public void save() {
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
                 .create();
         JsonObject jsonObject = getJsonObject();
         String json = gson.toJson(jsonObject);
-        try (FileWriter writer = new FileWriter("saves/"+ filename + ".json")){
+        try (FileWriter writer = new FileWriter("saves/credit" + ".json")){
             writer.write(json);
         }
         catch (IOException e){

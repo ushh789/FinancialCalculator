@@ -44,6 +44,8 @@ public class StartMenu extends Application {
         startMenuScene = primaryStage.getScene();
         StartMenu.openScenes.add(startMenuScene);
         primaryStage.show();
+
+
     }
 
     public static void main(String[] args) {
