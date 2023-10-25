@@ -11,12 +11,12 @@ module com.netrunners.financialcalculator {
     requires com.google.gson;
 
     opens com.netrunners.financialcalculator to javafx.fxml, com.google.gson;
-    opens com.netrunners.financialcalculator.controllers to javafx.fxml;
     opens com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Deposit to com.google.gson;
     opens com.netrunners.financialcalculator.LogicalInstrumnts.TimeFunctions to com.google.gson;
 
 
 
     exports com.netrunners.financialcalculator;
-    exports com.netrunners.financialcalculator.controllers;
+    exports com.netrunners.financialcalculator.Controllers;
+    opens com.netrunners.financialcalculator.Controllers to com.google.gson, javafx.fxml;
 }

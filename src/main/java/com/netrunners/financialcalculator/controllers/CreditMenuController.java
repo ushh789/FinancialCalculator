@@ -1,4 +1,4 @@
-package com.netrunners.financialcalculator.controllers;
+package com.netrunners.financialcalculator.Controllers;
 
 import java.io.IOException;
 import java.net.URL;
@@ -16,7 +16,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-import static com.netrunners.financialcalculator.controllers.closeWindow.closeCurrentWindow;
+import static com.netrunners.financialcalculator.Controllers.closeWindow.closeCurrentWindow;
 
 public class CreditMenuController {
     @FXML

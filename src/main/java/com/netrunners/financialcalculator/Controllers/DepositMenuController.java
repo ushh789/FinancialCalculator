@@ -1,6 +1,6 @@
-package com.netrunners.financialcalculator.Controllers;
+package com.netrunners.financialcalculator.Сontrollers;
 
-import static com.netrunners.financialcalculator.Controllers.closeWindow.closeCurrentWindow;
+import static com.netrunners.financialcalculator.Сontrollers.closeWindow.closeCurrentWindow;
 
 import java.io.IOException;
 import java.net.URL;
@@ -16,12 +16,9 @@ import com.netrunners.financialcalculator.StartMenu;
 import com.netrunners.financialcalculator.VisualInstruments.LanguageManager;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.HPos;
-import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 public class DepositMenuController {

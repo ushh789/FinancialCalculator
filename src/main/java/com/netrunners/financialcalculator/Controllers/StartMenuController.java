@@ -1,117 +1,57 @@
 package com.netrunners.financialcalculator.Controllers;
 
-import static com.netrunners.financialcalculator.Controllers.closeWindow.closeCurrentWindow;
-
-import java.io.IOException;
-import java.net.URL;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
-import java.time.format.DateTimeFormatter;
-
 import com.netrunners.financialcalculator.StartMenu;
 import com.netrunners.financialcalculator.VisualInstruments.LanguageManager;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.HPos;
-import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
-import javafx.scene.layout.GridPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.scene.control.Alert.AlertType;
 
-public class DepositMenuController {
+import java.io.FileReader;
+import java.io.*;
+import java.util.*;
+import java.util.List;
 
-    @FXML
-    private ResourceBundle resources;
+import static com.netrunners.financialcalculator.StartMenu.startMenuScene;
+import static com.netrunners.financialcalculator.Controllers.closeWindow.closeCurrentWindow;
 
-    @FXML
-    private URL location;
-
-    @FXML
-    private MenuItem WithdrawalOption1;
-
-    @FXML
-    private MenuItem WithdrawalOption2;
+public class StartMenuController implements LanguageUpdater {
 
     @FXML
-    private MenuItem WithdrawalOption3;
+    private Button CreditButton;
 
     @FXML
-    private MenuItem WithdrawalOption4;
-
-    @FXML
-    private Menu aboutButton;
-
-    @FXML
-    private MenuItem aboutUs;
-
-    @FXML
-    private Button closeWindow;
-
-    @FXML
-    private MenuItem creditButtonMenu;
-
-    @FXML
-    private MenuItem currency;
-
-    @FXML
-    private MenuItem darkTheme;
-
-    @FXML
-    private TextField depositAnnualPercentInput;
+    private Button DepositButton;
 
     @FXML
     private MenuItem depositButtonMenu;
 
     @FXML
-    private CheckBox depositCapitalizationCheck;
-
-    @FXML
-    private DatePicker depositContractBeginning;
-
-    @FXML
-    private DatePicker depositContractEnding;
-
-    @FXML
-    private CheckBox depositEarlyWithdrawalCheck;
-
-    @FXML
-    private Label depositLabel;
-
-    @FXML
-    private Button depositSaveResult;
-
-    @FXML
-    private Button depositViewResult;
-
-    @FXML
-    private DatePicker depositWithdrawalDate;
-
-    @FXML
-    private MenuButton depositWithdrawalOption;
-
-    @FXML
-    private MenuItem exitApp;
-
-    @FXML
-    private Menu fileButton;
-
-    @FXML
-    private TextField investInput;
+    private MenuItem creditButtonMenu;
 
     @FXML
     private MenuItem languageButton;
 
     @FXML
+    private MenuItem darkTheme;
+
+    @FXML
     private MenuItem lightTheme;
 
     @FXML
-    private Menu newButton;
+    private MenuItem aboutUs;
+
+    @FXML
+    private MenuItem exitApp;
+
+    @FXML
+    private MenuItem currency;
 
     @FXML
     private MenuItem openFileButton;
@@ -123,15 +63,29 @@ public class DepositMenuController {
     private MenuItem saveButton;
 
     @FXML
-    private Menu settingsButton;
-
-    @FXML
     private Menu themeButton;
 
     @FXML
     private Menu viewButton;
 
+    @FXML
+    private Menu newButton;
+
+    @FXML
+    private Menu fileButton;
+
+    @FXML
+    private Menu settingsButton;
+
+    @FXML
+    private Menu aboutButton;
+
+    @FXML
+    private Label financialCalculatorLabel;
+
     public void updateText(){
+        DepositButton.setText(LanguageManager.getInstance().getTranslation("DepositButton"));
+        CreditButton.setText(LanguageManager.getInstance().getTranslation("CreditButton"));
         creditButtonMenu.setText(LanguageManager.getInstance().getTranslation("creditButtonMenu"));
         depositButtonMenu.setText(LanguageManager.getInstance().getTranslation("depositButtonMenu"));
         languageButton.setText(LanguageManager.getInstance().getTranslation("languageButton"));
@@ -149,48 +103,94 @@ public class DepositMenuController {
         fileButton.setText(LanguageManager.getInstance().getTranslation("fileButton"));
         settingsButton.setText(LanguageManager.getInstance().getTranslation("settingsButton"));
         aboutButton.setText(LanguageManager.getInstance().getTranslation("aboutButton"));
-        closeWindow.setText(LanguageManager.getInstance().getTranslation("closeWindow"));
-        depositLabel.setText(LanguageManager.getInstance().getTranslation("DepositButton"));
-        depositCapitalizationCheck.setText(LanguageManager.getInstance().getTranslation("depositCapitalizationCheck"));
-        depositEarlyWithdrawalCheck.setText(LanguageManager.getInstance().getTranslation("depositEarlyWithdrawalCheck"));
-        depositWithdrawalOption.setText(LanguageManager.getInstance().getTranslation("depositWithdrawalOption"));
-        depositSaveResult.setText(LanguageManager.getInstance().getTranslation("creditSaveResult"));
-        depositViewResult.setText(LanguageManager.getInstance().getTranslation("creditViewResult"));
-        depositAnnualPercentInput.setPromptText(LanguageManager.getInstance().getTranslation("depositAnnualPercentInput"));
-        investInput.setPromptText(LanguageManager.getInstance().getTranslation("investInput"));
-        depositContractBeginning.setPromptText(LanguageManager.getInstance().getTranslation("depositContractBeginning"));
-        depositContractEnding.setPromptText(LanguageManager.getInstance().getTranslation("depositContractEnding"));
-        depositWithdrawalDate.setPromptText(LanguageManager.getInstance().getTranslation("depositWithdrawalDate"));
-        WithdrawalOption1.setText(LanguageManager.getInstance().getTranslation("WithdrawalOption1"));
-        WithdrawalOption2.setText(LanguageManager.getInstance().getTranslation("WithdrawalOption2"));
-        WithdrawalOption3.setText(LanguageManager.getInstance().getTranslation("WithdrawalOption3"));
-        WithdrawalOption4.setText(LanguageManager.getInstance().getTranslation("WithdrawalOption4"));
-
+        financialCalculatorLabel.setText(LanguageManager.getInstance().getTranslation("financialCalculatorLabel"));
     }
-
     @FXML
-    void initialize(){
-
+    void initialize() {
         updateText();
-        LanguageManager.getInstance().languageProperty().addListener((observable, oldValue, newValue) -> {
-            updateText();
-        });
-        depositWithdrawalDate.setVisible(false);
-        depositWithdrawalDate.setDisable(true);
-        closeWindow.setOnAction(event -> closeCurrentWindow(closeWindow.getScene()));
-        depositEarlyWithdrawalCheck.setOnAction(event -> {
-            if(depositEarlyWithdrawalCheck.isSelected()){
-                depositWithdrawalDate.setVisible(true);
-                depositWithdrawalDate.setDisable(false);
-            }else{
-                depositWithdrawalDate.setVisible(false);
-                depositWithdrawalDate.setDisable(true);
+        LanguageManager.getInstance().languageProperty().addListener((observable, oldValue, newValue) -> updateText());
+        DepositButton.setOnAction(event -> {
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(StartMenu.class.getResource("DepositMenu.fxml"));
+                Stage stage = new Stage();
+                stage.setTitle("Deposit Menu");
+                Scene scene = new Scene(fxmlLoader.load());
+                scene.getStylesheets().add(StartMenu.currentTheme);
+                stage.setScene(scene);
+                StartMenu.openScenes.add(scene);
+                stage.getIcons().add(new Image("file:src/main/resources/com/netrunners/financialcalculator/assets/Logo.png"));
+                stage.setMaxHeight(820);
+                stage.setMaxWidth(620);
+                stage.setMinHeight(820);
+                stage.setMinWidth(620);
+                stage.show();
+
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
-        WithdrawalOption1.setOnAction(event -> depositWithdrawalOption.setText(WithdrawalOption1.getText()));
-        WithdrawalOption2.setOnAction(event -> depositWithdrawalOption.setText(WithdrawalOption2.getText()));
-        WithdrawalOption3.setOnAction(event -> depositWithdrawalOption.setText(WithdrawalOption3.getText()));
-        WithdrawalOption4.setOnAction(event -> depositWithdrawalOption.setText(WithdrawalOption4.getText()));
+
+        CreditButton.setOnAction(event -> {
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(StartMenu.class.getResource("CreditMenu.fxml"));
+                Stage stage = new Stage();
+                stage.setTitle("Credit Menu");
+                Scene scene = new Scene(fxmlLoader.load());
+                scene.getStylesheets().add(StartMenu.currentTheme);
+                stage.setScene(scene);
+                StartMenu.openScenes.add(scene);
+                stage.getIcons().add(new Image("file:src/main/resources/com/netrunners/financialcalculator/assets/Logo.png"));
+                stage.setMaxHeight(820);
+                stage.setMaxWidth(620);
+                stage.setMinHeight(820);
+                stage.setMinWidth(620);
+                stage.show();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        depositButtonMenu.setOnAction(event -> {
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(StartMenu.class.getResource("DepositMenu.fxml"));
+                Stage stage = new Stage();
+                stage.setTitle("Deposit Menu");
+                Scene scene = new Scene(fxmlLoader.load());
+                scene.getStylesheets().add(StartMenu.currentTheme);
+                stage.setScene(scene);
+                StartMenu.openScenes.add(scene);
+                stage.getIcons().add(new Image("file:src/main/resources/com/netrunners/financialcalculator/assets/Logo.png"));
+                stage.setMaxHeight(820);
+                stage.setMaxWidth(620);
+                stage.setMinHeight(820);
+                stage.setMinWidth(620);
+                stage.show();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        creditButtonMenu.setOnAction(event -> {
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(StartMenu.class.getResource("CreditMenu.fxml"));
+                Stage stage = new Stage();
+                stage.setTitle("Credit Menu");
+                Scene scene = new Scene(fxmlLoader.load());
+                scene.getStylesheets().add(StartMenu.currentTheme);
+                stage.setScene(scene);
+                StartMenu.openScenes.add(scene);
+                stage.getIcons().add(new Image("file:src/main/resources/com/netrunners/financialcalculator/assets/Logo.png"));
+                stage.setMaxHeight(820);
+                stage.setMaxWidth(620);
+                stage.setMinHeight(820);
+                stage.setMinWidth(620);
+                stage.show();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
         darkTheme.setOnAction(event -> {
             StartMenu.currentTheme = "file:src/main/resources/com/netrunners/financialcalculator/assets/darkTheme.css";
             for (Scene scene : StartMenu.openScenes) {
@@ -207,7 +207,7 @@ public class DepositMenuController {
             }
         });
         aboutUs.setOnAction(event -> {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            Alert alert = new Alert(AlertType.INFORMATION);
             alert.setTitle("About our application");
             Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
             stage.getIcons().add(new Image("file:src/main/resources/com/netrunners/financialcalculator/assets/Logo.png"));
@@ -241,7 +241,7 @@ public class DepositMenuController {
                     "Financial Calculator by Netrunners" empowers individuals, students, professionals, and business owners to make informed decisions about their financial affairs. Whether you're planning to save money or seeking insights into loan repayments, this versatile tool offers a comprehensive set of features to help you on your financial journey. Start making smarter financial decisions today with this powerful yet user-friendly financial calculator.""");
             alert.showAndWait();
         });
-        exitApp.setOnAction(event ->{
+        exitApp.setOnAction(event -> {
             for (Scene scene : StartMenu.openScenes) {
                 closeCurrentWindow(scene);
             }
@@ -273,69 +273,40 @@ public class DepositMenuController {
                 }
             }
         });
-        depositContractBeginning.setOnAction(event ->{
-            LocalDate dateBeginning = depositContractBeginning.getValue();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-            String formattedDateBeginning = dateBeginning.format(formatter);
-            System.out.printf("Date of Beginning: %s%n", formattedDateBeginning);
-
-            LocalDate dateEnding = depositContractEnding.getValue();
-            if (dateEnding != null) {
-                long daysBetween = ChronoUnit.DAYS.between(dateBeginning, dateEnding);
-                System.out.printf("Days between: %d%n", daysBetween);
+        openFileButton.setOnAction(event -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Open Resource File");
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json"));
+            File file = fileChooser.showOpenDialog(startMenuScene.getWindow());
+            if (file != null) {
+                System.out.println("File opened: " + file.getName());
+                try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        System.out.println(line);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
+        saveAsButton.setOnAction(event -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Save As");
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("JSON Files", "*.json"),
+                    new FileChooser.ExtensionFilter("All Files", "*.*")
+            );
+            File file = fileChooser.showSaveDialog(null);
 
-        depositContractEnding.setOnAction(event ->{
-            LocalDate dateEnding = depositContractEnding.getValue();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-            String formattedDateEnding = dateEnding.format(formatter);
-            System.out.printf("Date of Ending: %s%n", formattedDateEnding);
-
-            LocalDate dateBeginning = depositContractBeginning.getValue();
-            if (dateBeginning != null) {
-                long daysBetween = ChronoUnit.DAYS.between(dateBeginning, dateEnding);
-                System.out.printf("Days between: %d%n", daysBetween);
-            }
-        });
-        depositButtonMenu.setOnAction(event ->{
-            try {
-                FXMLLoader fxmlLoader = new FXMLLoader(StartMenu.class.getResource("DepositMenu.fxml"));
-                Stage stage = new Stage();
-                stage.setTitle("Deposit Menu");
-                Scene scene = new Scene(fxmlLoader.load());
-                scene.getStylesheets().add(StartMenu.currentTheme);
-                stage.setScene(scene);
-                StartMenu.openScenes.add(scene);
-                stage.getIcons().add(new Image("file:src/main/resources/com/netrunners/financialcalculator/assets/Logo.png"));
-                stage.setMaxHeight(820);
-                stage.setMaxWidth(620);
-                stage.setMinHeight(820);
-                stage.setMinWidth(620);
-                stage.show();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-        creditButtonMenu.setOnAction(event ->{
-            try {
-                FXMLLoader fxmlLoader = new FXMLLoader(StartMenu.class.getResource("CreditMenu.fxml"));
-                Stage stage = new Stage();
-                stage.setTitle("Credit Menu");
-                Scene scene = new Scene(fxmlLoader.load());
-                scene.getStylesheets().add(StartMenu.currentTheme);
-                stage.setScene(scene);
-                StartMenu.openScenes.add(scene);
-                stage.getIcons().add(new Image("file:src/main/resources/com/netrunners/financialcalculator/assets/Logo.png"));
-                stage.setMaxHeight(820);
-                stage.setMaxWidth(620);
-                stage.setMinHeight(820);
-                stage.setMinWidth(620);
-                stage.show();
-
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (file != null) {
+                try {
+                    FileWriter fileWriter = new FileWriter(file);
+                    fileWriter.write("Your content here");
+                    fileWriter.close();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
             }
         });
         languageButton.setOnAction(event -> {
@@ -373,9 +344,14 @@ public class DepositMenuController {
                 }
             }
         });
+
+
     }
+
     public void setLanguage(String language) {
         LanguageManager.getInstance().setLanguage(language);
+        DepositButton.setText(LanguageManager.getInstance().getTranslation("DepositButton"));
+        CreditButton.setText(LanguageManager.getInstance().getTranslation("CreditButton"));
         creditButtonMenu.setText(LanguageManager.getInstance().getTranslation("creditButtonMenu"));
         depositButtonMenu.setText(LanguageManager.getInstance().getTranslation("depositButtonMenu"));
         languageButton.setText(LanguageManager.getInstance().getTranslation("languageButton"));
@@ -393,26 +369,7 @@ public class DepositMenuController {
         fileButton.setText(LanguageManager.getInstance().getTranslation("fileButton"));
         settingsButton.setText(LanguageManager.getInstance().getTranslation("settingsButton"));
         aboutButton.setText(LanguageManager.getInstance().getTranslation("aboutButton"));
-        closeWindow.setText(LanguageManager.getInstance().getTranslation("closeWindow"));
-        depositLabel.setText(LanguageManager.getInstance().getTranslation("DepositButton"));
-        depositCapitalizationCheck.setText(LanguageManager.getInstance().getTranslation("depositCapitalizationCheck"));
-        depositEarlyWithdrawalCheck.setText(LanguageManager.getInstance().getTranslation("depositEarlyWithdrawalCheck"));
-        depositWithdrawalOption.setText(LanguageManager.getInstance().getTranslation("depositWithdrawalOption"));
-        depositSaveResult.setText(LanguageManager.getInstance().getTranslation("creditSaveResult"));
-        depositViewResult.setText(LanguageManager.getInstance().getTranslation("creditViewResult"));
-        depositAnnualPercentInput.setPromptText(LanguageManager.getInstance().getTranslation("depositAnnualPercentInput"));
-        investInput.setPromptText(LanguageManager.getInstance().getTranslation("investInput"));
-        depositContractBeginning.setPromptText(LanguageManager.getInstance().getTranslation("depositContractBeginning"));
-        depositContractEnding.setPromptText(LanguageManager.getInstance().getTranslation("depositContractEnding"));
-        depositWithdrawalDate.setPromptText(LanguageManager.getInstance().getTranslation("depositWithdrawalDate"));
-        WithdrawalOption1.setText(LanguageManager.getInstance().getTranslation("WithdrawalOption1"));
-        WithdrawalOption2.setText(LanguageManager.getInstance().getTranslation("WithdrawalOption2"));
-        WithdrawalOption3.setText(LanguageManager.getInstance().getTranslation("WithdrawalOption3"));
-        WithdrawalOption4.setText(LanguageManager.getInstance().getTranslation("WithdrawalOption4"));
-
+        financialCalculatorLabel.setText(LanguageManager.getInstance().getTranslation("financialCalculatorLabel"));
     }
-    }
-
-
-
+}
 

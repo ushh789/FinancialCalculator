@@ -1,4 +1,4 @@
-package com.netrunners.financialcalculator.Controllers;
+package com.netrunners.financialcalculator.Сontrollers;
 
 import javafx.scene.Scene;
 
