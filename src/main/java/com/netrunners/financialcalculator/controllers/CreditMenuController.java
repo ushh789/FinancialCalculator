@@ -18,8 +18,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-
-import javax.xml.transform.ErrorListener;
+;
 
 import static com.netrunners.financialcalculator.Controllers.closeWindow.closeCurrentWindow;
 
