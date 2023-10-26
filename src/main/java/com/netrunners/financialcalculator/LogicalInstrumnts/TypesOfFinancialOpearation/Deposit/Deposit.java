@@ -71,7 +71,7 @@ public abstract class Deposit implements Savable {
         fileChooser.setTitle("Save Data");
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("JSON Files", "*.json"));
-        File file = fileChooser.showSaveDialog(null); // stage is your JavaFX stage
+        File file = fileChooser.showSaveDialog(null);
 
         if (file != null) {
             try (FileWriter writer = new FileWriter(file)){

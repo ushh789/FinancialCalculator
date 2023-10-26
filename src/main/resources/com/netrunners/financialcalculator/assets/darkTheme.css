@@ -26,4 +26,8 @@
     -fx-prompt-text-fill: lightgray;
     -fx-opacity: 0.3;
 }
-
+.date-picker:focused {
+    -fx-focus-color: #039ed3;
+    -fx-faint-focus-color: #039ed3;
+    -fx-background-color: #3c3f41;
+}

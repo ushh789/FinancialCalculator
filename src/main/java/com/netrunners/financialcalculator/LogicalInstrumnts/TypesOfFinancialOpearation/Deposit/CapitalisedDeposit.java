@@ -14,12 +14,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 public class CapitalisedDeposit extends Deposit{
-    public CapitalisedDeposit(float investment, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, LocalDate earlyWithdrawalDate, int withdrawalOption) {
-        super(investment,currency, annualPercent, startDate, endDate, earlyWithdrawalDate, withdrawalOption);
+    public CapitalisedDeposit(float investment, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, boolean earlyWithdrawal, LocalDate earlyWithdrawalDate, int withdrawalOption) {
+        super(investment,currency, annualPercent, startDate, endDate, earlyWithdrawal, earlyWithdrawalDate, withdrawalOption);
     }
 
-    public CapitalisedDeposit(float investment, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, int withdrawalOption) {
-        super(investment, currency, annualPercent, startDate, endDate, withdrawalOption);
+    public CapitalisedDeposit(float investment, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, boolean earlyWithdrawal, int withdrawalOption) {
+        super(investment, currency, annualPercent, startDate, endDate, earlyWithdrawal, withdrawalOption);
     }
     @Override
     protected float countProfit() {

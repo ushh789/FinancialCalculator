@@ -1,4 +1,4 @@
-package com.netrunners.financialcalculator.Controllers;
+package com.netrunners.financialcalculator.MenuControllers;
 
 public interface LanguageUpdater {
     void updateText();

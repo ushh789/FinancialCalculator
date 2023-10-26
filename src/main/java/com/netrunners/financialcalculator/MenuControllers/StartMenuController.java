@@ -1,4 +1,4 @@
-package com.netrunners.financialcalculator.Controllers;
+package com.netrunners.financialcalculator.MenuControllers;
 
 import com.netrunners.financialcalculator.StartMenu;
 import com.netrunners.financialcalculator.VisualInstruments.LanguageManager;
@@ -18,8 +18,9 @@ import java.io.*;
 import java.util.*;
 import java.util.List;
 
+import static com.netrunners.financialcalculator.ErrorHandling.ErrorChecker.updateDatePickerStyle;
 import static com.netrunners.financialcalculator.StartMenu.startMenuScene;
-import static com.netrunners.financialcalculator.Controllers.closeWindow.closeCurrentWindow;
+import static com.netrunners.financialcalculator.MenuControllers.closeWindow.closeCurrentWindow;
 
 public class StartMenuController implements LanguageUpdater {
 

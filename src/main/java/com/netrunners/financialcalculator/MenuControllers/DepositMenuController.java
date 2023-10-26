@@ -1,12 +1,21 @@
-package com.netrunners.financialcalculator.Сontrollers;
+package com.netrunners.financialcalculator.MenuControllers;
+
+import static com.netrunners.financialcalculator.ErrorHandling.ErrorChecker.updateDatePickerStyle;
+import static com.netrunners.financialcalculator.MenuControllers.closeWindow.closeCurrentWindow;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
+import java.time.format.DateTimeFormatter;
 
+import com.netrunners.financialcalculator.ErrorHandling.ErrorChecker;
+import com.netrunners.financialcalculator.ErrorHandling.InputFieldErrors;
+import com.netrunners.financialcalculator.LogicalInstrumnts.TimeFunctions.DatePickerRestrictions;
+import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Deposit.CapitalisedDeposit;
+import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Deposit.Deposit;
+import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Deposit.UncapitalisedDeposit;
 import com.netrunners.financialcalculator.StartMenu;
 import com.netrunners.financialcalculator.VisualInstruments.LanguageManager;
 import javafx.fxml.FXML;
@@ -16,9 +25,8 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-import static com.netrunners.financialcalculator.Сontrollers.closeWindow.closeCurrentWindow;
+public class DepositMenuController {
 
-public class CreditMenuController {
     @FXML
     private ResourceBundle resources;
 
@@ -26,16 +34,16 @@ public class CreditMenuController {
     private URL location;
 
     @FXML
-    private MenuItem PaymentOption1;
+    private MenuItem WithdrawalOption1;
 
     @FXML
-    private MenuItem PaymentOption2;
+    private MenuItem WithdrawalOption2;
 
     @FXML
-    private MenuItem PaymentOption3;
+    private MenuItem WithdrawalOption3;
 
     @FXML
-    private MenuItem PaymentOption4;
+    private MenuItem WithdrawalOption4;
 
     @FXML
     private Menu aboutButton;
@@ -44,31 +52,10 @@ public class CreditMenuController {
     private MenuItem aboutUs;
 
     @FXML
-    private TextField annualPercentInput;
-
-    @FXML
-    private CheckBox checkPaymentHolidays;
-
-    @FXML
     private Button closeWindow;
 
     @FXML
-    private DatePicker contractBeginning;
-
-    @FXML
-    private DatePicker contractEnding;
-
-    @FXML
     private MenuItem creditButtonMenu;
-
-    @FXML
-    private Label creditLabel;
-
-    @FXML
-    private Button creditSaveResult;
-
-    @FXML
-    private Button creditViewResult;
 
     @FXML
     private MenuItem currency;
@@ -77,7 +64,37 @@ public class CreditMenuController {
     private MenuItem darkTheme;
 
     @FXML
+    private TextField depositAnnualPercentInput;
+
+    @FXML
     private MenuItem depositButtonMenu;
+
+    @FXML
+    private CheckBox depositCapitalizationCheck;
+
+    @FXML
+    private DatePicker depositContractBeginning;
+
+    @FXML
+    private DatePicker depositContractEnding;
+
+    @FXML
+    private CheckBox depositEarlyWithdrawalCheck;
+
+    @FXML
+    private Label depositLabel;
+
+    @FXML
+    private Button depositSaveResult;
+
+    @FXML
+    private Button depositViewResult;
+
+    @FXML
+    private DatePicker depositWithdrawalDate;
+
+    @FXML
+    private MenuButton depositWithdrawalOption;
 
     @FXML
     private MenuItem exitApp;
@@ -86,10 +103,7 @@ public class CreditMenuController {
     private Menu fileButton;
 
     @FXML
-    private DatePicker holidaysBeginning;
-
-    @FXML
-    private DatePicker holidaysEnding;
+    private TextField investInput;
 
     @FXML
     private MenuItem languageButton;
@@ -98,13 +112,10 @@ public class CreditMenuController {
     private MenuItem lightTheme;
 
     @FXML
-    private TextField loanInput;
+    private Menu newButton;
 
     @FXML
     private MenuItem openFileButton;
-
-    @FXML
-    private MenuButton paymentOption;
 
     @FXML
     private MenuItem saveAsButton;
@@ -121,8 +132,7 @@ public class CreditMenuController {
     @FXML
     private Menu viewButton;
 
-    @FXML
-    private MenuItem newButton;
+    private String userSelectedCurrency;
 
     public void updateText() {
         creditButtonMenu.setText(LanguageManager.getInstance().getTranslation("creditButtonMenu"));
@@ -143,58 +153,61 @@ public class CreditMenuController {
         settingsButton.setText(LanguageManager.getInstance().getTranslation("settingsButton"));
         aboutButton.setText(LanguageManager.getInstance().getTranslation("aboutButton"));
         closeWindow.setText(LanguageManager.getInstance().getTranslation("closeWindow"));
-        creditLabel.setText(LanguageManager.getInstance().getTranslation("CreditButton"));
-        loanInput.setPromptText(LanguageManager.getInstance().getTranslation("loanInput"));
-        annualPercentInput.setPromptText(LanguageManager.getInstance().getTranslation("annualPercentInput"));
-        contractBeginning.setPromptText(LanguageManager.getInstance().getTranslation("contractBeginning"));
-        contractEnding.setPromptText(LanguageManager.getInstance().getTranslation("contractEnding"));
-        paymentOption.setText(LanguageManager.getInstance().getTranslation("paymentOption"));
-        checkPaymentHolidays.setText(LanguageManager.getInstance().getTranslation("checkPaymentHolidays"));
-        holidaysBeginning.setPromptText(LanguageManager.getInstance().getTranslation("holidaysBeginning"));
-        holidaysEnding.setPromptText(LanguageManager.getInstance().getTranslation("holidaysEnding"));
-        creditSaveResult.setText(LanguageManager.getInstance().getTranslation("creditSaveResult"));
-        creditViewResult.setText(LanguageManager.getInstance().getTranslation("creditViewResult"));
-        PaymentOption1.setText(LanguageManager.getInstance().getTranslation("PaymentOption1"));
-        PaymentOption2.setText(LanguageManager.getInstance().getTranslation("PaymentOption2"));
-        PaymentOption3.setText(LanguageManager.getInstance().getTranslation("PaymentOption3"));
-        PaymentOption4.setText(LanguageManager.getInstance().getTranslation("PaymentOption4"));
+        depositLabel.setText(LanguageManager.getInstance().getTranslation("DepositButton"));
+        depositCapitalizationCheck.setText(LanguageManager.getInstance().getTranslation("depositCapitalizationCheck"));
+        depositEarlyWithdrawalCheck.setText(LanguageManager.getInstance().getTranslation("depositEarlyWithdrawalCheck"));
+        depositWithdrawalOption.setText(LanguageManager.getInstance().getTranslation("depositWithdrawalOption"));
+        depositSaveResult.setText(LanguageManager.getInstance().getTranslation("creditSaveResult"));
+        depositViewResult.setText(LanguageManager.getInstance().getTranslation("creditViewResult"));
+        depositAnnualPercentInput.setPromptText(LanguageManager.getInstance().getTranslation("depositAnnualPercentInput"));
+        investInput.setPromptText(LanguageManager.getInstance().getTranslation("investInput"));
+        depositContractBeginning.setPromptText(LanguageManager.getInstance().getTranslation("depositContractBeginning"));
+        depositContractEnding.setPromptText(LanguageManager.getInstance().getTranslation("depositContractEnding"));
+        depositWithdrawalDate.setPromptText(LanguageManager.getInstance().getTranslation("depositWithdrawalDate"));
+        WithdrawalOption1.setText(LanguageManager.getInstance().getTranslation("WithdrawalOption1"));
+        WithdrawalOption2.setText(LanguageManager.getInstance().getTranslation("WithdrawalOption2"));
+        WithdrawalOption3.setText(LanguageManager.getInstance().getTranslation("WithdrawalOption3"));
+        WithdrawalOption4.setText(LanguageManager.getInstance().getTranslation("WithdrawalOption4"));
+
     }
+
     @FXML
     void initialize() {
+        ErrorChecker.WrongDateListener(depositContractBeginning);
+        ErrorChecker.WrongDateListener(depositContractEnding);
+        ErrorChecker.WrongDateListener(depositWithdrawalDate);
+        DatePickerRestrictions.setDatePickerRestrictionsWithdrawalHolidays(depositContractBeginning, depositContractEnding, depositWithdrawalDate);
+        userSelectedCurrency = "USD";
+
         updateText();
         LanguageManager.getInstance().languageProperty().addListener((observable, oldValue, newValue) -> {
             updateText();
         });
-        holidaysBeginning.setVisible(false);
-        holidaysBeginning.setDisable(true);
-        holidaysEnding.setVisible(false);
-        holidaysEnding.setDisable(true);
-        checkPaymentHolidays.setOnAction(event ->{
-            if(checkPaymentHolidays.isSelected()){
-                holidaysBeginning.setVisible(true);
-                holidaysEnding.setVisible(true);
-                holidaysBeginning.setDisable(false);
-                holidaysEnding.setDisable(false);
-            }
-            else{
-                holidaysBeginning.setVisible(false);
-                holidaysEnding.setVisible(false);
-                holidaysBeginning.setDisable(true);
-                holidaysEnding.setDisable(true);
+        depositWithdrawalDate.setVisible(false);
+        depositWithdrawalDate.setDisable(true);
+        closeWindow.setOnAction(event -> closeCurrentWindow(closeWindow.getScene()));
+        depositEarlyWithdrawalCheck.setOnAction(event -> {
+            if (depositEarlyWithdrawalCheck.isSelected()) {
+                depositWithdrawalDate.setVisible(true);
+                depositWithdrawalDate.setDisable(false);
+            } else {
+                depositWithdrawalDate.setVisible(false);
+                depositWithdrawalDate.setDisable(true);
             }
         });
-        PaymentOption1.setOnAction(event -> paymentOption.setText(PaymentOption1.getText()));
-        PaymentOption2.setOnAction(event -> paymentOption.setText(PaymentOption2.getText()));
-        PaymentOption3.setOnAction(event -> paymentOption.setText(PaymentOption3.getText()));
-        PaymentOption4.setOnAction(event -> paymentOption.setText(PaymentOption4.getText()));
-
-        closeWindow.setOnAction(event -> closeCurrentWindow(closeWindow.getScene()));
+        WithdrawalOption1.setOnAction(event -> depositWithdrawalOption.setText(WithdrawalOption1.getText()));
+        WithdrawalOption2.setOnAction(event -> depositWithdrawalOption.setText(WithdrawalOption2.getText()));
+        WithdrawalOption3.setOnAction(event -> depositWithdrawalOption.setText(WithdrawalOption3.getText()));
+        WithdrawalOption4.setOnAction(event -> depositWithdrawalOption.setText(WithdrawalOption4.getText()));
         darkTheme.setOnAction(event -> {
             StartMenu.currentTheme = "file:src/main/resources/com/netrunners/financialcalculator/assets/darkTheme.css";
             for (Scene scene : StartMenu.openScenes) {
                 scene.getStylesheets().clear();
                 scene.getStylesheets().add(StartMenu.currentTheme);
             }
+            updateDatePickerStyle(depositWithdrawalDate);
+            updateDatePickerStyle(depositContractBeginning);
+            updateDatePickerStyle(depositContractEnding);
         });
 
         lightTheme.setOnAction(event -> {
@@ -203,6 +216,9 @@ public class CreditMenuController {
                 scene.getStylesheets().clear();
                 scene.getStylesheets().add(StartMenu.currentTheme);
             }
+            updateDatePickerStyle(depositWithdrawalDate);
+            updateDatePickerStyle(depositContractBeginning);
+            updateDatePickerStyle(depositContractEnding);
         });
         aboutUs.setOnAction(event -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -239,7 +255,7 @@ public class CreditMenuController {
                     "Financial Calculator by Netrunners" empowers individuals, students, professionals, and business owners to make informed decisions about their financial affairs. Whether you're planning to save money or seeking insights into loan repayments, this versatile tool offers a comprehensive set of features to help you on your financial journey. Start making smarter financial decisions today with this powerful yet user-friendly financial calculator.""");
             alert.showAndWait();
         });
-        exitApp.setOnAction(event ->{
+        exitApp.setOnAction(event -> {
             for (Scene scene : StartMenu.openScenes) {
                 closeCurrentWindow(scene);
             }
@@ -270,8 +286,10 @@ public class CreditMenuController {
 
                 }
             }
+            userSelectedCurrency = dialog.getSelectedItem();
         });
-        depositButtonMenu.setOnAction(event ->{
+
+        depositButtonMenu.setOnAction(event -> {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(StartMenu.class.getResource("DepositMenu.fxml"));
                 Stage stage = new Stage();
@@ -291,7 +309,7 @@ public class CreditMenuController {
                 e.printStackTrace();
             }
         });
-        creditButtonMenu.setOnAction(event ->{
+        creditButtonMenu.setOnAction(event -> {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(StartMenu.class.getResource("CreditMenu.fxml"));
                 Stage stage = new Stage();
@@ -311,7 +329,6 @@ public class CreditMenuController {
                 e.printStackTrace();
             }
         });
-
         languageButton.setOnAction(event -> {
             List<String> choices = new ArrayList<>();
             choices.add("English");
@@ -347,7 +364,42 @@ public class CreditMenuController {
                 }
             }
         });
+
+        depositSaveResult.setOnAction(event -> {
+            if (ErrorChecker.areFieldsValid(investInput, depositAnnualPercentInput, depositWithdrawalOption)) {
+                float investment = Float.parseFloat(investInput.getText());
+                float annualPercent = Float.parseFloat(depositAnnualPercentInput.getText());
+                String depositCurrency = userSelectedCurrency;
+                int withdrawalOptionSelected = -1000;
+                switch (depositWithdrawalOption.getText()) {
+                    case "Monthly" -> withdrawalOptionSelected = 1;
+                    case "Quarterly" -> withdrawalOptionSelected = 2;
+                    case "Yearly" -> withdrawalOptionSelected = 3;
+                    case "At the end" -> withdrawalOptionSelected = 4;
+                }
+                LocalDate contractStartDate = depositContractBeginning.getValue();
+                LocalDate contractEndDate = depositContractEnding.getValue();
+                boolean earlyWithdrawalOption = depositEarlyWithdrawalCheck.isSelected();
+                if (depositCapitalizationCheck.isSelected()) {
+                    if (depositEarlyWithdrawalCheck.isSelected()) {
+                        LocalDate earlyWithdrawal = depositWithdrawalDate.getValue();
+                        Deposit deposit = new CapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate,earlyWithdrawalOption, earlyWithdrawal, withdrawalOptionSelected);
+                        deposit.save();
+                    }
+                    else {
+                        Deposit deposit = new CapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate,earlyWithdrawalOption,withdrawalOptionSelected);
+                        deposit.save();
+                    }
+                }
+                else {
+                    Deposit deposit = new UncapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate,earlyWithdrawalOption,withdrawalOptionSelected);
+                    deposit.save();
+                }
+            }
+        });
+
     }
+
     public void setLanguage(String language) {
         LanguageManager.getInstance().setLanguage(language);
         creditButtonMenu.setText(LanguageManager.getInstance().getTranslation("creditButtonMenu"));
@@ -368,25 +420,24 @@ public class CreditMenuController {
         settingsButton.setText(LanguageManager.getInstance().getTranslation("settingsButton"));
         aboutButton.setText(LanguageManager.getInstance().getTranslation("aboutButton"));
         closeWindow.setText(LanguageManager.getInstance().getTranslation("closeWindow"));
-        creditLabel.setText(LanguageManager.getInstance().getTranslation("CreditButton"));
-        loanInput.setPromptText(LanguageManager.getInstance().getTranslation("loanInput"));
-        annualPercentInput.setPromptText(LanguageManager.getInstance().getTranslation("annualPercentInput"));
-        contractBeginning.setPromptText(LanguageManager.getInstance().getTranslation("contractBeginning"));
-        contractEnding.setPromptText(LanguageManager.getInstance().getTranslation("contractEnding"));
-        paymentOption.setText(LanguageManager.getInstance().getTranslation("paymentOption"));
-        checkPaymentHolidays.setText(LanguageManager.getInstance().getTranslation("checkPaymentHolidays"));
-        holidaysBeginning.setPromptText(LanguageManager.getInstance().getTranslation("holidaysBeginning"));
-        holidaysEnding.setPromptText(LanguageManager.getInstance().getTranslation("holidaysEnding"));
-        creditSaveResult.setText(LanguageManager.getInstance().getTranslation("creditSaveResult"));
-        creditViewResult.setText(LanguageManager.getInstance().getTranslation("creditViewResult"));
-        PaymentOption1.setText(LanguageManager.getInstance().getTranslation("PaymentOption1"));
-        PaymentOption2.setText(LanguageManager.getInstance().getTranslation("PaymentOption2"));
-        PaymentOption3.setText(LanguageManager.getInstance().getTranslation("PaymentOption3"));
-        PaymentOption4.setText(LanguageManager.getInstance().getTranslation("PaymentOption4"));
+        depositLabel.setText(LanguageManager.getInstance().getTranslation("DepositButton"));
+        depositCapitalizationCheck.setText(LanguageManager.getInstance().getTranslation("depositCapitalizationCheck"));
+        depositEarlyWithdrawalCheck.setText(LanguageManager.getInstance().getTranslation("depositEarlyWithdrawalCheck"));
+        depositWithdrawalOption.setText(LanguageManager.getInstance().getTranslation("depositWithdrawalOption"));
+        depositSaveResult.setText(LanguageManager.getInstance().getTranslation("creditSaveResult"));
+        depositViewResult.setText(LanguageManager.getInstance().getTranslation("creditViewResult"));
+        depositAnnualPercentInput.setPromptText(LanguageManager.getInstance().getTranslation("depositAnnualPercentInput"));
+        investInput.setPromptText(LanguageManager.getInstance().getTranslation("investInput"));
+        depositContractBeginning.setPromptText(LanguageManager.getInstance().getTranslation("depositContractBeginning"));
+        depositContractEnding.setPromptText(LanguageManager.getInstance().getTranslation("depositContractEnding"));
+        depositWithdrawalDate.setPromptText(LanguageManager.getInstance().getTranslation("depositWithdrawalDate"));
+        WithdrawalOption1.setText(LanguageManager.getInstance().getTranslation("WithdrawalOption1"));
+        WithdrawalOption2.setText(LanguageManager.getInstance().getTranslation("WithdrawalOption2"));
+        WithdrawalOption3.setText(LanguageManager.getInstance().getTranslation("WithdrawalOption3"));
+        WithdrawalOption4.setText(LanguageManager.getInstance().getTranslation("WithdrawalOption4"));
+
     }
-
 }
-
 
 
 
