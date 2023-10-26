@@ -395,23 +395,23 @@ public class DepositMenuController {
                 }
                 LocalDate contractStartDate = depositContractBeginning.getValue();
                 LocalDate contractEndDate = depositContractEnding.getValue();
+                boolean earlyWithdrawalOption = depositEarlyWithdrawalCheck.isSelected();
                 if (depositCapitalizationCheck.isSelected()) {
                     if (depositEarlyWithdrawalCheck.isSelected()) {
                         LocalDate earlyWithdrawal = depositWithdrawalDate.getValue();
-                        Deposit deposit = new CapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate, earlyWithdrawal, withdrawalOptionSelected);
+                        Deposit deposit = new CapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate,earlyWithdrawalOption, earlyWithdrawal, withdrawalOptionSelected);
                         deposit.save();
                     }
                     else {
-                        Deposit deposit = new CapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate,withdrawalOptionSelected);
+                        Deposit deposit = new CapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate,earlyWithdrawalOption,withdrawalOptionSelected);
                         deposit.save();
                     }
                 }
                 else {
-                    Deposit deposit = new UncapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate,withdrawalOptionSelected);
+                    Deposit deposit = new UncapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate,earlyWithdrawalOption,withdrawalOptionSelected);
                     deposit.save();
                 }
             }
-            System.out.println(depositWithdrawalOption.getText());
         });
 
     }

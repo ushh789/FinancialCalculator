@@ -2,11 +2,16 @@ package com.netrunners.financialcalculator.Controllers;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import com.netrunners.financialcalculator.ErrorHandling.InputFieldErrors;
+import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Credit.Credit;
+import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Credit.CreditWithHolidays;
+import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Credit.CreditWithoutHolidays;
 import com.netrunners.financialcalculator.StartMenu;
 import com.netrunners.financialcalculator.VisualInstruments.LanguageManager;
 import javafx.fxml.FXML;
@@ -123,6 +128,7 @@ public class CreditMenuController {
 
     @FXML
     private MenuItem newButton;
+    private String userSelectedCurrency;
 
     public void updateText() {
         creditButtonMenu.setText(LanguageManager.getInstance().getTranslation("creditButtonMenu"));
@@ -161,6 +167,8 @@ public class CreditMenuController {
     }
     @FXML
     void initialize() {
+        userSelectedCurrency = "USD";
+
         updateText();
         LanguageManager.getInstance().languageProperty().addListener((observable, oldValue, newValue) -> {
             updateText();
@@ -269,6 +277,7 @@ public class CreditMenuController {
                         break;
 
                 }
+                userSelectedCurrency = dialog.getSelectedItem();
             }
         });
         depositButtonMenu.setOnAction(event ->{
@@ -346,6 +355,36 @@ public class CreditMenuController {
                     case "中国人" -> setLanguage("zh");
                 }
             }
+        });
+
+        creditSaveResult.setOnAction(event -> {
+            if (InputFieldErrors.checkIfCorrectNumberGiven(loanInput) &&
+                    InputFieldErrors.checkIfCorrectNumberGiven(annualPercentInput) &&
+                    InputFieldErrors.paymentOptionIsSelected(paymentOption)) {
+            float creditLoan = Float.parseFloat(loanInput.getText());
+            float creditAnnualPercent = Float.parseFloat(annualPercentInput.getText());
+            String creditCurrency = userSelectedCurrency;
+                int paymentOptionSelected = -1000;
+                switch (paymentOption.getText()) {
+                    case "Monthly" -> paymentOptionSelected = 1;
+                    case "Quarterly" -> paymentOptionSelected = 2;
+                    case "Yearly" -> paymentOptionSelected = 3;
+                    case "At the end" -> paymentOptionSelected = 4;
+                }
+                LocalDate contractStartDate = contractBeginning.getValue();
+                LocalDate contractEndDate = contractEnding.getValue();
+                if (checkPaymentHolidays.isSelected()){
+                    LocalDate holidaysStartDate = holidaysBeginning.getValue();
+                    LocalDate holidaysEndDate = holidaysEnding.getValue();
+                    Credit credit = new CreditWithHolidays(creditLoan, creditCurrency, creditAnnualPercent, contractStartDate, contractEndDate, paymentOptionSelected, holidaysStartDate, holidaysEndDate);
+                    credit.save();
+                }
+                else {
+                    Credit credit = new CreditWithoutHolidays(creditLoan, creditCurrency, creditAnnualPercent, contractStartDate, contractEndDate, paymentOptionSelected);
+                    credit.save();
+                }
+            }
+
         });
     }
     public void setLanguage(String language) {

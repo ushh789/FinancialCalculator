@@ -5,8 +5,10 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.netrunners.financialcalculator.LogicalInstrumnts.FileInstruments.Savable;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TimeFunctions.LocalDateAdapter;
+import javafx.stage.FileChooser;
 
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -24,21 +26,23 @@ public abstract class Deposit implements Savable {
     protected LocalDate earlyWithdrawalDate;
 
     protected abstract float countProfit();
-    public Deposit(float investment, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, LocalDate earlyWithdrawalDate, int withdrawalOption){
+    public Deposit(float investment, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, boolean earlyWithdrawal, LocalDate earlyWithdrawalDate, int withdrawalOption){
         this.investment = investment;
         this.currency = currency;
         this.annualPercent = annualPercent;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.earlyWithdrawal = earlyWithdrawal;
         this.earlyWithdrawalDate = earlyWithdrawalDate;
         this.withdrawalOption = withdrawalOption;
     }
-    public Deposit(float investment, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, int withdrawalOption){
+    public Deposit(float investment, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, boolean earlyWithdrawal, int withdrawalOption){
         this.investment = investment;
         this.currency = currency;
         this.annualPercent = annualPercent;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.earlyWithdrawal = earlyWithdrawal;
         this.withdrawalOption = withdrawalOption;
     }
 
@@ -62,11 +66,20 @@ public abstract class Deposit implements Savable {
                 .create();
         JsonObject jsonObject = getJsonObject();
         String json = gson.toJson(jsonObject);
-        try (FileWriter writer = new FileWriter("saves/deposit" + ".json")){
-            writer.write(json);
-        }
-        catch (IOException e){
-            e.getMessage();
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save Data");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("JSON Files", "*.json"));
+        File file = fileChooser.showSaveDialog(null); // stage is your JavaFX stage
+
+        if (file != null) {
+            try (FileWriter writer = new FileWriter(file)){
+                writer.write(json);
+            }
+            catch (IOException e){
+                e.getMessage();
+            }
         }
     }
 
