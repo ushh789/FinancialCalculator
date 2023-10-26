@@ -5,15 +5,14 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.netrunners.financialcalculator.LogicalInstrumnts.FileInstruments.Savable;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TimeFunctions.LocalDateAdapter;
-import com.netrunners.financialcalculator.StartMenu;
+
 import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+
 
 public class Credit implements Savable {
     protected float loan;
@@ -32,7 +31,7 @@ public class Credit implements Savable {
         this.paymentType = paymentType;
     }
 
-    protected float countLoan(){
+    protected float countLoan() {
         return 0;
     }
 
@@ -52,16 +51,15 @@ public class Credit implements Savable {
         File file = fileChooser.showSaveDialog(null); // stage is your JavaFX stage
 
         if (file != null) {
-            try (FileWriter writer = new FileWriter(file)){
+            try (FileWriter writer = new FileWriter(file)) {
                 writer.write(json);
-            }
-            catch (IOException e){
+            } catch (IOException e) {
                 e.getMessage();
             }
         }
     }
 
-    protected JsonObject getJsonObject(){
+    protected JsonObject getJsonObject() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("investment", this.loan);
         jsonObject.addProperty("annualPercent", this.annualPercent);

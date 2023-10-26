@@ -18,7 +18,6 @@ import java.io.*;
 import java.util.*;
 import java.util.List;
 
-import static com.netrunners.financialcalculator.ErrorHandling.ErrorChecker.updateDatePickerStyle;
 import static com.netrunners.financialcalculator.StartMenu.startMenuScene;
 import static com.netrunners.financialcalculator.MenuControllers.closeWindow.closeCurrentWindow;
 
@@ -84,7 +83,7 @@ public class StartMenuController implements LanguageUpdater {
     @FXML
     private Label financialCalculatorLabel;
 
-    public void updateText(){
+    public void updateText() {
         DepositButton.setText(LanguageManager.getInstance().getTranslation("DepositButton"));
         CreditButton.setText(LanguageManager.getInstance().getTranslation("CreditButton"));
         creditButtonMenu.setText(LanguageManager.getInstance().getTranslation("creditButtonMenu"));
@@ -106,6 +105,7 @@ public class StartMenuController implements LanguageUpdater {
         aboutButton.setText(LanguageManager.getInstance().getTranslation("aboutButton"));
         financialCalculatorLabel.setText(LanguageManager.getInstance().getTranslation("financialCalculatorLabel"));
     }
+
     @FXML
     void initialize() {
         saveButton.setDisable(true);

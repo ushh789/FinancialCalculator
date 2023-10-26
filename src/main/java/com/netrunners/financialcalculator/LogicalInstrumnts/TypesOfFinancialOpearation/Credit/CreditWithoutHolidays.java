@@ -7,7 +7,7 @@ import com.netrunners.financialcalculator.LogicalInstrumnts.FileInstruments.Sava
 import java.time.LocalDate;
 import java.util.Map;
 
-public class CreditWithoutHolidays extends Credit implements Savable{
+public class CreditWithoutHolidays extends Credit implements Savable {
 
     public CreditWithoutHolidays(float loan, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, int paymentType) {
         super(loan, currency, annualPercent, startDate, endDate, paymentType);

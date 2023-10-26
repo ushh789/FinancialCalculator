@@ -12,8 +12,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public abstract class Deposit implements Savable {
     protected float investment;
@@ -26,7 +24,8 @@ public abstract class Deposit implements Savable {
     protected LocalDate earlyWithdrawalDate;
 
     protected abstract float countProfit();
-    public Deposit(float investment, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, boolean earlyWithdrawal, LocalDate earlyWithdrawalDate, int withdrawalOption){
+
+    public Deposit(float investment, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, boolean earlyWithdrawal, LocalDate earlyWithdrawalDate, int withdrawalOption) {
         this.investment = investment;
         this.currency = currency;
         this.annualPercent = annualPercent;
@@ -36,7 +35,8 @@ public abstract class Deposit implements Savable {
         this.earlyWithdrawalDate = earlyWithdrawalDate;
         this.withdrawalOption = withdrawalOption;
     }
-    public Deposit(float investment, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, boolean earlyWithdrawal, int withdrawalOption){
+
+    public Deposit(float investment, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, boolean earlyWithdrawal, int withdrawalOption) {
         this.investment = investment;
         this.currency = currency;
         this.annualPercent = annualPercent;
@@ -46,7 +46,7 @@ public abstract class Deposit implements Savable {
         this.withdrawalOption = withdrawalOption;
     }
 
-    protected JsonObject getJsonObject(){
+    protected JsonObject getJsonObject() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("investment", this.investment);
         jsonObject.addProperty("annualPercent", this.annualPercent);
@@ -74,10 +74,9 @@ public abstract class Deposit implements Savable {
         File file = fileChooser.showSaveDialog(null);
 
         if (file != null) {
-            try (FileWriter writer = new FileWriter(file)){
+            try (FileWriter writer = new FileWriter(file)) {
                 writer.write(json);
-            }
-            catch (IOException e){
+            } catch (IOException e) {
                 e.getMessage();
             }
         }
@@ -85,5 +84,6 @@ public abstract class Deposit implements Savable {
 
 
     @Override
-    public void open(){}
+    public void open() {
+    }
 }

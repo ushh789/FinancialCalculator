@@ -40,6 +40,7 @@ public class CreditWithHolidays extends Credit implements Savable {
         jsonObject.addProperty("holidaysEnd", holidaysEnd.toString());
         return jsonObject;
     }
+
     @Override
     public void open() {
         super.open();

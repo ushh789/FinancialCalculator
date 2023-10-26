@@ -6,12 +6,9 @@ import static com.netrunners.financialcalculator.MenuControllers.closeWindow.clo
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.time.format.DateTimeFormatter;
 
 import com.netrunners.financialcalculator.ErrorHandling.ErrorChecker;
-import com.netrunners.financialcalculator.ErrorHandling.InputFieldErrors;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TimeFunctions.DatePickerRestrictions;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Deposit.CapitalisedDeposit;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Deposit.Deposit;
@@ -383,16 +380,14 @@ public class DepositMenuController {
                 if (depositCapitalizationCheck.isSelected()) {
                     if (depositEarlyWithdrawalCheck.isSelected()) {
                         LocalDate earlyWithdrawal = depositWithdrawalDate.getValue();
-                        Deposit deposit = new CapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate,earlyWithdrawalOption, earlyWithdrawal, withdrawalOptionSelected);
+                        Deposit deposit = new CapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate, earlyWithdrawalOption, earlyWithdrawal, withdrawalOptionSelected);
+                        deposit.save();
+                    } else {
+                        Deposit deposit = new CapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate, earlyWithdrawalOption, withdrawalOptionSelected);
                         deposit.save();
                     }
-                    else {
-                        Deposit deposit = new CapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate,earlyWithdrawalOption,withdrawalOptionSelected);
-                        deposit.save();
-                    }
-                }
-                else {
-                    Deposit deposit = new UncapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate,earlyWithdrawalOption,withdrawalOptionSelected);
+                } else {
+                    Deposit deposit = new UncapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate, earlyWithdrawalOption, withdrawalOptionSelected);
                     deposit.save();
                 }
             }

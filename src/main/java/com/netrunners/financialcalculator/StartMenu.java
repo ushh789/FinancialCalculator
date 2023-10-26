@@ -1,9 +1,5 @@
 package com.netrunners.financialcalculator;
 
-import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Credit.Credit;
-import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Credit.CreditWithHolidays;
-import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Deposit.CapitalisedDeposit;
-import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Deposit.Deposit;
 import javafx.application.Application;
 
 import javafx.scene.Scene;
@@ -12,7 +8,6 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.awt.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,9 +15,10 @@ public class StartMenu extends Application {
     public static Scene startMenuScene;
     public static List<Scene> openScenes = new ArrayList<>();
     public static String currentTheme = "file:src/main/resources/com/netrunners/financialcalculator/assets/lightTheme.css";
+
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader fxmlLoader =new FXMLLoader(StartMenu.class.getResource("StartMenu.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(StartMenu.class.getResource("StartMenu.fxml"));
         primaryStage.setTitle("Financial Calculator by netrunners");
         primaryStage.getIcons().add(new Image("file:src/main/resources/com/netrunners/financialcalculator/assets/Logo.png"));
         if (Taskbar.isTaskbarSupported()) {
