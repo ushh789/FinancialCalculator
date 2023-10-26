@@ -13,7 +13,6 @@ import java.util.ResourceBundle;
 import java.time.format.DateTimeFormatter;
 
 import com.netrunners.financialcalculator.ErrorHandling.InputFieldErrors;
-import com.netrunners.financialcalculator.LogicalInstrumnts.TimeFunctions.DateTimeFunctions;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Deposit.CapitalisedDeposit;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Deposit.Deposit;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Deposit.UncapitalisedDeposit;
@@ -174,6 +173,7 @@ public class DepositMenuController {
 
     @FXML
     void initialize() {
+        userSelectedCurrency = "USD";
 
         updateText();
         LanguageManager.getInstance().languageProperty().addListener((observable, oldValue, newValue) -> {
@@ -399,19 +399,16 @@ public class DepositMenuController {
                     if (depositEarlyWithdrawalCheck.isSelected()) {
                         LocalDate earlyWithdrawal = depositWithdrawalDate.getValue();
                         Deposit deposit = new CapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate, earlyWithdrawal, withdrawalOptionSelected);
-                        deposit.save("temp1");
-                        System.out.println("saved temp1");
+                        deposit.save();
                     }
                     else {
                         Deposit deposit = new CapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate,withdrawalOptionSelected);
-                        deposit.save("temp2");
-                        System.out.println("seved temp2");
+                        deposit.save();
                     }
                 }
                 else {
                     Deposit deposit = new UncapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate,withdrawalOptionSelected);
-                    deposit.save("temp3");
-                    System.out.println("seved temp3");
+                    deposit.save();
                 }
             }
             System.out.println(depositWithdrawalOption.getText());

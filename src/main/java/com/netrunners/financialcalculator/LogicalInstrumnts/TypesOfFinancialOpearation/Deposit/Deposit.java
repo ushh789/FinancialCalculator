@@ -62,7 +62,7 @@ public abstract class Deposit implements Savable {
                 .create();
         JsonObject jsonObject = getJsonObject();
         String json = gson.toJson(jsonObject);
-        try (FileWriter writer = new FileWriter("saves/credit" + ".json")){
+        try (FileWriter writer = new FileWriter("saves/deposit" + ".json")){
             writer.write(json);
         }
         catch (IOException e){
