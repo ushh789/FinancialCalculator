@@ -53,7 +53,7 @@
         </MenuBar>
       <TableView fx:id="resultTable" layoutX="60.0" layoutY="125.0" prefHeight="400.0" prefWidth="500.0">
         <columns>
-          <TableColumn fx:id="numersColumn" prefWidth="75.0" sortable="false" />
+          <TableColumn fx:id="numbersColumn" prefWidth="75.0" sortable="false" />
           <TableColumn fx:id="investmentloanColumn" prefWidth="142.0" sortable="false" text="Investment" />
             <TableColumn fx:id="periodProfitLoan" prefWidth="143.0" sortable="false" text="Period profit" />
             <TableColumn fx:id="total" prefWidth="139.0" sortable="false" text="Total profit" />

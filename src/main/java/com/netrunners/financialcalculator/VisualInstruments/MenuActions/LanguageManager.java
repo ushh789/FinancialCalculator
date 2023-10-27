@@ -1,4 +1,4 @@
-package com.netrunners.financialcalculator.VisualInstruments;
+package com.netrunners.financialcalculator.VisualInstruments.MenuActions;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -9,6 +9,7 @@ import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -59,5 +60,6 @@ public class LanguageManager {
     public StringProperty languageProperty() {
         return currentLanguage;
     }
+
 }
 
