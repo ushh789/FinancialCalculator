@@ -9,6 +9,7 @@ module com.netrunners.financialcalculator {
     requires java.desktop;
     requires java.base;
     requires com.google.gson;
+    requires com.opencsv;
 
     opens com.netrunners.financialcalculator to javafx.fxml, com.google.gson;
     opens com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Deposit to com.google.gson;
