@@ -169,10 +169,13 @@ public class CreditMenuController {
     }
     @FXML
     void initialize() {
-        ErrorChecker.WrongDateListener(contractBeginning);
-        ErrorChecker.WrongDateListener(contractEnding);
-        ErrorChecker.WrongDateListener(holidaysBeginning);
-        ErrorChecker.WrongDateListener(holidaysEnding);
+        StartMenu.datePickers.add(contractBeginning);
+        StartMenu.datePickers.add(contractEnding);
+        StartMenu.datePickers.add(holidaysBeginning);
+        StartMenu.datePickers.add(holidaysEnding);
+        for (DatePicker datePicker : StartMenu.datePickers) {
+            ErrorChecker.WrongDateListener(datePicker);
+        }
         DatePickerRestrictions.setDatePickerRestrictionsHolidays(contractBeginning, contractEnding, holidaysBeginning, holidaysEnding);
         userSelectedCurrency = "USD";
 
@@ -210,10 +213,9 @@ public class CreditMenuController {
                 scene.getStylesheets().clear();
                 scene.getStylesheets().add(StartMenu.currentTheme);
             }
-            updateDatePickerStyle(contractBeginning);
-            updateDatePickerStyle(contractEnding);
-            updateDatePickerStyle(holidaysBeginning);
-            updateDatePickerStyle(holidaysEnding);
+            for (DatePicker datePicker : StartMenu.datePickers) {
+                updateDatePickerStyle(datePicker);
+            }
         });
 
         lightTheme.setOnAction(event -> {
@@ -222,10 +224,9 @@ public class CreditMenuController {
                 scene.getStylesheets().clear();
                 scene.getStylesheets().add(StartMenu.currentTheme);
             }
-            updateDatePickerStyle(contractBeginning);
-            updateDatePickerStyle(contractEnding);
-            updateDatePickerStyle(holidaysBeginning);
-            updateDatePickerStyle(holidaysEnding);
+            for (DatePicker datePicker : StartMenu.datePickers) {
+                updateDatePickerStyle(datePicker);
+            }
         });
         aboutUs.setOnAction(event -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);

@@ -170,9 +170,12 @@ public class DepositMenuController {
 
     @FXML
     void initialize() {
-        ErrorChecker.WrongDateListener(depositContractBeginning);
-        ErrorChecker.WrongDateListener(depositContractEnding);
-        ErrorChecker.WrongDateListener(depositWithdrawalDate);
+        StartMenu.datePickers.add(depositContractBeginning);
+        StartMenu.datePickers.add(depositContractEnding);
+        StartMenu.datePickers.add(depositWithdrawalDate);
+        for (DatePicker datePicker : StartMenu.datePickers) {
+            ErrorChecker.WrongDateListener(datePicker);
+        }
         DatePickerRestrictions.setDatePickerRestrictionsWithdrawalHolidays(depositContractBeginning, depositContractEnding, depositWithdrawalDate);
         userSelectedCurrency = "USD";
 
@@ -202,9 +205,9 @@ public class DepositMenuController {
                 scene.getStylesheets().clear();
                 scene.getStylesheets().add(StartMenu.currentTheme);
             }
-            updateDatePickerStyle(depositWithdrawalDate);
-            updateDatePickerStyle(depositContractBeginning);
-            updateDatePickerStyle(depositContractEnding);
+            for (DatePicker datePicker : StartMenu.datePickers) {
+                updateDatePickerStyle(datePicker);
+            }
         });
 
         lightTheme.setOnAction(event -> {
@@ -213,9 +216,9 @@ public class DepositMenuController {
                 scene.getStylesheets().clear();
                 scene.getStylesheets().add(StartMenu.currentTheme);
             }
-            updateDatePickerStyle(depositWithdrawalDate);
-            updateDatePickerStyle(depositContractBeginning);
-            updateDatePickerStyle(depositContractEnding);
+            for (DatePicker datePicker : StartMenu.datePickers) {
+                updateDatePickerStyle(datePicker);
+            }
         });
         aboutUs.setOnAction(event -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);

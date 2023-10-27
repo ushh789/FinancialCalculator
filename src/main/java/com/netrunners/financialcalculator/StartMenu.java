@@ -4,6 +4,7 @@ import javafx.application.Application;
 
 import javafx.scene.Scene;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.DatePicker;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
@@ -16,6 +17,7 @@ public class StartMenu extends Application {
     public static List<Scene> openScenes = new ArrayList<>();
     public static String currentTheme = "file:src/main/resources/com/netrunners/financialcalculator/assets/lightTheme.css";
 
+    public static List<DatePicker> datePickers = new ArrayList<>();
     @Override
     public void start(Stage primaryStage) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader(StartMenu.class.getResource("StartMenu.fxml"));
