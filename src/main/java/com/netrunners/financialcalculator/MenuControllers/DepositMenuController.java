@@ -2,7 +2,6 @@ package com.netrunners.financialcalculator.MenuControllers;
 
 import static com.netrunners.financialcalculator.MenuControllers.closeWindow.closeCurrentWindow;
 
-import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.*;
@@ -19,8 +18,6 @@ import com.netrunners.financialcalculator.VisualInstruments.MenuActions.Language
 import com.netrunners.financialcalculator.VisualInstruments.MenuActions.ThemeSelector;
 import com.netrunners.financialcalculator.VisualInstruments.WindowsOpener;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -208,6 +205,7 @@ public class DepositMenuController {
         exitApp.setOnAction(event -> ExitApp.exitApp());
         depositButtonMenu.setOnAction(event -> WindowsOpener.depositOpener());
         creditButtonMenu.setOnAction(event -> WindowsOpener.creditOpener());
+        depositViewResult.setOnAction(event -> WindowsOpener.viewResultOpener());
 
         currency.setOnAction(event -> {
             List<String> choices = new ArrayList<>();
@@ -305,25 +303,7 @@ public class DepositMenuController {
             }
         });
 
-        depositViewResult.setOnAction(event -> {
-            try {
-                FXMLLoader fxmlLoader = new FXMLLoader(StartMenu.class.getResource("ResultTable.fxml"));
-                Stage stage = new Stage();
-                stage.setTitle("Result");
-                Scene scene = new Scene(fxmlLoader.load());
-                scene.getStylesheets().add(StartMenu.currentTheme);
-                stage.setScene(scene);
-                StartMenu.openScenes.add(scene);
-                stage.getIcons().add(new Image("file:src/main/resources/com/netrunners/financialcalculator/assets/Logo.png"));
-                stage.setMaxHeight(720);
-                stage.setMaxWidth(620);
-                stage.setMinHeight(820);
-                stage.setMinWidth(620);
-                stage.show();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+
 
     }
 

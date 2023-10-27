@@ -216,6 +216,7 @@ public class CreditMenuController {
         exitApp.setOnAction(event -> ExitApp.exitApp());
         depositButtonMenu.setOnAction(event -> WindowsOpener.depositOpener());
         creditButtonMenu.setOnAction(event -> WindowsOpener.creditOpener());
+        creditViewResult.setOnAction(event -> WindowsOpener.viewResultOpener());
 
         currency.setOnAction(event -> {
             List<String> choices = new ArrayList<>();
@@ -308,6 +309,7 @@ public class CreditMenuController {
             }
 
         });
+
     }
 
     public void setLanguage(String language) {

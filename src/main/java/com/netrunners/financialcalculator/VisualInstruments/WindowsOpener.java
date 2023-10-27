@@ -49,4 +49,23 @@ public class WindowsOpener{
             e.printStackTrace();
         }
     }
+    public static void viewResultOpener(){
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(StartMenu.class.getResource("ResultTable.fxml"));
+            Stage stage = new Stage();
+            stage.setTitle("Result");
+            Scene scene = new Scene(fxmlLoader.load());
+            scene.getStylesheets().add(StartMenu.currentTheme);
+            stage.setScene(scene);
+            StartMenu.openScenes.add(scene);
+            stage.getIcons().add(new Image("file:src/main/resources/com/netrunners/financialcalculator/assets/Logo.png"));
+            stage.setMaxHeight(720);
+            stage.setMaxWidth(620);
+            stage.setMinHeight(820);
+            stage.setMinWidth(620);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
