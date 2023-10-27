@@ -18,10 +18,7 @@ public class LanguageManager {
     private Map<String, List<String>> translations;
 
     private LanguageManager() {
-        // Initialize currentLanguage
         currentLanguage = new SimpleStringProperty("en");
-
-        // Load translations from JSON file
         Gson gson = new Gson();
         Type type = new TypeToken<Map<String, List<String>>>(){}.getType();
         try (InputStreamReader reader = new InputStreamReader(new FileInputStream("languages.json"), StandardCharsets.UTF_8)) {

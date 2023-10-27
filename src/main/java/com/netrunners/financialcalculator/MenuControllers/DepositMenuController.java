@@ -165,7 +165,6 @@ public class DepositMenuController {
         WithdrawalOption2.setText(LanguageManager.getInstance().getTranslation("WithdrawalOption2"));
         WithdrawalOption3.setText(LanguageManager.getInstance().getTranslation("WithdrawalOption3"));
         WithdrawalOption4.setText(LanguageManager.getInstance().getTranslation("WithdrawalOption4"));
-
     }
 
     @FXML
@@ -393,6 +392,26 @@ public class DepositMenuController {
                     Deposit deposit = new UncapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate, earlyWithdrawalOption, withdrawalOptionSelected);
                     deposit.save();
                 }
+            }
+        });
+
+        depositViewResult.setOnAction(event -> {
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader(StartMenu.class.getResource("ResultTable.fxml"));
+                Stage stage = new Stage();
+                stage.setTitle("Result");
+                Scene scene = new Scene(fxmlLoader.load());
+                scene.getStylesheets().add(StartMenu.currentTheme);
+                stage.setScene(scene);
+                StartMenu.openScenes.add(scene);
+                stage.getIcons().add(new Image("file:src/main/resources/com/netrunners/financialcalculator/assets/Logo.png"));
+                stage.setMaxHeight(720);
+                stage.setMaxWidth(620);
+                stage.setMinHeight(820);
+                stage.setMinWidth(620);
+                stage.show();
+            }catch (Exception e){
+                e.printStackTrace();
             }
         });
 
