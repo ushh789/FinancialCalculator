@@ -7,9 +7,13 @@ import com.netrunners.financialcalculator.LogicalInstrumnts.FileInstruments.Sava
 import com.netrunners.financialcalculator.LogicalInstrumnts.TimeFunctions.LocalDateAdapter;
 
 import com.netrunners.financialcalculator.MenuControllers.ResultTableController;
+import com.netrunners.financialcalculator.StartMenu;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -51,7 +55,7 @@ public class Credit implements Savable {
         fileChooser.setTitle("Save Data");
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("JSON Files", "*.json"));
-        File file = fileChooser.showSaveDialog(null); // stage is your JavaFX stage
+        File file = fileChooser.showSaveDialog(null);
 
         if (file != null) {
             try (FileWriter writer = new FileWriter(file)) {
@@ -68,8 +72,21 @@ public class Credit implements Savable {
             Parent root = loader.load();
             ResultTableController resultTableController = loader.getController();
             resultTableController.updateTable(this);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+
+            Stage stage = new Stage();
+            stage.setTitle("Result");
+            Scene scene = new Scene(root); // Використовуйте вже завантажений root
+            scene.getStylesheets().add(StartMenu.currentTheme);
+            stage.setScene(scene);
+            StartMenu.openScenes.add(scene);
+            stage.getIcons().add(new Image("file:src/main/resources/com/netrunners/financialcalculator/assets/Logo.png"));
+            stage.setMaxHeight(720);
+            stage.setMaxWidth(620);
+            stage.setMinHeight(820);
+            stage.setMinWidth(620);
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -99,5 +116,29 @@ public class Credit implements Savable {
     @Override
     public void open() {
 
+    }
+
+    public float getLoan() {
+        return loan;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public float getAnnualPercent() {
+        return annualPercent;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public int getPaymentType() {
+        return paymentType;
     }
 }

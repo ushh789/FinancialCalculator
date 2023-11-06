@@ -328,16 +328,12 @@ public class CreditMenuController {
                     LocalDate holidaysEndDate = holidaysEnding.getValue();
                     Credit credit = new CreditWithHolidays(creditLoan, creditCurrency, creditAnnualPercent, contractStartDate, contractEndDate, paymentOptionSelected, holidaysStartDate, holidaysEndDate);
                     credit.sendCreditToResultTable();
-                    WindowsOpener.viewResultOpener();
                 } else {
                     Credit credit = new CreditWithoutHolidays(creditLoan, creditCurrency, creditAnnualPercent, contractStartDate, contractEndDate, paymentOptionSelected);
                     credit.sendCreditToResultTable();
-                    WindowsOpener.viewResultOpener();
                 }
             }
-
         });
-
     }
 
     public void setLanguage(String language) {

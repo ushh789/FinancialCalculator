@@ -7,6 +7,7 @@ import com.netrunners.financialcalculator.VisualInstruments.MenuActions.AboutUsA
 import com.netrunners.financialcalculator.VisualInstruments.MenuActions.ExitApp;
 import com.netrunners.financialcalculator.VisualInstruments.MenuActions.ThemeSelector;
 import com.netrunners.financialcalculator.VisualInstruments.WindowsOpener;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -87,12 +88,6 @@ public class ResultTableController {
 
     @FXML
     void initialize() {
-        ObservableList<Integer> data = FXCollections.observableArrayList();
-        for (int i = 1; i <= 10; i++) {
-            data.add(i);
-        }
-        numbersColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue()));
-        resultTable.setItems(data);
 
         darkTheme.setOnAction(event -> ThemeSelector.setDarkTheme());
         lightTheme.setOnAction(event -> ThemeSelector.setLightTheme());
@@ -103,9 +98,56 @@ public class ResultTableController {
 
     }
     public void updateTable(Deposit deposit){
+        Platform.runLater(() -> {
+            switch (deposit.getWithdrawalOption()) {
+                case 1:
+                    numbersColumn.setText("Months");
+                    break;
+                case 2:
+                    numbersColumn.setText("Quarters");
+                    break;
+                case 3:
+                    numbersColumn.setText("Years");
+                    break;
+                case 4:
+                    numbersColumn.setText("Periods");
+                    break;
+            }
+            ObservableList<Integer> data = FXCollections.observableArrayList();
+            for (int i = 1; i <= 10; i++) {
+                data.add(i);
+            }
+            numbersColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue()));
+            resultTable.getItems().clear();
+            resultTable.setItems(data);
+
+        });
         System.out.println(deposit);
     }
     public void updateTable(Credit credit){
+        Platform.runLater(() -> {
+            switch (credit.getPaymentType()) {
+                case 1:
+                    numbersColumn.setText("Months");
+                    break;
+                case 2:
+                    numbersColumn.setText("Quarters");
+                    break;
+                case 3:
+                    numbersColumn.setText("Years");
+                    break;
+                case 4:
+                    numbersColumn.setText("Periods");
+                    break;
+            }
+            ObservableList<Integer> data = FXCollections.observableArrayList();
+            for (int i = 1; i <= 10; i++) {
+                data.add(i);
+            }
+            numbersColumn.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue()));
+            resultTable.getItems().clear();
+            resultTable.setItems(data);
+        });
         System.out.println(credit);
     }
 }

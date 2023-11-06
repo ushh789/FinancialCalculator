@@ -207,7 +207,6 @@ public class DepositMenuController {
         exitApp.setOnAction(event -> ExitApp.exitApp());
         depositButtonMenu.setOnAction(event -> WindowsOpener.depositOpener());
         creditButtonMenu.setOnAction(event -> WindowsOpener.creditOpener());
-        depositViewResult.setOnAction(event -> WindowsOpener.viewResultOpener());
 
         currency.setOnAction(event -> {
             List<String> choices = new ArrayList<>();
