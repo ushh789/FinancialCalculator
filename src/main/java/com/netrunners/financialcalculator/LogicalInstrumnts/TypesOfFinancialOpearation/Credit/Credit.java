@@ -6,6 +6,9 @@ import com.google.gson.JsonObject;
 import com.netrunners.financialcalculator.LogicalInstrumnts.FileInstruments.Savable;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TimeFunctions.LocalDateAdapter;
 
+import com.netrunners.financialcalculator.MenuControllers.ResultTableController;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.stage.FileChooser;
 
 import java.io.File;
@@ -57,6 +60,29 @@ public class Credit implements Savable {
                 e.getMessage();
             }
         }
+    }
+
+    public void sendCreditToResultTable() {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/netrunners/financialcalculator/ResultTable.fxml"));
+        try {
+            Parent root = loader.load();
+            ResultTableController resultTableController = loader.getController();
+            resultTableController.updateTable(this);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Credit{" +
+                "loan=" + loan +
+                ", currency='" + currency + '\'' +
+                ", annualPercent=" + annualPercent +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", paymentType=" + paymentType +
+                '}';
     }
 
     protected JsonObject getJsonObject() {

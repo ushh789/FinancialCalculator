@@ -216,7 +216,7 @@ public class CreditMenuController {
         exitApp.setOnAction(event -> ExitApp.exitApp());
         depositButtonMenu.setOnAction(event -> WindowsOpener.depositOpener());
         creditButtonMenu.setOnAction(event -> WindowsOpener.creditOpener());
-        creditViewResult.setOnAction(event -> WindowsOpener.viewResultOpener());
+
 
         currency.setOnAction(event -> {
             List<String> choices = new ArrayList<>();
@@ -305,6 +305,34 @@ public class CreditMenuController {
                 } else {
                     Credit credit = new CreditWithoutHolidays(creditLoan, creditCurrency, creditAnnualPercent, contractStartDate, contractEndDate, paymentOptionSelected);
                     credit.save();
+                }
+            }
+
+        });
+        creditViewResult.setOnAction(event -> {
+            if (ErrorChecker.areFieldsValid(loanInput, annualPercentInput, paymentOption)) {
+                float creditLoan = Float.parseFloat(loanInput.getText());
+                float creditAnnualPercent = Float.parseFloat(annualPercentInput.getText());
+                String creditCurrency = userSelectedCurrency;
+                int paymentOptionSelected = -1000;
+                switch (paymentOption.getText()) {
+                    case "Monthly" -> paymentOptionSelected = 1;
+                    case "Quarterly" -> paymentOptionSelected = 2;
+                    case "Yearly" -> paymentOptionSelected = 3;
+                    case "At the end" -> paymentOptionSelected = 4;
+                }
+                LocalDate contractStartDate = contractBeginning.getValue();
+                LocalDate contractEndDate = contractEnding.getValue();
+                if (checkPaymentHolidays.isSelected()) {
+                    LocalDate holidaysStartDate = holidaysBeginning.getValue();
+                    LocalDate holidaysEndDate = holidaysEnding.getValue();
+                    Credit credit = new CreditWithHolidays(creditLoan, creditCurrency, creditAnnualPercent, contractStartDate, contractEndDate, paymentOptionSelected, holidaysStartDate, holidaysEndDate);
+                    credit.sendCreditToResultTable();
+                    WindowsOpener.viewResultOpener();
+                } else {
+                    Credit credit = new CreditWithoutHolidays(creditLoan, creditCurrency, creditAnnualPercent, contractStartDate, contractEndDate, paymentOptionSelected);
+                    credit.sendCreditToResultTable();
+                    WindowsOpener.viewResultOpener();
                 }
             }
 

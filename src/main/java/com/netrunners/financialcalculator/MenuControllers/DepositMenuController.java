@@ -2,6 +2,7 @@ package com.netrunners.financialcalculator.MenuControllers;
 
 import static com.netrunners.financialcalculator.MenuControllers.closeWindow.closeCurrentWindow;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.*;
@@ -12,17 +13,18 @@ import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpea
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Deposit.Deposit;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Deposit.UncapitalisedDeposit;
 import com.netrunners.financialcalculator.StartMenu;
-import com.netrunners.financialcalculator.VisualInstruments.MenuActions.AboutUsAlert;
-import com.netrunners.financialcalculator.VisualInstruments.MenuActions.ExitApp;
-import com.netrunners.financialcalculator.VisualInstruments.MenuActions.LanguageManager;
-import com.netrunners.financialcalculator.VisualInstruments.MenuActions.ThemeSelector;
+import com.netrunners.financialcalculator.VisualInstruments.MenuActions.*;
 import com.netrunners.financialcalculator.VisualInstruments.WindowsOpener;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class DepositMenuController {
+
+    private Parent root;
 
     @FXML
     private ResourceBundle resources;
@@ -302,6 +304,36 @@ public class DepositMenuController {
                 }
             }
         });
+        depositViewResult.setOnAction(event -> {
+            if (ErrorChecker.areFieldsValid(investInput, depositAnnualPercentInput, depositWithdrawalOption)) {
+                float investment = Float.parseFloat(investInput.getText());
+                float annualPercent = Float.parseFloat(depositAnnualPercentInput.getText());
+                String depositCurrency = userSelectedCurrency;
+                int withdrawalOptionSelected = -1000;
+                switch (depositWithdrawalOption.getText()) {
+                    case "Monthly" -> withdrawalOptionSelected = 1;
+                    case "Quarterly" -> withdrawalOptionSelected = 2;
+                    case "Yearly" -> withdrawalOptionSelected = 3;
+                    case "At the end" -> withdrawalOptionSelected = 4;
+                }
+                LocalDate contractStartDate = depositContractBeginning.getValue();
+                LocalDate contractEndDate = depositContractEnding.getValue();
+                boolean earlyWithdrawalOption = depositEarlyWithdrawalCheck.isSelected();
+                if (depositCapitalizationCheck.isSelected()) {
+                    if (depositEarlyWithdrawalCheck.isSelected()) {
+                        LocalDate earlyWithdrawal = depositWithdrawalDate.getValue();
+                        Deposit deposit = new CapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate, earlyWithdrawalOption, earlyWithdrawal, withdrawalOptionSelected);
+                        deposit.sendDepositToResultTable();
+                    } else {
+                        Deposit deposit = new CapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate, earlyWithdrawalOption, withdrawalOptionSelected);
+                        deposit.sendDepositToResultTable();
+                    }
+                } else {
+                    Deposit deposit = new UncapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate, earlyWithdrawalOption, withdrawalOptionSelected);
+                    deposit.sendDepositToResultTable();
+                }
+            }
+        });
 
 
 
@@ -344,6 +376,17 @@ public class DepositMenuController {
         WithdrawalOption4.setText(LanguageManager.getInstance().getTranslation("WithdrawalOption4"));
 
     }
+//    public Deposit sendDeposit(Deposit deposit) {
+//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/netrunners/financialcalculator/ResultTable.fxml"));
+//        try {
+//            root = loader.load();
+//            ResultTableController resultTableController = loader.getController();
+//            resultTableController.updateTable(deposit);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//        return deposit;
+//    }
 }
 
 

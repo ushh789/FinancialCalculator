@@ -1,6 +1,8 @@
 package com.netrunners.financialcalculator.MenuControllers;
 
-import com.netrunners.financialcalculator.StartMenu;
+
+import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Deposit.*;
+import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Credit.*;
 import com.netrunners.financialcalculator.VisualInstruments.MenuActions.AboutUsAlert;
 import com.netrunners.financialcalculator.VisualInstruments.MenuActions.ExitApp;
 import com.netrunners.financialcalculator.VisualInstruments.MenuActions.ThemeSelector;
@@ -9,10 +11,8 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 
-import static com.netrunners.financialcalculator.MenuControllers.closeWindow.closeCurrentWindow;
 
 public class ResultTableController {
 
@@ -101,5 +101,11 @@ public class ResultTableController {
         depositButtonMenu.setOnAction(event -> WindowsOpener.depositOpener());
         creditButtonMenu.setOnAction(event -> WindowsOpener.creditOpener());
 
+    }
+    public void updateTable(Deposit deposit){
+        System.out.println(deposit);
+    }
+    public void updateTable(Credit credit){
+        System.out.println(credit);
     }
 }

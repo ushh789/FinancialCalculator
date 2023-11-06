@@ -5,6 +5,9 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.netrunners.financialcalculator.LogicalInstrumnts.FileInstruments.Savable;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TimeFunctions.LocalDateAdapter;
+import com.netrunners.financialcalculator.MenuControllers.ResultTableController;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.stage.FileChooser;
 
 
@@ -81,7 +84,30 @@ public abstract class Deposit implements Savable {
             }
         }
     }
+    public void sendDepositToResultTable() {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/netrunners/financialcalculator/ResultTable.fxml"));
+        try {
+            Parent root = loader.load();
+            ResultTableController resultTableController = loader.getController();
+            resultTableController.updateTable(this);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
+    @Override
+    public String toString() {
+        return "Deposit{" +
+                "investment=" + investment +
+                ", annualPercent=" + annualPercent +
+                ", currency='" + currency + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", withdrawalOption=" + withdrawalOption +
+                ", earlyWithdrawal=" + earlyWithdrawal +
+                ", earlyWithdrawalDate=" + earlyWithdrawalDate +
+                '}';
+    }
 
     @Override
     public void open() {
