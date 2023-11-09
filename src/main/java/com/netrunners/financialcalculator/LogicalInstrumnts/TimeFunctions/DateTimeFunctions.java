@@ -1,8 +1,12 @@
 package com.netrunners.financialcalculator.LogicalInstrumnts.TimeFunctions;
 
+import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Credit.Credit;
+import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Deposit.Deposit;
+
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalAdjusters;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -50,20 +54,82 @@ public class DateTimeFunctions {
     }
 
     public static int countMonthsBetweenDates(LocalDate startDate, LocalDate endDate) {
-        return (int) ChronoUnit.MONTHS.between(startDate, endDate);
+        long monthsBetween = ChronoUnit.MONTHS.between(startDate, endDate);
+        if (!startDate.isEqual(endDate) && (endDate.getMonth() == startDate.getMonth() || endDate.getDayOfMonth() > startDate.getDayOfMonth())) {
+            monthsBetween++;
+        }
+        return (int) monthsBetween;
     }
 
-    public static int getQuarter(int month) {
-        if (month >= 1 && month <= 3) {
-            return 1;
-        } else if (month >= 4 && month <= 6) {
-            return 2;
-        } else if (month >= 7 && month <= 9) {
-            return 3;
-        } else if (month >= 10 && month <= 12) {
-            return 4;
-        } else {
-            throw new IllegalArgumentException("Невірний номер місяця: " + month);
+    public static int countYearsBetweenDates(LocalDate startDate, LocalDate endDate) {
+        long yearsBetween = ChronoUnit.YEARS.between(startDate, endDate);
+        if (endDate.getMonthValue() > startDate.getMonthValue() ||
+                (endDate.getMonthValue() == startDate.getMonthValue() && endDate.getDayOfMonth() > startDate.getDayOfMonth())) {
+            yearsBetween++;
         }
+        return (int) yearsBetween;
+    }
+
+    public static int countQuartersBetweenDates(LocalDate startDate, LocalDate endDate) {
+        long monthsBetween = ChronoUnit.MONTHS.between(
+                startDate.withDayOfMonth(1),
+                endDate.withDayOfMonth(1));
+        int quarters = (int) monthsBetween / 3;
+        LocalDate lastFullQuarterEnd = startDate.plusMonths(quarters * 3);
+        LocalDate lastDayOfQuarter = lastFullQuarterEnd
+                .withMonth(((lastFullQuarterEnd.getMonthValue() - 1) / 3 + 1) * 3)
+                .with(TemporalAdjusters.lastDayOfMonth());
+        if (!endDate.isBefore(lastDayOfQuarter)) {
+            quarters++;
+        }
+        return quarters;
+    }
+
+    public static int countDaysToNextPeriod(Credit credit, LocalDate date) {
+        switch (credit.getPaymentType()) {
+            case 1 -> {
+                return countDaysBetweenDates(date, date.plusMonths(1).withDayOfMonth(1));
+            }
+            case 2 -> {
+                return countDaysBetweenDates(date, date.plusMonths(3).withDayOfMonth(1));
+            }
+            case 3 -> {
+                return countDaysBetweenDates(date, date.plusYears(1).withMonth(1).withDayOfMonth(1));
+            }
+            case 4 -> {
+                return countDaysBetweenDates(date, credit.getEndDate());
+            }
+        }
+        return 0;
+    }
+
+    public static int countDaysToNextPeriod(Deposit deposit, LocalDate tempDate, LocalDate endDate) {
+        switch (deposit.getWithdrawalOption()) {
+            case 1 -> {
+                if (tempDate.plusMonths(1).withDayOfMonth(1).isAfter(endDate)) {
+                    return countDaysBetweenDates(tempDate, endDate);
+                } else {
+                    return countDaysBetweenDates(tempDate, tempDate.plusMonths(1).withDayOfMonth(1));
+                }
+            }
+            case 2 -> {
+                if (tempDate.plusMonths(3).withDayOfMonth(1).isAfter(endDate)) {
+                    return countDaysBetweenDates(tempDate, endDate);
+                } else {
+                    return countDaysBetweenDates(tempDate, tempDate.plusMonths(3).withDayOfMonth(1));
+                }
+            }
+            case 3 -> {
+                if (tempDate.plusYears(1).withMonth(1).withDayOfMonth(1).isAfter(endDate)) {
+                    return countDaysBetweenDates(tempDate, endDate);
+                } else {
+                    return countDaysBetweenDates(tempDate, tempDate.plusYears(1).withMonth(1).withDayOfMonth(1));
+                }
+            }
+            case 4 -> {
+                return countDaysBetweenDates(tempDate, endDate);
+            }
+        }
+        return 0;
     }
 }

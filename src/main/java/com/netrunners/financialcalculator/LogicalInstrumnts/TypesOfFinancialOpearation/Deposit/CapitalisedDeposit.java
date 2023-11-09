@@ -18,8 +18,8 @@ public class CapitalisedDeposit extends Deposit {
     }
 
     @Override
-    protected float countProfit() {
-        return 0;
+    public float countProfit() {
+        return super.countProfit();
     }
 
     @Override

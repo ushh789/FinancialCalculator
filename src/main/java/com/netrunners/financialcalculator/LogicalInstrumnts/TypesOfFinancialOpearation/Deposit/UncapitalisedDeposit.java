@@ -16,10 +16,9 @@ public class UncapitalisedDeposit extends Deposit {
     }
 
     @Override
-    protected float countProfit() {
-        return 0;
+    public float countProfit() {
+        return super.countProfit();
     }
-
 
     @Override
     public void save() {

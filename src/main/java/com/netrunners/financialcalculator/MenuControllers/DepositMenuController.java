@@ -2,7 +2,6 @@ package com.netrunners.financialcalculator.MenuControllers;
 
 import static com.netrunners.financialcalculator.MenuControllers.closeWindow.closeCurrentWindow;
 
-import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.*;
@@ -16,7 +15,6 @@ import com.netrunners.financialcalculator.StartMenu;
 import com.netrunners.financialcalculator.VisualInstruments.MenuActions.*;
 import com.netrunners.financialcalculator.VisualInstruments.WindowsOpener;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -321,6 +319,7 @@ public class DepositMenuController {
                 if (depositCapitalizationCheck.isSelected()) {
                     if (depositEarlyWithdrawalCheck.isSelected()) {
                         LocalDate earlyWithdrawal = depositWithdrawalDate.getValue();
+                        System.out.println(depositWithdrawalDate.getValue());
                         Deposit deposit = new CapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate, earlyWithdrawalOption, earlyWithdrawal, withdrawalOptionSelected);
                         deposit.sendDepositToResultTable();
                     } else {

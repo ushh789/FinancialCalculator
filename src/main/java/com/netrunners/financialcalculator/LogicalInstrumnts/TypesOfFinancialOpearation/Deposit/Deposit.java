@@ -30,7 +30,9 @@ public abstract class Deposit implements Savable {
     protected boolean earlyWithdrawal;
     protected LocalDate earlyWithdrawalDate;
 
-    protected abstract float countProfit();
+    public float countProfit() {
+        return investment * (1f / 365f) * (annualPercent / 100f);
+    }
 
     public Deposit(float investment, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, boolean earlyWithdrawal, LocalDate earlyWithdrawalDate, int withdrawalOption) {
         this.investment = investment;
@@ -88,6 +90,7 @@ public abstract class Deposit implements Savable {
             }
         }
     }
+
     public void sendDepositToResultTable() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/netrunners/financialcalculator/ResultTable.fxml"));
         try {
@@ -125,6 +128,24 @@ public abstract class Deposit implements Savable {
                 ", earlyWithdrawal=" + earlyWithdrawal +
                 ", earlyWithdrawalDate=" + earlyWithdrawalDate +
                 '}';
+    }
+
+    public String getNameOfWithdrawalType() {
+        switch (withdrawalOption) {
+            case 1 -> {
+                return "Months";
+            }
+            case 2 -> {
+                return "Quarters";
+            }
+            case 3 -> {
+                return "Years";
+            }
+            case 4 -> {
+                return "Periods";
+            }
+        }
+        return "None";
     }
 
     @Override

@@ -18,7 +18,7 @@ public class CreditWithHolidays extends Credit implements Savable {
     }
 
     @Override
-    protected float countLoan() {
+    public float countLoan() {
         return 0;
     }
 
@@ -44,5 +44,13 @@ public class CreditWithHolidays extends Credit implements Savable {
     @Override
     public void open() {
         super.open();
+    }
+
+    public LocalDate getHolidaysStart() {
+        return holidaysStart;
+    }
+
+    public LocalDate getHolidaysEnd() {
+        return holidaysEnd;
     }
 }

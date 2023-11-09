@@ -38,8 +38,8 @@ public class Credit implements Savable {
         this.paymentType = paymentType;
     }
 
-    protected float countLoan() {
-        return 0;
+    public float countLoan() {
+        return loan * (1f/365f) * (annualPercent / 100f);
     }
 
 
@@ -140,5 +140,22 @@ public class Credit implements Savable {
 
     public int getPaymentType() {
         return paymentType;
+    }
+    public String getNameOfPaymentType(){
+        switch (paymentType){
+            case 1 -> {
+                return "Months";
+            }
+            case 2 -> {
+                return "Quarters";
+            }
+            case 3 -> {
+                return "Years";
+            }
+            case 4 -> {
+                return "Periods";
+            }
+        }
+        return "None";
     }
 }
