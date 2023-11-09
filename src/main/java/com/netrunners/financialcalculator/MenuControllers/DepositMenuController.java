@@ -286,9 +286,10 @@ public class DepositMenuController {
                 LocalDate contractStartDate = depositContractBeginning.getValue();
                 LocalDate contractEndDate = depositContractEnding.getValue();
                 boolean earlyWithdrawalOption = depositEarlyWithdrawalCheck.isSelected();
+                LocalDate earlyWithdrawal = null;
+                earlyWithdrawal = depositWithdrawalDate.getValue();
                 if (depositCapitalizationCheck.isSelected()) {
                     if (depositEarlyWithdrawalCheck.isSelected()) {
-                        LocalDate earlyWithdrawal = depositWithdrawalDate.getValue();
                         Deposit deposit = new CapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate, earlyWithdrawalOption, earlyWithdrawal, withdrawalOptionSelected);
                         deposit.save();
                     } else {
@@ -296,8 +297,14 @@ public class DepositMenuController {
                         deposit.save();
                     }
                 } else {
-                    Deposit deposit = new UncapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate, earlyWithdrawalOption, withdrawalOptionSelected);
-                    deposit.save();
+                    if (depositEarlyWithdrawalCheck.isSelected()) {
+                        Deposit deposit = new CapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate, earlyWithdrawalOption, earlyWithdrawal, withdrawalOptionSelected);
+                        deposit.save();
+                    }
+                    else {
+                        Deposit deposit = new UncapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate, earlyWithdrawalOption, withdrawalOptionSelected);
+                        deposit.save();
+                    }
                 }
             }
         });
@@ -316,9 +323,10 @@ public class DepositMenuController {
                 LocalDate contractStartDate = depositContractBeginning.getValue();
                 LocalDate contractEndDate = depositContractEnding.getValue();
                 boolean earlyWithdrawalOption = depositEarlyWithdrawalCheck.isSelected();
+                LocalDate earlyWithdrawal = null;
+                earlyWithdrawal = depositWithdrawalDate.getValue();
                 if (depositCapitalizationCheck.isSelected()) {
                     if (depositEarlyWithdrawalCheck.isSelected()) {
-                        LocalDate earlyWithdrawal = depositWithdrawalDate.getValue();
                         System.out.println(depositWithdrawalDate.getValue());
                         Deposit deposit = new CapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate, earlyWithdrawalOption, earlyWithdrawal, withdrawalOptionSelected);
                         deposit.sendDepositToResultTable();
@@ -327,8 +335,13 @@ public class DepositMenuController {
                         deposit.sendDepositToResultTable();
                     }
                 } else {
-                    Deposit deposit = new UncapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate, earlyWithdrawalOption, withdrawalOptionSelected);
-                    deposit.sendDepositToResultTable();
+                    if (depositEarlyWithdrawalCheck.isSelected()) {
+                        Deposit deposit = new UncapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate, earlyWithdrawalOption, earlyWithdrawal, withdrawalOptionSelected);
+                        deposit.sendDepositToResultTable();
+                    }else {
+                        Deposit deposit = new UncapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate, earlyWithdrawalOption, withdrawalOptionSelected);
+                        deposit.sendDepositToResultTable();
+                    }
                 }
             }
         });
@@ -374,17 +387,6 @@ public class DepositMenuController {
         WithdrawalOption4.setText(LanguageManager.getInstance().getTranslation("WithdrawalOption4"));
 
     }
-//    public Deposit sendDeposit(Deposit deposit) {
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/netrunners/financialcalculator/ResultTable.fxml"));
-//        try {
-//            root = loader.load();
-//            ResultTableController resultTableController = loader.getController();
-//            resultTableController.updateTable(deposit);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//        return deposit;
-//    }
 }
 
 

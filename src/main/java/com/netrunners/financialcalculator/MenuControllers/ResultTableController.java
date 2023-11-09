@@ -177,10 +177,8 @@ public class ResultTableController {
         LocalDate endOfContract;
         if (deposit.isEarlyWithdrawal()) {
             endOfContract = deposit.getEarlyWithdrawalDate();
-            System.out.println(endOfContract);
         } else {
             endOfContract = deposit.getEndDate();
-            System.out.println(endOfContract);
         }
         boolean capitalize = deposit instanceof CapitalisedDeposit;
         while (tempDate.isBefore(endOfContract)) {
@@ -196,7 +194,6 @@ public class ResultTableController {
                 if (capitalize) {
                     for (int i = 0; i < daysToNextPeriod; i++) {
                         periodProfit += deposit.countProfit();
-                        totalInvestment+=periodProfit;
                     }
                 } else {
                     for (int i = 0; i < daysToNextPeriod; i++) {
@@ -206,7 +203,10 @@ public class ResultTableController {
             }
             totalInvestment += periodProfit;
             data.add(new Object[]{numbersColumnFlag, tempInvestment, periodProfit, totalInvestment});
-            tempInvestment = totalInvestment;
+            if (capitalize) {
+                tempInvestment = totalInvestment;
+                deposit.setInvestment(tempInvestment);
+            }
             tempDate = tempDate.plusDays(daysToNextPeriod);
             numbersColumnFlag++;
         }

@@ -156,6 +156,10 @@ public abstract class Deposit implements Savable {
         return investment;
     }
 
+    public void setInvestment(float investment) {
+        this.investment = investment;
+    }
+
     public float getAnnualPercent() {
         return annualPercent;
     }
