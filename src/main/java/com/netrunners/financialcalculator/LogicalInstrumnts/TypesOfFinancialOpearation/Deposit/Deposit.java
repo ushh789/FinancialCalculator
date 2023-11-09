@@ -63,6 +63,7 @@ public abstract class Deposit implements Savable {
         jsonObject.addProperty("startDate", this.startDate.toString());
         jsonObject.addProperty("endDate", this.endDate.toString());
         jsonObject.addProperty("withdrawalOption", this.withdrawalOption);
+        jsonObject.addProperty("earlyWithdrawalDate", this.earlyWithdrawalDate.toString());
         jsonObject.addProperty("earlyWithdrawal", this.earlyWithdrawal);
         return jsonObject;
     }
@@ -100,7 +101,7 @@ public abstract class Deposit implements Savable {
 
             Stage stage = new Stage();
             stage.setTitle("Result");
-            Scene scene = new Scene(root); // Використовуйте вже завантажений root
+            Scene scene = new Scene(root);
             scene.getStylesheets().add(StartMenu.currentTheme);
             stage.setScene(scene);
             StartMenu.openScenes.add(scene);

@@ -298,7 +298,7 @@ public class DepositMenuController {
                     }
                 } else {
                     if (depositEarlyWithdrawalCheck.isSelected()) {
-                        Deposit deposit = new CapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate, earlyWithdrawalOption, earlyWithdrawal, withdrawalOptionSelected);
+                        Deposit deposit = new UncapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate, earlyWithdrawalOption, earlyWithdrawal, withdrawalOptionSelected);
                         deposit.save();
                     }
                     else {
