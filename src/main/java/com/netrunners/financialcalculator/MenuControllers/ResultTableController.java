@@ -219,18 +219,21 @@ public class ResultTableController {
     private void fillColumns(Deposit deposit) {
         resultTable.getColumns().clear();
         periodPercentsColumn.setVisible(false);
-        LocalDate tempDate = deposit.getStartDate();
-        float tempInvestment = deposit.getInvestment();
-        float totalInvestment = tempInvestment;
-        int numbersColumnFlag = 0;
-
         periodColumn.setCellValueFactory(cellData -> cellData.getValue()[0] == null ? null : new SimpleObjectProperty<>((Integer) cellData.getValue()[0]));
         investmentloanColumn.setCellValueFactory(cellData -> cellData.getValue()[1] == null ? null : new SimpleObjectProperty<>((String) cellData.getValue()[1]));
         periodProfitLoanColumn.setCellValueFactory(cellData -> cellData.getValue()[2] == null ? null : new SimpleObjectProperty<>((String) cellData.getValue()[2]));
         totalColumn.setCellValueFactory(cellData -> cellData.getValue()[3] == null ? null : new SimpleObjectProperty<>((String) cellData.getValue()[3]));
-        List<Object[]> data = new ArrayList<>();
+        List<Object[]> data = countDepositData(deposit);
         resultTable.getColumns().addAll(periodColumn, investmentloanColumn, periodProfitLoanColumn, totalColumn);
-
+        ObservableList<Object[]> observableData = FXCollections.observableArrayList(data);
+        resultTable.setItems(observableData);
+    }
+    private List<Object[]> countDepositData(Deposit deposit){
+        List<Object[]> data = new ArrayList<>();
+        LocalDate tempDate = deposit.getStartDate();
+        float tempInvestment = deposit.getInvestment();
+        float totalInvestment = tempInvestment;
+        int numbersColumnFlag = 0;
         LocalDate endOfContract;
         if (deposit.isEarlyWithdrawal()) {
             endOfContract = deposit.getEarlyWithdrawalDate();
@@ -270,9 +273,9 @@ public class ResultTableController {
             tempDate = tempDate.plusDays(daysToNextPeriod);
             numbersColumnFlag++;
         }
-        ObservableList<Object[]> observableData = FXCollections.observableArrayList(data);
-        resultTable.setItems(observableData);
+        return data;
     }
+
 }
 
 
