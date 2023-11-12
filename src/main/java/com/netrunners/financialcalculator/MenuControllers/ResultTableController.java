@@ -6,6 +6,7 @@ import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpea
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Credit.*;
 import com.netrunners.financialcalculator.VisualInstruments.MenuActions.AboutUsAlert;
 import com.netrunners.financialcalculator.VisualInstruments.MenuActions.ExitApp;
+import com.netrunners.financialcalculator.VisualInstruments.MenuActions.LanguageManager;
 import com.netrunners.financialcalculator.VisualInstruments.MenuActions.ThemeSelector;
 import com.netrunners.financialcalculator.VisualInstruments.WindowsOpener;
 
@@ -14,10 +15,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
 
+import java.io.PrintWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 public class ResultTableController {
@@ -90,15 +97,73 @@ public class ResultTableController {
 
     @FXML
     private Menu viewButton;
+    public void updateText() {
+        creditButtonMenu.setText(LanguageManager.getInstance().getTranslation("creditButtonMenu"));
+        depositButtonMenu.setText(LanguageManager.getInstance().getTranslation("depositButtonMenu"));
+        languageButton.setText(LanguageManager.getInstance().getTranslation("languageButton"));
+        darkTheme.setText(LanguageManager.getInstance().getTranslation("darkTheme"));
+        lightTheme.setText(LanguageManager.getInstance().getTranslation("lightTheme"));
+        aboutUs.setText(LanguageManager.getInstance().getTranslation("aboutUs"));
+        exitApp.setText(LanguageManager.getInstance().getTranslation("exitApp"));
+        currency.setText(LanguageManager.getInstance().getTranslation("currency"));
+        openFileButton.setText(LanguageManager.getInstance().getTranslation("openFileButton"));
+        saveAsButton.setText(LanguageManager.getInstance().getTranslation("saveAsButton"));
+        saveButton.setText(LanguageManager.getInstance().getTranslation("saveButton"));
+        themeButton.setText(LanguageManager.getInstance().getTranslation("themeButton"));
+        viewButton.setText(LanguageManager.getInstance().getTranslation("viewButton"));
+        newButton.setText(LanguageManager.getInstance().getTranslation("newButton"));
+        fileButton.setText(LanguageManager.getInstance().getTranslation("fileButton"));
+        settingsButton.setText(LanguageManager.getInstance().getTranslation("settingsButton"));
+        aboutButton.setText(LanguageManager.getInstance().getTranslation("aboutButton"));
 
+    }
     @FXML
     void initialize() {
+        updateText();
+        LanguageManager.getInstance().languageProperty().addListener((observable, oldValue, newValue) -> {
+            updateText();
+        });
         darkTheme.setOnAction(event -> ThemeSelector.setDarkTheme());
         lightTheme.setOnAction(event -> ThemeSelector.setLightTheme());
         aboutUs.setOnAction(event -> AboutUsAlert.showAboutUs());
         exitApp.setOnAction(event -> ExitApp.exitApp());
         depositButtonMenu.setOnAction(event -> WindowsOpener.depositOpener());
         creditButtonMenu.setOnAction(event -> WindowsOpener.creditOpener());
+        languageButton.setOnAction(event -> {
+            List<String> choices = new ArrayList<>();
+            choices.add("English");
+            choices.add("Українська");
+            choices.add("Español");
+            choices.add("Français");
+            choices.add("Deutsch");
+            choices.add("Czech");
+            choices.add("Polski");
+            choices.add("Nederlands");
+            choices.add("日本語");
+            choices.add("中国人");
+            ChoiceDialog<String> dialog = new ChoiceDialog<>("English", choices);
+            dialog.setTitle("Choose Language");
+            Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+            stage.getIcons().add(new Image("file:src/main/resources/com/netrunners/financialcalculator/assets/Logo.png"));
+            dialog.setHeaderText(null);
+            dialog.setContentText("Choose your language:");
+
+            Optional<String> result = dialog.showAndWait();
+            if (result.isPresent()) {
+                switch (result.get()) {
+                    case "English" -> setLanguage("en");
+                    case "Українська" -> setLanguage("uk");
+                    case "Español" -> setLanguage("es");
+                    case "Français" -> setLanguage("fr");
+                    case "Deutsch" -> setLanguage("de");
+                    case "Czech" -> setLanguage("cs");
+                    case "Polski" -> setLanguage("pl");
+                    case "Nederlands" -> setLanguage("nl");
+                    case "日本語" -> setLanguage("ja");
+                    case "中国人" -> setLanguage("zh");
+                }
+            }
+        });
     }
 
     public void updateTable(Deposit deposit) {
@@ -110,6 +175,38 @@ public class ResultTableController {
         fillColumns(credit);
         System.out.println(credit);
     }
+
+
+    private void writeDataToCSV(List<Object[]> data, Deposit deposit) {
+        String csvFile = "depositResult.csv";
+        try (PrintWriter writer = new PrintWriter(new FileWriter(csvFile))) {
+            writer.println(deposit.getNameOfWithdrawalType()  + ";" + investmentloanColumn.getText() + ";" + periodProfitLoanColumn.getText() + ";" + totalColumn.getText());
+
+            for (Object[] row : data) {
+                writer.println(row[0] + ";" + row[1] + ";" + row[2] + ";" + row[3]);
+                writer.flush();
+            }
+            writer.println("Annual percent of deposit: " + deposit.getAnnualPercent());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private void writeDataToCSV(List<Object[]> data, Credit credit){
+        String csvFile = "creditResult.csv";
+        try (PrintWriter writer = new PrintWriter(new FileWriter(csvFile))) {
+            writer.println(credit.getNameOfPaymentType()  + ";" + investmentloanColumn.getText() + ";" + periodProfitLoanColumn.getText() + ";" + totalColumn.getText());
+
+            for (Object[] row : data) {
+                writer.println(row[0] + ";" + row[1] + ";" + row[2] + ";" + row[3]);
+                writer.flush();
+            }
+            //Write a Annual percent of deposit
+            writer.println("Annual percent of deposit: " + credit.getAnnualPercent());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
     private void fillColumns(Credit credit) {
@@ -158,6 +255,7 @@ public class ResultTableController {
         }
         ObservableList<Object[]> observableData = FXCollections.observableArrayList(data);
         resultTable.setItems(observableData);
+        writeDataToCSV(data, credit);
     }
 
     private void fillColumns(Deposit deposit) {
@@ -212,6 +310,30 @@ public class ResultTableController {
         }
         ObservableList<Object[]> observableData = FXCollections.observableArrayList(data);
         resultTable.setItems(observableData);
+        writeDataToCSV(data, deposit);
+    }
+    public void setLanguage(String language) {
+        LanguageManager.getInstance().setLanguage(language);
+        creditButtonMenu.setText(LanguageManager.getInstance().getTranslation("creditButtonMenu"));
+        depositButtonMenu.setText(LanguageManager.getInstance().getTranslation("depositButtonMenu"));
+        languageButton.setText(LanguageManager.getInstance().getTranslation("languageButton"));
+        darkTheme.setText(LanguageManager.getInstance().getTranslation("darkTheme"));
+        lightTheme.setText(LanguageManager.getInstance().getTranslation("lightTheme"));
+        aboutUs.setText(LanguageManager.getInstance().getTranslation("aboutUs"));
+        exitApp.setText(LanguageManager.getInstance().getTranslation("exitApp"));
+        currency.setText(LanguageManager.getInstance().getTranslation("currency"));
+        openFileButton.setText(LanguageManager.getInstance().getTranslation("openFileButton"));
+        saveAsButton.setText(LanguageManager.getInstance().getTranslation("saveAsButton"));
+        saveButton.setText(LanguageManager.getInstance().getTranslation("saveButton"));
+        themeButton.setText(LanguageManager.getInstance().getTranslation("themeButton"));
+        viewButton.setText(LanguageManager.getInstance().getTranslation("viewButton"));
+        newButton.setText(LanguageManager.getInstance().getTranslation("newButton"));
+        fileButton.setText(LanguageManager.getInstance().getTranslation("fileButton"));
+        settingsButton.setText(LanguageManager.getInstance().getTranslation("settingsButton"));
+        aboutButton.setText(LanguageManager.getInstance().getTranslation("aboutButton"));
+        investmentloanColumn.setText(LanguageManager.getInstance().getTranslation("investmentColumn"));
+        financialCalculatorLabel.setText(LanguageManager.getInstance().getTranslation("resultTablelabel"));
+        periodColumn.setText(LanguageManager.getInstance().getTranslation("periodColumn"));
     }
 }
 

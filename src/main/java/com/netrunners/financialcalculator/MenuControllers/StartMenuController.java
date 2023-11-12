@@ -249,6 +249,7 @@ public class StartMenuController implements LanguageUpdater {
         settingsButton.setText(LanguageManager.getInstance().getTranslation("settingsButton"));
         aboutButton.setText(LanguageManager.getInstance().getTranslation("aboutButton"));
         financialCalculatorLabel.setText(LanguageManager.getInstance().getTranslation("financialCalculatorLabel"));
+
     }
 }
 

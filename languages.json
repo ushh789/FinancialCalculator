@@ -45,5 +45,16 @@
   "saveAsButton": ["Save As", "Зберегти як", "Guardar como", "Enregistrer sous", "Speichern unter", "Uložit jako", "Zapisz jako", "Opslaan als", "名前を付けて保存", "另存为"],
   "themeButton": ["Theme", "Тема", "Tema", "Thème", "Thema", "Téma", "Motyw", "Thema", "テーマ", "主题"],
   "aboutButton": ["About us", "Про нас", "Sobre nosotros", "À propos de nous", "Über uns", "O nás", "O nas","Over ons","私たちについて","关于我们"],
-  "languageButton": ["Change Language", "Змінити мову", "Cambiar idioma", "Changer de langue", "Sprache ändern", "Změnit jazyk", "Zmień język", "Taal wijzigen", "言語を変更する", "更改语言"]
+  "languageButton": ["Change Language", "Змінити мову", "Cambiar idioma", "Changer de langue", "Sprache ändern", "Změnit jazyk", "Zmień język", "Taal wijzigen", "言語を変更する", "更改语言"],
+  "monthsTerm": ["Months", "Місяці", "Meses", "Mois", "Monate", "Měsíce", "Miesiące", "Maanden", "月", "月"],
+  "quartersTerm": ["Quarters", "Квартали", "Trimestres", "Trimestres", "Quartale", "Čtvrtletí", "Kwartały", "Kwartaal", "四半期", "季度"],
+  "yearsTerm": ["Years", "Роки", "Años", "Ans", "Jahre", "Roky", "Lata", "Jaren", "年", "年"],
+  "endTerm": ["End of Period", "Кінець періоду", "Fin del período", "Fin de période", "Ende der Periode", "Konec období", "Koniec okresu", "Einde van de periode", "期末", "期末"],
+  "investmentColumn": ["Investment", "Інвестиція", "Inversión", "Investissement", "Investition", "Investice", "Inwestycja", "Investering", "投資", "投资"],
+  "loanColumn": ["Loan", "Позика", "Préstamo", "Prêt", "Darlehen", "Půjčka", "Pożyczka", "Lening", "ローン", "贷款"],
+  "profitColumn": ["Profit", "Прибуток", "Beneficio", "Profit", "Gewinn", "Zisk", "Zysk", "Winst", "利益", "利润"],
+  "paymentLoan": ["Payment", "Платіж", "Pago", "Paiement", "Zahlung", "Platba", "Płatność", "Betaling", "支払い", "付款"],
+  "totalColumn": ["Total", "Всього", "Total", "Total", "Gesamt", "Celkem", "Całkowity", "Totaal", "合計", "总"],
+  "resultTablelabel": ["Result Table", "Таблиця результатів", "Tabla de resultados", "Tableau de résultats", "Ergebnistabelle", "Výsledná tabulka", "Tabela wyników", "Resultatentabel", "結果表", "结果表"],
+  "periodColumn": ["Period", "Період", "Período", "Période", "Periode", "Období", "Okres", "Periode", "期間", "期间"]
 }
