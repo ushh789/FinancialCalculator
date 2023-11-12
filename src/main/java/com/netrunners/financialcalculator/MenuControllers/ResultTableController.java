@@ -170,7 +170,6 @@ public class ResultTableController {
             });
             numbersColumnFlag++;
         }
-        data.add(new Object[]{null, "Total"});
         return data;
     }
 
@@ -275,6 +274,5 @@ public class ResultTableController {
         resultTable.setItems(observableData);
     }
 }
-
 
 

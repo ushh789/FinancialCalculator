@@ -1,6 +1,5 @@
 package com.netrunners.financialcalculator.VisualInstruments;
 
-import com.netrunners.financialcalculator.MenuControllers.ResultTableController;
 import com.netrunners.financialcalculator.StartMenu;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
