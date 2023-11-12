@@ -63,7 +63,11 @@ public abstract class Deposit implements Savable {
         jsonObject.addProperty("startDate", this.startDate.toString());
         jsonObject.addProperty("endDate", this.endDate.toString());
         jsonObject.addProperty("withdrawalOption", this.withdrawalOption);
-        jsonObject.addProperty("earlyWithdrawalDate", this.earlyWithdrawalDate.toString());
+        if (this.earlyWithdrawal) {
+            jsonObject.addProperty("earlyWithdrawalDate", this.earlyWithdrawalDate.toString());
+        } else {
+            jsonObject.addProperty("earlyWithdrawalDate", "None");
+        }
         jsonObject.addProperty("earlyWithdrawal", this.earlyWithdrawal);
         return jsonObject;
     }
@@ -83,11 +87,13 @@ public abstract class Deposit implements Savable {
                 new FileChooser.ExtensionFilter("JSON Files", "*.json"));
         File file = fileChooser.showSaveDialog(null);
 
-        if (file != null) {
-            try (FileWriter writer = new FileWriter(file)) {
-                writer.write(json);
+        if(file != null){
+            try {
+                FileWriter fileWriter = new FileWriter(file);
+                fileWriter.write(json);
+                fileWriter.close();
             } catch (IOException e) {
-                e.getMessage();
+                e.printStackTrace();
             }
         }
     }

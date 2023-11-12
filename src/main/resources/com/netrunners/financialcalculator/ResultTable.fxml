@@ -75,7 +75,10 @@
                 <Font size="14.0" />
             </font>
         </Label>
-      <Button layoutX="460.0" layoutY="543.0" mnemonicParsing="false" prefWidth="100.0" text="Next page" textAlignment="CENTER" />
-      <Button layoutX="60.0" layoutY="543.0" mnemonicParsing="false" prefWidth="100.0" text="Previous page" textAlignment="CENTER" />
+      <Button fx:id="saveFileButton" layoutX="230.0" layoutY="556.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="150.0" text="Export to CSV">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
     </children>
 </AnchorPane>

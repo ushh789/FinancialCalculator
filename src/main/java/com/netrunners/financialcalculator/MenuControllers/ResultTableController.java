@@ -13,7 +13,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.FileChooser;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -94,6 +99,9 @@ public class ResultTableController {
     private Menu viewButton;
 
     @FXML
+    private Button saveFileButton;
+
+    @FXML
     void initialize() {
         darkTheme.setOnAction(event -> ThemeSelector.setDarkTheme());
         lightTheme.setOnAction(event -> ThemeSelector.setLightTheme());
@@ -101,6 +109,48 @@ public class ResultTableController {
         exitApp.setOnAction(event -> ExitApp.exitApp());
         depositButtonMenu.setOnAction(event -> WindowsOpener.depositOpener());
         creditButtonMenu.setOnAction(event -> WindowsOpener.creditOpener());
+
+    }
+
+    private void writeDataToCSV(List<Object[]> data, Deposit deposit , File file) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
+            writer.println(deposit.getNameOfWithdrawalType()  + ";" + investmentloanColumn.getText() + ";" + periodProfitLoanColumn.getText() + ";" + totalColumn.getText());
+
+            for (Object[] row : data) {
+                writer.println(row[0] + ";" + row[1] + ";" + row[2] + ";" + row[3]);
+                writer.flush();
+            }
+            writer.println("Annual percent of deposit: " + deposit.getAnnualPercent());
+            writer.println("Currency: " + deposit.getCurrency());
+            writer.println("Start date: " + deposit.getStartDate());
+            writer.println("End date: " + deposit.getEndDate());
+            if(deposit.isEarlyWithdrawal()){
+                writer.println("Early withdrawal date: " + deposit.getEarlyWithdrawalDate());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private void writeDataToCSV(List<Object[]> data, Credit credit, File file){
+        try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
+            writer.println(credit.getNameOfPaymentType()  + ";" + investmentloanColumn.getText() + ";" + periodProfitLoanColumn.getText() + ";" + totalColumn.getText() + ";" + periodPercentsColumn.getText());
+
+            for (Object[] row : data) {
+                writer.println(row[0] + ";" + row[1] + ";" + row[2] + ";" + row[3]+ ";" + row[4]);
+                writer.flush();
+            }
+            //Write a Annual percent of deposit
+            writer.println("Annual percent of credit: " + credit.getAnnualPercent());
+            writer.println("Currency: " + credit.getCurrency());
+            writer.println("Start date: " + credit.getStartDate());
+            writer.println("End date: " + credit.getEndDate());
+            if(credit instanceof CreditWithHolidays){
+                writer.println("Holidays start date: " + ((CreditWithHolidays) credit).getHolidaysStart());
+                writer.println("Holidays end date: " + ((CreditWithHolidays) credit).getHolidaysEnd());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void updateTable(Deposit deposit) {
@@ -128,7 +178,22 @@ public class ResultTableController {
         }
         ObservableList<Object[]> observableData = FXCollections.observableArrayList(data);
         resultTable.setItems(observableData);
+        List<Object[]> finalData = data;
+        saveFileButton.setOnAction(event ->{
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Save Data");
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+            File file = fileChooser.showSaveDialog(null);
+            if (file != null) {
+                writeDataToCSV(finalData, credit, file);
+            }
+        });
     }
+
+
+
+
 
     private List<Object[]> countCreditWithHolidaysData(CreditWithHolidays credit) {
         LocalDate tempDate = credit.getStartDate();
@@ -217,6 +282,7 @@ public class ResultTableController {
 
 
     private void fillColumns(Deposit deposit) {
+
         resultTable.getColumns().clear();
         periodPercentsColumn.setVisible(false);
         periodColumn.setCellValueFactory(cellData -> cellData.getValue()[0] == null ? null : new SimpleObjectProperty<>((Integer) cellData.getValue()[0]));
@@ -227,6 +293,16 @@ public class ResultTableController {
         resultTable.getColumns().addAll(periodColumn, investmentloanColumn, periodProfitLoanColumn, totalColumn);
         ObservableList<Object[]> observableData = FXCollections.observableArrayList(data);
         resultTable.setItems(observableData);
+        saveFileButton.setOnAction(event ->{
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Save Data");
+            fileChooser.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+            File file = fileChooser.showSaveDialog(null);
+            if (file != null) {
+                writeDataToCSV(data, deposit, file);
+            }
+        });
     }
     private List<Object[]> countDepositData(Deposit deposit){
         List<Object[]> data = new ArrayList<>();
