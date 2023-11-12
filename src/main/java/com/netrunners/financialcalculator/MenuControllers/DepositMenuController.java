@@ -239,7 +239,7 @@ public class DepositMenuController implements CurrencyController{
         });
 
         depositSaveResult.setOnAction(event -> {
-            if (ErrorChecker.areFieldsValidinDeposit(investInput, depositAnnualPercentInput, depositWithdrawalOption, depositContractBeginning, depositContractEnding, depositWithdrawalDate, depositEarlyWithdrawalCheck)) {
+            if (ErrorChecker.areFieldsValidInDeposit(investInput, depositAnnualPercentInput, depositWithdrawalOption, depositContractBeginning, depositContractEnding, depositWithdrawalDate, depositEarlyWithdrawalCheck)) {
                 float investment = Float.parseFloat(investInput.getText());
                 float annualPercent = Float.parseFloat(depositAnnualPercentInput.getText());
                 String depositCurrency = userSelectedCurrency;
@@ -276,7 +276,7 @@ public class DepositMenuController implements CurrencyController{
             }
         });
         depositViewResult.setOnAction(event -> {
-            if (ErrorChecker.areFieldsValidinDeposit(investInput, depositAnnualPercentInput, depositWithdrawalOption, depositContractBeginning, depositContractEnding, depositWithdrawalDate, depositEarlyWithdrawalCheck)) {
+            if (ErrorChecker.areFieldsValidInDeposit(investInput, depositAnnualPercentInput, depositWithdrawalOption, depositContractBeginning, depositContractEnding, depositWithdrawalDate, depositEarlyWithdrawalCheck)) {
                 float investment = Float.parseFloat(investInput.getText());
                 float annualPercent = Float.parseFloat(depositAnnualPercentInput.getText());
                 String depositCurrency = userSelectedCurrency;

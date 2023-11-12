@@ -246,7 +246,7 @@ public class CreditMenuController implements CurrencyController {
         });
 
         creditSaveResult.setOnAction(event -> {
-            if (ErrorChecker.areFieldsValidinCredit(loanInput, annualPercentInput, paymentOption, contractBeginning, contractEnding, checkPaymentHolidays, holidaysBeginning, holidaysEnding)) {
+            if (ErrorChecker.areFieldsValidInCredit(loanInput, annualPercentInput, paymentOption, contractBeginning, contractEnding, checkPaymentHolidays, holidaysBeginning, holidaysEnding)) {
                 float creditLoan = Float.parseFloat(loanInput.getText());
                 float creditAnnualPercent = Float.parseFloat(annualPercentInput.getText());
                 String creditCurrency = userSelectedCurrency;
@@ -272,7 +272,7 @@ public class CreditMenuController implements CurrencyController {
 
         });
         creditViewResult.setOnAction(event -> {
-            if (ErrorChecker.areFieldsValidinCredit(loanInput, annualPercentInput, paymentOption, contractBeginning, contractEnding, checkPaymentHolidays, holidaysBeginning, holidaysEnding)) {
+            if (ErrorChecker.areFieldsValidInCredit(loanInput, annualPercentInput, paymentOption, contractBeginning, contractEnding, checkPaymentHolidays, holidaysBeginning, holidaysEnding)) {
                 float creditLoan = Float.parseFloat(loanInput.getText());
                 float creditAnnualPercent = Float.parseFloat(annualPercentInput.getText());
                 String creditCurrency = userSelectedCurrency;

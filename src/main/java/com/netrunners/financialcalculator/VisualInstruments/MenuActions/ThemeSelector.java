@@ -2,7 +2,6 @@ package com.netrunners.financialcalculator.VisualInstruments.MenuActions;
 
 import com.netrunners.financialcalculator.StartMenu;
 import javafx.scene.Scene;
-import javafx.scene.control.DatePicker;
 
 
 public class ThemeSelector {
