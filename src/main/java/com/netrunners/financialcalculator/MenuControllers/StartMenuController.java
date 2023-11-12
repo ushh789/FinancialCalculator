@@ -1,10 +1,7 @@
 package com.netrunners.financialcalculator.MenuControllers;
 
 import com.netrunners.financialcalculator.StartMenu;
-import com.netrunners.financialcalculator.VisualInstruments.MenuActions.AboutUsAlert;
-import com.netrunners.financialcalculator.VisualInstruments.MenuActions.ExitApp;
-import com.netrunners.financialcalculator.VisualInstruments.MenuActions.LanguageManager;
-import com.netrunners.financialcalculator.VisualInstruments.MenuActions.ThemeSelector;
+import com.netrunners.financialcalculator.VisualInstruments.MenuActions.*;
 import com.netrunners.financialcalculator.VisualInstruments.WindowsOpener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -24,7 +21,7 @@ import java.util.List;
 import static com.netrunners.financialcalculator.StartMenu.startMenuScene;
 import static com.netrunners.financialcalculator.MenuControllers.closeWindow.closeCurrentWindow;
 
-public class StartMenuController implements LanguageUpdater {
+public class StartMenuController implements LanguageUpdater, CurrencyController {
 
     @FXML
     private Button CreditButton;
@@ -85,6 +82,7 @@ public class StartMenuController implements LanguageUpdater {
 
     @FXML
     private Label financialCalculatorLabel;
+    private String userSelectedCurrency;
 
     public void updateText() {
         DepositButton.setText(LanguageManager.getInstance().getTranslation("DepositButton"));
@@ -111,6 +109,7 @@ public class StartMenuController implements LanguageUpdater {
 
     @FXML
     void initialize() {
+        userSelectedCurrency = "$";
         saveButton.setDisable(true);
         saveAsButton.setDisable(true);
         updateText();
@@ -125,33 +124,7 @@ public class StartMenuController implements LanguageUpdater {
         lightTheme.setOnAction(event -> ThemeSelector.setLightTheme());
         aboutUs.setOnAction(event -> AboutUsAlert.showAboutUs());
         exitApp.setOnAction(event -> ExitApp.exitApp());
-
-        currency.setOnAction(event -> {
-            List<String> choices = new ArrayList<>();
-            choices.add("UAH");
-            choices.add("USD");
-            choices.add("EUR");
-
-            ChoiceDialog<String> dialog = new ChoiceDialog<>("UAH", choices);
-            dialog.setTitle("Choose Currency");
-            Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
-            stage.getIcons().add(new Image("file:src/main/resources/com/netrunners/financialcalculator/assets/Logo.png"));
-            dialog.setHeaderText(null);
-            dialog.setContentText("Choose your currency:");
-
-            Optional<String> result = dialog.showAndWait();
-            if (result.isPresent()) {
-                switch (result.get()) {
-                    case "UAH":
-                        break;
-                    case "USD":
-                        break;
-                    case "EUR":
-                        break;
-
-                }
-            }
-        });
+        currency.setOnAction(event -> handleCurrencySelection());
         openFileButton.setOnAction(event -> {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Open Resource File");
@@ -249,6 +222,25 @@ public class StartMenuController implements LanguageUpdater {
         settingsButton.setText(LanguageManager.getInstance().getTranslation("settingsButton"));
         aboutButton.setText(LanguageManager.getInstance().getTranslation("aboutButton"));
         financialCalculatorLabel.setText(LanguageManager.getInstance().getTranslation("financialCalculatorLabel"));
+    }
+
+    @Override
+    public void handleCurrencySelection() {
+        List<String> choices = new ArrayList<>();
+        choices.add("₴");
+        choices.add("$");
+        choices.add("£");
+        choices.add("€");
+
+        ChoiceDialog<String> dialog = new ChoiceDialog<>("₴", choices);
+        dialog.setTitle("Choose Currency");
+        Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image("file:src/main/resources/com/netrunners/financialcalculator/assets/Logo.png"));
+        dialog.setHeaderText(null);
+        dialog.setContentText("Choose your currency:");
+
+        dialog.showAndWait();
+        userSelectedCurrency = dialog.getSelectedItem();
     }
 }
 

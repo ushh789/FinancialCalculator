@@ -20,7 +20,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-public class DepositMenuController {
+public class DepositMenuController implements CurrencyController{
 
     private Parent root;
 
@@ -170,7 +170,7 @@ public class DepositMenuController {
     @FXML
     void initialize() {
         DatePickerRestrictions.setDatePickerRestrictionsWithdrawalHolidays(depositContractBeginning, depositContractEnding, depositWithdrawalDate);
-        userSelectedCurrency = "USD";
+        userSelectedCurrency = "$";
 
         updateText();
         LanguageManager.getInstance().languageProperty().addListener((observable, oldValue, newValue) -> {
@@ -199,34 +199,7 @@ public class DepositMenuController {
         exitApp.setOnAction(event -> ExitApp.exitApp());
         depositButtonMenu.setOnAction(event -> WindowsOpener.depositOpener());
         creditButtonMenu.setOnAction(event -> WindowsOpener.creditOpener());
-
-        currency.setOnAction(event -> {
-            List<String> choices = new ArrayList<>();
-            choices.add("UAH");
-            choices.add("USD");
-            choices.add("EUR");
-
-            ChoiceDialog<String> dialog = new ChoiceDialog<>("UAH", choices);
-            dialog.setTitle("Choose Currency");
-            Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
-            stage.getIcons().add(new Image("file:src/main/resources/com/netrunners/financialcalculator/assets/Logo.png"));
-            dialog.setHeaderText(null);
-            dialog.setContentText("Choose your currency:");
-
-            Optional<String> result = dialog.showAndWait();
-            if (result.isPresent()) {
-                switch (result.get()) {
-                    case "UAH":
-                        break;
-                    case "USD":
-                        break;
-                    case "EUR":
-                        break;
-
-                }
-            }
-            userSelectedCurrency = dialog.getSelectedItem();
-        });
+        currency.setOnAction(event -> handleCurrencySelection());
 
 
         languageButton.setOnAction(event -> {
@@ -380,6 +353,25 @@ public class DepositMenuController {
         WithdrawalOption3.setText(LanguageManager.getInstance().getTranslation("WithdrawalOption3"));
         WithdrawalOption4.setText(LanguageManager.getInstance().getTranslation("WithdrawalOption4"));
 
+    }
+
+    @Override
+    public void handleCurrencySelection() {
+        List<String> choices = new ArrayList<>();
+        choices.add("₴");
+        choices.add("$");
+        choices.add("£");
+        choices.add("€");
+
+        ChoiceDialog<String> dialog = new ChoiceDialog<>("₴", choices);
+        dialog.setTitle("Choose Currency");
+        Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image("file:src/main/resources/com/netrunners/financialcalculator/assets/Logo.png"));
+        dialog.setHeaderText(null);
+        dialog.setContentText("Choose your currency:");
+
+        dialog.showAndWait();
+        userSelectedCurrency = dialog.getSelectedItem();
     }
 }
 

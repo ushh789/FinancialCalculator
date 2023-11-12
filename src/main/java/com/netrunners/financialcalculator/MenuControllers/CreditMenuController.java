@@ -1,6 +1,5 @@
 package com.netrunners.financialcalculator.MenuControllers;
 
-import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -14,21 +13,16 @@ import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpea
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Credit.CreditWithHolidays;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Credit.CreditWithoutHolidays;
 import com.netrunners.financialcalculator.StartMenu;
-import com.netrunners.financialcalculator.VisualInstruments.MenuActions.AboutUsAlert;
-import com.netrunners.financialcalculator.VisualInstruments.MenuActions.ExitApp;
-import com.netrunners.financialcalculator.VisualInstruments.MenuActions.LanguageManager;
-import com.netrunners.financialcalculator.VisualInstruments.MenuActions.ThemeSelector;
+import com.netrunners.financialcalculator.VisualInstruments.MenuActions.*;
 import com.netrunners.financialcalculator.VisualInstruments.WindowsOpener;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import static com.netrunners.financialcalculator.MenuControllers.closeWindow.closeCurrentWindow;
 
-public class CreditMenuController {
+public class CreditMenuController implements CurrencyController {
     @FXML
     private ResourceBundle resources;
 
@@ -175,7 +169,7 @@ public class CreditMenuController {
     void initialize() {
 
         DatePickerRestrictions.setDatePickerRestrictionsHolidays(contractBeginning, contractEnding, holidaysBeginning, holidaysEnding);
-        userSelectedCurrency = "USD";
+        userSelectedCurrency = "$";
 
         updateText();
         LanguageManager.getInstance().languageProperty().addListener((observable, oldValue, newValue) -> {
@@ -212,33 +206,7 @@ public class CreditMenuController {
         creditButtonMenu.setOnAction(event -> WindowsOpener.creditOpener());
 
 
-        currency.setOnAction(event -> {
-            List<String> choices = new ArrayList<>();
-            choices.add("UAH");
-            choices.add("USD");
-            choices.add("EUR");
-
-            ChoiceDialog<String> dialog = new ChoiceDialog<>("UAH", choices);
-            dialog.setTitle("Choose Currency");
-            Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
-            stage.getIcons().add(new Image("file:src/main/resources/com/netrunners/financialcalculator/assets/Logo.png"));
-            dialog.setHeaderText(null);
-            dialog.setContentText("Choose your currency:");
-
-            Optional<String> result = dialog.showAndWait();
-            if (result.isPresent()) {
-                switch (result.get()) {
-                    case "UAH":
-                        break;
-                    case "USD":
-                        break;
-                    case "EUR":
-                        break;
-
-                }
-                userSelectedCurrency = dialog.getSelectedItem();
-            }
-        });
+        currency.setOnAction(event -> handleCurrencySelection());
 
 
         languageButton.setOnAction(event -> {
@@ -367,7 +335,29 @@ public class CreditMenuController {
         PaymentOption4.setText(LanguageManager.getInstance().getTranslation("PaymentOption4"));
     }
 
-}
+    public String getUserSelectedCurrency() {
+        return userSelectedCurrency;
+    }
+
+    @Override
+    public void handleCurrencySelection() {
+        List<String> choices = new ArrayList<>();
+        choices.add("₴");
+        choices.add("$");
+        choices.add("£");
+        choices.add("€");
+
+        ChoiceDialog<String> dialog = new ChoiceDialog<>("₴", choices);
+        dialog.setTitle("Choose Currency");
+        Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image("file:src/main/resources/com/netrunners/financialcalculator/assets/Logo.png"));
+        dialog.setHeaderText(null);
+        dialog.setContentText("Choose your currency:");
+
+        dialog.showAndWait();
+        userSelectedCurrency = dialog.getSelectedItem();
+        }
+    }
 
 
 

@@ -9,8 +9,8 @@ import java.time.LocalDate;
 import java.util.Map;
 
 public class CreditWithHolidays extends Credit implements Savable {
-    private LocalDate holidaysStart;
-    private LocalDate holidaysEnd;
+    private final LocalDate holidaysStart;
+    private final LocalDate holidaysEnd;
 
     public CreditWithHolidays(float loan, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, int paymentType, LocalDate holidaysStart, LocalDate holidaysEnd) {
         super(loan, currency, annualPercent, startDate, endDate, paymentType);
@@ -62,9 +62,6 @@ public class CreditWithHolidays extends Credit implements Savable {
 
     public int countHolidaysDuration() {
         return DateTimeFunctions.countDaysBetweenDates(holidaysStart, holidaysEnd);
-    }
-    private int countDaysToHolidays(){
-        return DateTimeFunctions.countDaysBetweenDates(super.startDate, holidaysStart);
     }
 
 }
