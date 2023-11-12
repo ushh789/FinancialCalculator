@@ -169,12 +169,6 @@ public class DepositMenuController {
 
     @FXML
     void initialize() {
-        StartMenu.datePickers.add(depositContractBeginning);
-        StartMenu.datePickers.add(depositContractEnding);
-        StartMenu.datePickers.add(depositWithdrawalDate);
-        for (DatePicker datePicker : StartMenu.datePickers) {
-            ErrorChecker.WrongDateListener(datePicker);
-        }
         DatePickerRestrictions.setDatePickerRestrictionsWithdrawalHolidays(depositContractBeginning, depositContractEnding, depositWithdrawalDate);
         userSelectedCurrency = "USD";
 
@@ -272,7 +266,7 @@ public class DepositMenuController {
         });
 
         depositSaveResult.setOnAction(event -> {
-            if (ErrorChecker.areFieldsValid(investInput, depositAnnualPercentInput, depositWithdrawalOption)) {
+            if (ErrorChecker.areFieldsValidinDeposit(investInput, depositAnnualPercentInput, depositWithdrawalOption, depositContractBeginning, depositContractEnding, depositWithdrawalDate, depositEarlyWithdrawalCheck)) {
                 float investment = Float.parseFloat(investInput.getText());
                 float annualPercent = Float.parseFloat(depositAnnualPercentInput.getText());
                 String depositCurrency = userSelectedCurrency;
@@ -309,7 +303,7 @@ public class DepositMenuController {
             }
         });
         depositViewResult.setOnAction(event -> {
-            if (ErrorChecker.areFieldsValid(investInput, depositAnnualPercentInput, depositWithdrawalOption)) {
+            if (ErrorChecker.areFieldsValidinDeposit(investInput, depositAnnualPercentInput, depositWithdrawalOption, depositContractBeginning, depositContractEnding, depositWithdrawalDate, depositEarlyWithdrawalCheck)) {
                 float investment = Float.parseFloat(investInput.getText());
                 float annualPercent = Float.parseFloat(depositAnnualPercentInput.getText());
                 String depositCurrency = userSelectedCurrency;
