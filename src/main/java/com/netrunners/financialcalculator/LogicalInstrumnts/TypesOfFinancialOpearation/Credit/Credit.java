@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.netrunners.financialcalculator.LogicalInstrumnts.FileInstruments.Savable;
+import com.netrunners.financialcalculator.LogicalInstrumnts.TimeFunctions.DateTimeFunctions;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TimeFunctions.LocalDateAdapter;
 
 import com.netrunners.financialcalculator.MenuControllers.ResultTableController;
@@ -28,6 +29,7 @@ public class Credit implements Savable {
     protected LocalDate startDate;
     protected LocalDate endDate;
     protected int paymentType;
+    protected int contractDuration;
 
     public Credit(float loan, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, int paymentType) {
         this.loan = loan;
@@ -36,10 +38,15 @@ public class Credit implements Savable {
         this.startDate = startDate;
         this.endDate = endDate;
         this.paymentType = paymentType;
+        this.contractDuration = DateTimeFunctions.countDaysBetweenDates(startDate, endDate);
     }
 
     public float countLoan() {
-        return loan * (1f/365f) * (annualPercent / 100f);
+        return loan * (1f / 365f) * (annualPercent / 100f);
+    }
+
+    public float countCreditBodyPerDay(){
+        return loan/contractDuration;
     }
 
 
@@ -75,7 +82,7 @@ public class Credit implements Savable {
 
             Stage stage = new Stage();
             stage.setTitle("Result");
-            Scene scene = new Scene(root); // Використовуйте вже завантажений root
+            Scene scene = new Scene(root);
             scene.getStylesheets().add(StartMenu.currentTheme);
             stage.setScene(scene);
             StartMenu.openScenes.add(scene);
@@ -141,8 +148,13 @@ public class Credit implements Savable {
     public int getPaymentType() {
         return paymentType;
     }
-    public String getNameOfPaymentType(){
-        switch (paymentType){
+
+    public void setLoan(float loan) {
+        this.loan = loan;
+    }
+
+    public String getNameOfPaymentType() {
+        switch (paymentType) {
             case 1 -> {
                 return "Months";
             }

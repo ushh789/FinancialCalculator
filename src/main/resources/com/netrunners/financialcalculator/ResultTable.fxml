@@ -57,6 +57,7 @@
           <TableColumn fx:id="investmentloanColumn" prefWidth="142.0" sortable="false" text="Investment" />
             <TableColumn fx:id="periodProfitLoanColumn" prefWidth="143.0" sortable="false" text="Period profit" />
             <TableColumn fx:id="totalColumn" prefWidth="139.0" sortable="false" text="Total profit" />
+            <TableColumn fx:id="periodPercentsColumn" prefWidth="139.0" sortable="false" text="Period percents" />
         </columns>
       </TableView>
         <Label fx:id="financialCalculatorLabel" alignment="CENTER" layoutX="67.0" layoutY="25.0" prefHeight="100.0" prefWidth="620.0" text="Result table" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">

@@ -3,6 +3,7 @@ package com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpe
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.netrunners.financialcalculator.LogicalInstrumnts.FileInstruments.Savable;
+import com.netrunners.financialcalculator.LogicalInstrumnts.TimeFunctions.DateTimeFunctions;
 
 import java.time.LocalDate;
 import java.util.Map;
@@ -19,7 +20,12 @@ public class CreditWithHolidays extends Credit implements Savable {
 
     @Override
     public float countLoan() {
-        return 0;
+        return super.countLoan();
+    }
+
+    @Override
+    public float countCreditBodyPerDay(){
+        return loan / (this.contractDuration - this.countHolidaysDuration());
     }
 
     @Override
@@ -53,4 +59,12 @@ public class CreditWithHolidays extends Credit implements Savable {
     public LocalDate getHolidaysEnd() {
         return holidaysEnd;
     }
+
+    public int countHolidaysDuration() {
+        return DateTimeFunctions.countDaysBetweenDates(holidaysStart, holidaysEnd);
+    }
+    private int countDaysToHolidays(){
+        return DateTimeFunctions.countDaysBetweenDates(super.startDate, holidaysStart);
+    }
+
 }
