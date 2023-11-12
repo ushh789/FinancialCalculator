@@ -1,18 +1,15 @@
 package com.netrunners.financialcalculator.MenuControllers;
 
-import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.ResourceBundle;
 
 import com.netrunners.financialcalculator.ErrorHandling.ErrorChecker;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TimeFunctions.DatePickerRestrictions;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Credit.Credit;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Credit.CreditWithHolidays;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Credit.CreditWithoutHolidays;
-import com.netrunners.financialcalculator.StartMenu;
 import com.netrunners.financialcalculator.VisualInstruments.MenuActions.*;
 import com.netrunners.financialcalculator.VisualInstruments.WindowsOpener;
 import javafx.fxml.FXML;
@@ -23,12 +20,6 @@ import javafx.stage.Stage;
 import static com.netrunners.financialcalculator.MenuControllers.closeWindow.closeCurrentWindow;
 
 public class CreditMenuController implements CurrencyController {
-    @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
-
     @FXML
     private MenuItem PaymentOption1;
 
@@ -172,9 +163,7 @@ public class CreditMenuController implements CurrencyController {
         userSelectedCurrency = "$";
 
         updateText();
-        LanguageManager.getInstance().languageProperty().addListener((observable, oldValue, newValue) -> {
-            updateText();
-        });
+        LanguageManager.getInstance().languageProperty().addListener((observable, oldValue, newValue) -> updateText());
         holidaysBeginning.setVisible(false);
         holidaysBeginning.setDisable(true);
         holidaysEnding.setVisible(false);
@@ -335,9 +324,6 @@ public class CreditMenuController implements CurrencyController {
         PaymentOption4.setText(LanguageManager.getInstance().getTranslation("PaymentOption4"));
     }
 
-    public String getUserSelectedCurrency() {
-        return userSelectedCurrency;
-    }
 
     @Override
     public void handleCurrencySelection() {
