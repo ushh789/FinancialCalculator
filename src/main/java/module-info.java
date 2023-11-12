@@ -20,5 +20,7 @@ module com.netrunners.financialcalculator {
     exports com.netrunners.financialcalculator;
     exports com.netrunners.financialcalculator.MenuControllers;
     opens com.netrunners.financialcalculator.MenuControllers to com.google.gson, javafx.fxml;
+    exports com.netrunners.financialcalculator.VisualInstruments.MenuActions;
+    opens com.netrunners.financialcalculator.VisualInstruments.MenuActions to com.google.gson, javafx.fxml;
 
 }

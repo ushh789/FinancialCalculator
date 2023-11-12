@@ -1,6 +1,6 @@
 package com.netrunners.financialcalculator.LogicalInstrumnts.FileInstruments;
 
-public abstract interface Savable {
+public interface Savable {
     void save();
 
     void open();
