@@ -167,13 +167,7 @@ public class CreditMenuController implements CurrencyController {
 
     @FXML
     void initialize() {
-        StartMenu.datePickers.add(contractBeginning);
-        StartMenu.datePickers.add(contractEnding);
-        StartMenu.datePickers.add(holidaysBeginning);
-        StartMenu.datePickers.add(holidaysEnding);
-        for (DatePicker datePicker : StartMenu.datePickers) {
-            ErrorChecker.WrongDateListener(datePicker);
-        }
+
         DatePickerRestrictions.setDatePickerRestrictionsHolidays(contractBeginning, contractEnding, holidaysBeginning, holidaysEnding);
         userSelectedCurrency = "$";
 
@@ -252,7 +246,7 @@ public class CreditMenuController implements CurrencyController {
         });
 
         creditSaveResult.setOnAction(event -> {
-            if (ErrorChecker.areFieldsValid(loanInput, annualPercentInput, paymentOption)) {
+            if (ErrorChecker.areFieldsValidinCredit(loanInput, annualPercentInput, paymentOption, contractBeginning, contractEnding, checkPaymentHolidays, holidaysBeginning, holidaysEnding)) {
                 float creditLoan = Float.parseFloat(loanInput.getText());
                 float creditAnnualPercent = Float.parseFloat(annualPercentInput.getText());
                 String creditCurrency = userSelectedCurrency;
@@ -278,7 +272,7 @@ public class CreditMenuController implements CurrencyController {
 
         });
         creditViewResult.setOnAction(event -> {
-            if (ErrorChecker.areFieldsValid(loanInput, annualPercentInput, paymentOption)) {
+            if (ErrorChecker.areFieldsValidinCredit(loanInput, annualPercentInput, paymentOption, contractBeginning, contractEnding, checkPaymentHolidays, holidaysBeginning, holidaysEnding)) {
                 float creditLoan = Float.parseFloat(loanInput.getText());
                 float creditAnnualPercent = Float.parseFloat(annualPercentInput.getText());
                 String creditCurrency = userSelectedCurrency;
