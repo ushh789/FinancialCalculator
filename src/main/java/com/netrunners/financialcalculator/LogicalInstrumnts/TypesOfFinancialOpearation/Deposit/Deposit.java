@@ -122,21 +122,6 @@ public abstract class Deposit implements Savable {
         }
     }
 
-
-    @Override
-    public String toString() {
-        return "Deposit{" +
-                "investment=" + investment +
-                ", annualPercent=" + annualPercent +
-                ", currency='" + currency + '\'' +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
-                ", withdrawalOption=" + withdrawalOption +
-                ", earlyWithdrawal=" + earlyWithdrawal +
-                ", earlyWithdrawalDate=" + earlyWithdrawalDate +
-                '}';
-    }
-
     public String getNameOfWithdrawalType() {
         switch (withdrawalOption) {
             case 1 -> {
@@ -155,9 +140,7 @@ public abstract class Deposit implements Savable {
         return "None";
     }
 
-    @Override
-    public void open() {
-    }
+
 
     public float getInvestment() {
         return investment;

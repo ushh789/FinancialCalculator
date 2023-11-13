@@ -1,25 +1,17 @@
 package com.netrunners.financialcalculator.MenuControllers;
 
-import com.netrunners.financialcalculator.StartMenu;
+import com.netrunners.financialcalculator.LogicalInstrumnts.FileInstruments.OpenFile;
 import com.netrunners.financialcalculator.VisualInstruments.MenuActions.*;
 import com.netrunners.financialcalculator.VisualInstruments.WindowsOpener;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import java.io.FileReader;
-import java.io.*;
 import java.util.*;
 import java.util.List;
-
-import static com.netrunners.financialcalculator.StartMenu.startMenuScene;
-import static com.netrunners.financialcalculator.MenuControllers.closeWindow.closeCurrentWindow;
 
 public class StartMenuController implements LanguageUpdater, CurrencyController {
 
@@ -125,42 +117,7 @@ public class StartMenuController implements LanguageUpdater, CurrencyController 
         aboutUs.setOnAction(event -> AboutUsAlert.showAboutUs());
         exitApp.setOnAction(event -> ExitApp.exitApp());
         currency.setOnAction(event -> handleCurrencySelection());
-        openFileButton.setOnAction(event -> {
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Open Resource File");
-            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json"));
-            File file = fileChooser.showOpenDialog(startMenuScene.getWindow());
-            if (file != null) {
-                System.out.println("File opened: " + file.getName());
-                try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        System.out.println(line);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        saveAsButton.setOnAction(event -> {
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Save As");
-            fileChooser.getExtensionFilters().addAll(
-                    new FileChooser.ExtensionFilter("JSON Files", "*.json"),
-                    new FileChooser.ExtensionFilter("All Files", "*.*")
-            );
-            File file = fileChooser.showSaveDialog(null);
-
-            if (file != null) {
-                try {
-                    FileWriter fileWriter = new FileWriter(file);
-                    fileWriter.write("Your content here");
-                    fileWriter.close();
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });
+        openFileButton.setOnAction(event -> OpenFile.openFromSave());
         languageButton.setOnAction(event -> {
             List<String> choices = new ArrayList<>();
             choices.add("English");

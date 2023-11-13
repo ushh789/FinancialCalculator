@@ -35,9 +35,4 @@ public class UncapitalisedDeposit extends Deposit {
         }
         return jsonObject;
     }
-
-    @Override
-    public void open() {
-
-    }
 }

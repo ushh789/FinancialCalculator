@@ -97,32 +97,15 @@ public class Credit implements Savable {
         }
     }
 
-    @Override
-    public String toString() {
-        return "Credit{" +
-                "loan=" + loan +
-                ", currency='" + currency + '\'' +
-                ", annualPercent=" + annualPercent +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
-                ", paymentType=" + paymentType +
-                '}';
-    }
-
     protected JsonObject getJsonObject() {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("investment", this.loan);
+        jsonObject.addProperty("loan", this.loan);
         jsonObject.addProperty("annualPercent", this.annualPercent);
         jsonObject.addProperty("currency", this.currency);
+        jsonObject.addProperty("paymentType", this.paymentType);
         jsonObject.addProperty("startDate", this.startDate.toString());
         jsonObject.addProperty("endDate", this.endDate.toString());
         return jsonObject;
-    }
-
-
-    @Override
-    public void open() {
-
     }
 
     public float getLoan() {

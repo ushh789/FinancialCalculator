@@ -16,7 +16,6 @@ public class StartMenu extends Application {
     public static Scene startMenuScene;
     public static List<Scene> openScenes = new ArrayList<>();
     public static String currentTheme = "file:src/main/resources/com/netrunners/financialcalculator/assets/lightTheme.css";
-
     public static List<DatePicker> datePickers = new ArrayList<>();
     @Override
     public void start(Stage primaryStage) throws Exception {

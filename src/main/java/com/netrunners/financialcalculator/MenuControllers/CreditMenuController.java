@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.netrunners.financialcalculator.ErrorHandling.ErrorChecker;
+import com.netrunners.financialcalculator.LogicalInstrumnts.FileInstruments.OpenFile;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TimeFunctions.DatePickerRestrictions;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Credit.Credit;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Credit.CreditWithHolidays;
@@ -158,7 +159,6 @@ public class CreditMenuController implements CurrencyController {
 
     @FXML
     void initialize() {
-
         DatePickerRestrictions.setDatePickerRestrictionsHolidays(contractBeginning, contractEnding, holidaysBeginning, holidaysEnding);
         userSelectedCurrency = "$";
 
@@ -193,8 +193,7 @@ public class CreditMenuController implements CurrencyController {
         exitApp.setOnAction(event -> ExitApp.exitApp());
         depositButtonMenu.setOnAction(event -> WindowsOpener.depositOpener());
         creditButtonMenu.setOnAction(event -> WindowsOpener.creditOpener());
-
-
+        openFileButton.setOnAction(event -> OpenFile.openFromSave());
         currency.setOnAction(event -> handleCurrencySelection());
 
 
@@ -342,8 +341,8 @@ public class CreditMenuController implements CurrencyController {
 
         dialog.showAndWait();
         userSelectedCurrency = dialog.getSelectedItem();
-        }
     }
+}
 
 
 

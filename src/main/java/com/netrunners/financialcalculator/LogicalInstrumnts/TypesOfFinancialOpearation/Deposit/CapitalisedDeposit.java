@@ -38,8 +38,4 @@ public class CapitalisedDeposit extends Deposit {
         return jsonObject;
     }
 
-    @Override
-    public void open() {
-
-    }
 }

@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 import com.netrunners.financialcalculator.ErrorHandling.ErrorChecker;
+import com.netrunners.financialcalculator.LogicalInstrumnts.FileInstruments.OpenFile;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TimeFunctions.DatePickerRestrictions;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Deposit.CapitalisedDeposit;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Deposit.Deposit;
@@ -186,6 +187,7 @@ public class DepositMenuController implements CurrencyController {
         exitApp.setOnAction(event -> ExitApp.exitApp());
         depositButtonMenu.setOnAction(event -> WindowsOpener.depositOpener());
         creditButtonMenu.setOnAction(event -> WindowsOpener.creditOpener());
+        openFileButton.setOnAction(event -> OpenFile.openFromSave());
         currency.setOnAction(event -> handleCurrencySelection());
 
 

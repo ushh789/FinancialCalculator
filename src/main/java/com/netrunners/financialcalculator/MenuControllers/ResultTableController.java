@@ -259,7 +259,7 @@ public class ResultTableController {
         List<Object[]> data = new ArrayList<>();
         int numbersColumnFlag = 0;
         float dailyBodyPart = credit.countCreditBodyPerDay();
-        float tempLoan = 0;
+        float tempLoan;
         while (!tempDate.equals(credit.getEndDate())) {
             tempLoan = credit.getLoan();
             float totalLoan = tempLoan;
