@@ -147,6 +147,8 @@ public class ResultTableController {
         saveFileButton.setOnAction(event -> {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Save Data");
+            File initialDirectory = new File("saves/");
+            fileChooser.setInitialDirectory(initialDirectory);
             fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
             File file = fileChooser.showSaveDialog(null);
             if (file != null) {
@@ -163,6 +165,8 @@ public class ResultTableController {
         saveAsButton.setOnAction(event -> {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Save Data");
+            File initialDirectory = new File("saves/");
+            fileChooser.setInitialDirectory(initialDirectory);
             fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
             File file = fileChooser.showSaveDialog(null);
             if (file != null) {

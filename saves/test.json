@@ -1,0 +1,12 @@
+{
+  "operation": "Deposit",
+  "type": "Capitalized",
+  "investment": 125000.0,
+  "annualPercent": 15.0,
+  "currency": "$",
+  "startDate": "2023-12-01",
+  "endDate": "2024-03-15",
+  "withdrawalOption": 1,
+  "earlyWithdrawalDate": "2024-01-18",
+  "earlyWithdrawal": true
+}

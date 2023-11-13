@@ -86,6 +86,8 @@ public abstract class Deposit implements Savable {
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save Data");
+        File initialDirectory = new File("saves/");
+        fileChooser.setInitialDirectory(initialDirectory);
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("JSON Files", "*.json"));
         File file = fileChooser.showSaveDialog(null);
