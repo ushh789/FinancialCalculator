@@ -9,7 +9,9 @@ import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
+import com.netrunners.financialcalculator.LogicalInstrumnts.FileInstruments.LogHelper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -21,11 +23,12 @@ public class LanguageManager {
     private LanguageManager() {
         currentLanguage = new SimpleStringProperty("en");
         Gson gson = new Gson();
-        Type type = new TypeToken<Map<String, List<String>>>(){}.getType();
+        Type type = new TypeToken<Map<String, List<String>>>() {
+        }.getType();
         try (InputStreamReader reader = new InputStreamReader(new FileInputStream("languages.json"), StandardCharsets.UTF_8)) {
             translations = gson.fromJson(reader, type);
         } catch (Exception e) {
-            e.printStackTrace();
+            LogHelper.log(Level.SEVERE, "Error reading languages.json: ", e);
         }
     }
 

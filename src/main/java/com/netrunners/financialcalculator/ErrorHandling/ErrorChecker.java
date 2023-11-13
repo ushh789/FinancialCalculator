@@ -1,7 +1,6 @@
 package com.netrunners.financialcalculator.ErrorHandling;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+
 import javafx.scene.control.*;
 
 
@@ -101,12 +100,9 @@ public class ErrorChecker {
 
     public static void highlightError(Control field) {
         field.setStyle("-fx-border-color:red;-fx-border-radius:3px");
-        field.focusedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-                if (newValue) {
-                    removeHighlight(field);
-                }
+        field.focusedProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue) {
+                removeHighlight(field);
             }
         });
     }

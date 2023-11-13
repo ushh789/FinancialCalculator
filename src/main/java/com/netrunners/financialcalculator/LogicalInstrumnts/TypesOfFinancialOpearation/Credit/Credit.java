@@ -3,6 +3,7 @@ package com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpe
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.netrunners.financialcalculator.LogicalInstrumnts.FileInstruments.LogHelper;
 import com.netrunners.financialcalculator.LogicalInstrumnts.FileInstruments.Savable;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TimeFunctions.DateTimeFunctions;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TimeFunctions.LocalDateAdapter;
@@ -20,6 +21,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.logging.Level;
 
 
 public class Credit implements Savable {
@@ -68,7 +70,7 @@ public class Credit implements Savable {
             try (FileWriter writer = new FileWriter(file)) {
                 writer.write(json);
             } catch (IOException e) {
-                e.getMessage();
+                LogHelper.log(Level.SEVERE, "Error while saving Credit to json", e);
             }
         }
     }
@@ -93,7 +95,7 @@ public class Credit implements Savable {
             stage.setMinWidth(620);
             stage.show();
         } catch (Exception e) {
-            e.printStackTrace();
+            LogHelper.log(Level.SEVERE, "Error while sending Credit to result table", e);
         }
     }
 

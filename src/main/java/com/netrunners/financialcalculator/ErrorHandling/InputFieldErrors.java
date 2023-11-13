@@ -2,20 +2,23 @@ package com.netrunners.financialcalculator.ErrorHandling;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.netrunners.financialcalculator.LogicalInstrumnts.FileInstruments.LogHelper;
 import javafx.scene.control.*;
 
 import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class InputFieldErrors {
     private static List<String> paymentOptions;
     private static List<String> withdrawalOptions;
 
+    private static final Logger logger = Logger.getLogger(LogHelper.class.getName());
     static {
         Gson gson = new Gson();
         try {
@@ -25,7 +28,7 @@ public class InputFieldErrors {
             paymentOptions = map.get("paymentOption");
             withdrawalOptions = map.get("depositWithdrawalOption");
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Error while reading languages.json", e);
         }
     }
     public static boolean checkIfCorrectNumberGiven(TextField field) {

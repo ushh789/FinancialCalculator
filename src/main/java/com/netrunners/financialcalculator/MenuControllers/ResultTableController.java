@@ -1,5 +1,6 @@
 package com.netrunners.financialcalculator.MenuControllers;
 
+import com.netrunners.financialcalculator.LogicalInstrumnts.FileInstruments.LogHelper;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TimeFunctions.DateTimeFunctions;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Deposit.*;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Credit.*;
@@ -25,6 +26,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+
 
 
 public class ResultTableController {
@@ -85,6 +88,7 @@ public class ResultTableController {
 
     @FXML
     private Label financialCalculatorLabel;
+
     public void updateText() {
         creditButtonMenu.setText(LanguageManager.getInstance().getTranslation("creditButtonMenu"));
         depositButtonMenu.setText(LanguageManager.getInstance().getTranslation("depositButtonMenu"));
@@ -353,7 +357,7 @@ public class ResultTableController {
                 writer.println("Early withdrawal date: " + deposit.getEarlyWithdrawalDate());
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LogHelper.log(Level.SEVERE, "Error while writing Deposit to CSV", e);
         }
     }
 
@@ -374,7 +378,7 @@ public class ResultTableController {
                 writer.println("Holidays end date: " + ((CreditWithHolidays) credit).getHolidaysEnd());
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LogHelper.log(Level.SEVERE, "Error while writing Credit to CSV", e);
         }
     }
 

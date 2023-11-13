@@ -1,5 +1,6 @@
 package com.netrunners.financialcalculator.VisualInstruments;
 
+import com.netrunners.financialcalculator.LogicalInstrumnts.FileInstruments.LogHelper;
 import com.netrunners.financialcalculator.StartMenu;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -7,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.logging.Level;
 
 public class WindowsOpener{
     public static void depositOpener(){
@@ -26,7 +28,7 @@ public class WindowsOpener{
             stage.show();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            LogHelper.log(Level.SEVERE, "Error opening DepositMenu.fxml: ", e);
         }
     }
     public static void creditOpener(){
@@ -46,7 +48,7 @@ public class WindowsOpener{
             stage.show();
 
         } catch (Exception e) {
-            e.printStackTrace();
+            LogHelper.log(Level.SEVERE, "Error opening CreditMenu.fxml: ", e);
         }
     }
 }

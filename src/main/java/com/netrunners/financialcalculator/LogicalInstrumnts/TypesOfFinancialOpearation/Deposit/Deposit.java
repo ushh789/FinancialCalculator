@@ -3,6 +3,7 @@ package com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpe
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.netrunners.financialcalculator.LogicalInstrumnts.FileInstruments.LogHelper;
 import com.netrunners.financialcalculator.LogicalInstrumnts.FileInstruments.Savable;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TimeFunctions.LocalDateAdapter;
 import com.netrunners.financialcalculator.MenuControllers.ResultTableController;
@@ -19,6 +20,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.logging.Level;
 
 public abstract class Deposit implements Savable {
     protected float investment;
@@ -29,6 +31,7 @@ public abstract class Deposit implements Savable {
     protected int withdrawalOption;
     protected boolean earlyWithdrawal;
     protected LocalDate earlyWithdrawalDate;
+
 
     public float countProfit() {
         return investment * (1f / 365f) * (annualPercent / 100f);
@@ -93,7 +96,7 @@ public abstract class Deposit implements Savable {
                 fileWriter.write(json);
                 fileWriter.close();
             } catch (IOException e) {
-                e.printStackTrace();
+               LogHelper.log(Level.SEVERE, "Error while saving Deposit to json", e);
             }
         }
     }
@@ -118,7 +121,7 @@ public abstract class Deposit implements Savable {
             stage.setMinWidth(620);
             stage.show();
         } catch (Exception e) {
-            e.printStackTrace();
+            LogHelper.log(Level.SEVERE, "Error while sending Deposit to result table", e);
         }
     }
 
