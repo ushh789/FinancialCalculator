@@ -7,6 +7,7 @@ import javafx.util.Callback;
 import java.time.LocalDate;
 
 public class DatePickerRestrictions {
+
     public static void setDatePickerRestrictionsWithdrawalHolidays(DatePicker start, DatePicker end, DatePicker newDate) {
         final Callback<DatePicker, DateCell> dayCellFactory =
                 new Callback<>() {

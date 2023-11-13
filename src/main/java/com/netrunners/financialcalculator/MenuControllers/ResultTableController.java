@@ -5,6 +5,7 @@ import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpea
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Credit.*;
 import com.netrunners.financialcalculator.VisualInstruments.MenuActions.AboutUsAlert;
 import com.netrunners.financialcalculator.VisualInstruments.MenuActions.ExitApp;
+import com.netrunners.financialcalculator.VisualInstruments.MenuActions.LanguageManager;
 import com.netrunners.financialcalculator.VisualInstruments.MenuActions.ThemeSelector;
 import com.netrunners.financialcalculator.VisualInstruments.WindowsOpener;
 
@@ -20,6 +21,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,7 +84,28 @@ public class ResultTableController {
     private Button saveFileButton;
 
     @FXML
+    private Label financialCalculatorLabel;
+    public void updateText() {
+        creditButtonMenu.setText(LanguageManager.getInstance().getTranslation("creditButtonMenu"));
+        depositButtonMenu.setText(LanguageManager.getInstance().getTranslation("depositButtonMenu"));
+        languageButton.setText(LanguageManager.getInstance().getTranslation("languageButton"));
+        darkTheme.setText(LanguageManager.getInstance().getTranslation("darkTheme"));
+        lightTheme.setText(LanguageManager.getInstance().getTranslation("lightTheme"));
+        aboutUs.setText(LanguageManager.getInstance().getTranslation("aboutUs"));
+        exitApp.setText(LanguageManager.getInstance().getTranslation("exitApp"));
+        currency.setText(LanguageManager.getInstance().getTranslation("currency"));
+        openFileButton.setText(LanguageManager.getInstance().getTranslation("openFileButton"));
+        saveAsButton.setText(LanguageManager.getInstance().getTranslation("saveAsButton"));
+        saveButton.setText(LanguageManager.getInstance().getTranslation("saveButton"));
+        financialCalculatorLabel.setText(LanguageManager.getInstance().getTranslation("resultTablelabel"));
+        periodProfitLoanColumn.setText(LanguageManager.getInstance().getTranslation("profitColumn"));
+        totalColumn.setText(LanguageManager.getInstance().getTranslation("totalColumn"));
+    }
+    @FXML
     void initialize() {
+        openFileButton.setDisable(true);
+        updateText();
+        LanguageManager.getInstance().languageProperty().addListener((observable, oldValue, newValue) -> updateText());
         darkTheme.setOnAction(event -> ThemeSelector.setDarkTheme());
         lightTheme.setOnAction(event -> ThemeSelector.setLightTheme());
         aboutUs.setOnAction(event -> AboutUsAlert.showAboutUs());
@@ -125,6 +149,22 @@ public class ResultTableController {
                 writeDataToCSV(finalData, credit, file);
             }
         });
+        saveButton.setOnAction(event -> {
+            LocalDateTime now = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
+            String formattedNow = now.format(formatter);
+            File file = new File("saves/Credit_result_" + formattedNow + ".csv");
+            writeDataToCSV(finalData, credit, file);
+        });
+        saveAsButton.setOnAction(event -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Save Data");
+            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+            File file = fileChooser.showSaveDialog(null);
+            if (file != null) {
+                writeDataToCSV(finalData, credit, file);
+            }
+        });
     }
 
     private void fillColumns(Deposit deposit) {
@@ -139,6 +179,22 @@ public class ResultTableController {
         ObservableList<Object[]> observableData = FXCollections.observableArrayList(data);
         resultTable.setItems(observableData);
         saveFileButton.setOnAction(event -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Save Data");
+            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+            File file = fileChooser.showSaveDialog(null);
+            if (file != null) {
+                writeDataToCSV(data, deposit, file);
+            }
+        });
+        saveButton.setOnAction(event -> {
+            LocalDateTime now = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
+            String formattedNow = now.format(formatter);
+            File file = new File("saves/Deposit_result_" + formattedNow + ".csv");
+            writeDataToCSV(data, deposit, file);
+        });
+        saveAsButton.setOnAction(event -> {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Save Data");
             fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
