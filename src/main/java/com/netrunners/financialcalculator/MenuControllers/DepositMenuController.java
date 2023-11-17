@@ -282,7 +282,6 @@ public class DepositMenuController implements CurrencyController {
                 earlyWithdrawal = depositWithdrawalDate.getValue();
                 if (depositCapitalizationCheck.isSelected()) {
                     if (depositEarlyWithdrawalCheck.isSelected()) {
-                        System.out.println(depositWithdrawalDate.getValue());
                         Deposit deposit = new CapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate, earlyWithdrawalOption, earlyWithdrawal, withdrawalOptionSelected);
                         deposit.sendDepositToResultTable();
                     } else {
