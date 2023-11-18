@@ -10,6 +10,7 @@ import com.netrunners.financialcalculator.LogicalInstrumnts.TimeFunctions.LocalD
 
 import com.netrunners.financialcalculator.MenuControllers.ResultTableController;
 import com.netrunners.financialcalculator.StartMenu;
+import com.netrunners.financialcalculator.VisualInstruments.MenuActions.LanguageManager;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -141,6 +142,7 @@ public class Credit implements Savable {
     }
 
     public String getNameOfPaymentType() {
+        LanguageManager languageManager = LanguageManager.getInstance();
         switch (paymentType) {
             case 1 -> {
                 return "Months";
@@ -152,9 +154,9 @@ public class Credit implements Savable {
                 return "Years";
             }
             case 4 -> {
-                return "Periods";
+                return "EndofTerm";
             }
         }
-        return "None";
+        return languageManager.getStringBinding("None").get();
     }
 }

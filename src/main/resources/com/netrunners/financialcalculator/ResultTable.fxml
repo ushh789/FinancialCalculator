@@ -51,13 +51,13 @@
                 </Menu>
             </menus>
         </MenuBar>
-      <TableView fx:id="resultTable" layoutX="60.0" layoutY="125.0" prefHeight="400.0" prefWidth="500.0">
+      <TableView fx:id="resultTable" editable="true" layoutX="60.0" layoutY="125.0" prefHeight="400.0" prefWidth="500.0">
         <columns>
           <TableColumn fx:id="periodColumn" prefWidth="75.0" sortable="false" />
-          <TableColumn fx:id="investmentloanColumn" prefWidth="142.0" sortable="false" text="Investment" />
-            <TableColumn fx:id="periodProfitLoanColumn" prefWidth="143.0" sortable="false" text="Period profit" />
-            <TableColumn fx:id="totalColumn" prefWidth="139.0" sortable="false" text="Total profit" />
-            <TableColumn fx:id="periodPercentsColumn" prefWidth="139.0" sortable="false" text="Period percents" />
+          <TableColumn fx:id="investmentloanColumn" prefWidth="142.0" sortable="false" />
+            <TableColumn fx:id="periodProfitLoanColumn" editable="false" prefWidth="143.0" sortable="false" />
+            <TableColumn fx:id="totalColumn" editable="false" prefWidth="139.0" sortable="false" />
+            <TableColumn fx:id="periodPercentsColumn" prefWidth="139.0" sortable="false" />
         </columns>
       </TableView>
         <Label fx:id="financialCalculatorLabel" alignment="CENTER" layoutX="67.0" layoutY="25.0" prefHeight="100.0" prefWidth="620.0" text="Result table" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
@@ -75,7 +75,7 @@
                 <Font size="14.0" />
             </font>
         </Label>
-      <Button fx:id="saveFileButton" layoutX="230.0" layoutY="556.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="150.0" text="Export to CSV">
+      <Button fx:id="exportButton" layoutX="230.0" layoutY="556.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="150.0" text="Export">
          <font>
             <Font size="18.0" />
          </font>

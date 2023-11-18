@@ -1,6 +1,7 @@
 package com.netrunners.financialcalculator;
 
 import com.netrunners.financialcalculator.LogicalInstrumnts.FileInstruments.LogHelper;
+import com.netrunners.financialcalculator.VisualInstruments.MenuActions.LanguageManager;
 import javafx.application.Application;
 
 import javafx.scene.Scene;
@@ -50,5 +51,10 @@ public class StartMenu extends Application {
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+    @Override
+    public void stop() {
+        LanguageManager.getInstance().saveLanguage();
     }
 }

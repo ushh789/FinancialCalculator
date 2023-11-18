@@ -76,42 +76,19 @@ public class StartMenuController implements LanguageUpdater, CurrencyController 
     private Label financialCalculatorLabel;
     private String userSelectedCurrency;
 
-    public void updateText() {
-        DepositButton.setText(LanguageManager.getInstance().getTranslation("DepositButton"));
-        CreditButton.setText(LanguageManager.getInstance().getTranslation("CreditButton"));
-        creditButtonMenu.setText(LanguageManager.getInstance().getTranslation("creditButtonMenu"));
-        depositButtonMenu.setText(LanguageManager.getInstance().getTranslation("depositButtonMenu"));
-        languageButton.setText(LanguageManager.getInstance().getTranslation("languageButton"));
-        darkTheme.setText(LanguageManager.getInstance().getTranslation("darkTheme"));
-        lightTheme.setText(LanguageManager.getInstance().getTranslation("lightTheme"));
-        aboutUs.setText(LanguageManager.getInstance().getTranslation("aboutUs"));
-        exitApp.setText(LanguageManager.getInstance().getTranslation("exitApp"));
-        currency.setText(LanguageManager.getInstance().getTranslation("currency"));
-        openFileButton.setText(LanguageManager.getInstance().getTranslation("openFileButton"));
-        saveAsButton.setText(LanguageManager.getInstance().getTranslation("saveAsButton"));
-        saveButton.setText(LanguageManager.getInstance().getTranslation("saveButton"));
-        themeButton.setText(LanguageManager.getInstance().getTranslation("themeButton"));
-        viewButton.setText(LanguageManager.getInstance().getTranslation("viewButton"));
-        newButton.setText(LanguageManager.getInstance().getTranslation("newButton"));
-        fileButton.setText(LanguageManager.getInstance().getTranslation("fileButton"));
-        settingsButton.setText(LanguageManager.getInstance().getTranslation("settingsButton"));
-        aboutButton.setText(LanguageManager.getInstance().getTranslation("aboutButton"));
-        financialCalculatorLabel.setText(LanguageManager.getInstance().getTranslation("financialCalculatorLabel"));
-    }
+    private LanguageManager languageManager = LanguageManager.getInstance();
+
 
     @FXML
     void initialize() {
+        //Зберігати мову при закритті програми
         userSelectedCurrency = "$";
         saveButton.setDisable(true);
         saveAsButton.setDisable(true);
-        updateText();
-        LanguageManager.getInstance().languageProperty().addListener((observable, oldValue, newValue) -> updateText());
-
         DepositButton.setOnAction(event -> WindowsOpener.depositOpener());
         CreditButton.setOnAction(event -> WindowsOpener.creditOpener());
         depositButtonMenu.setOnAction(event -> WindowsOpener.depositOpener());
         creditButtonMenu.setOnAction(event -> WindowsOpener.creditOpener());
-
         darkTheme.setOnAction(event -> ThemeSelector.setDarkTheme());
         lightTheme.setOnAction(event -> ThemeSelector.setLightTheme());
         aboutUs.setOnAction(event -> AboutUsAlert.showAboutUs());
@@ -139,47 +116,46 @@ public class StartMenuController implements LanguageUpdater, CurrencyController 
 
             Optional<String> result = dialog.showAndWait();
             if (result.isPresent()) {
-                switch (result.get()) {
-                    case "English" -> setLanguage("en");
-                    case "Українська" -> setLanguage("uk");
-                    case "Español" -> setLanguage("es");
-                    case "Français" -> setLanguage("fr");
-                    case "Deutsch" -> setLanguage("de");
-                    case "Czech" -> setLanguage("cs");
-                    case "Polski" -> setLanguage("pl");
-                    case "Nederlands" -> setLanguage("nl");
-                    case "日本語" -> setLanguage("ja");
-                    case "中国人" -> setLanguage("zh");
+                String chosenLanguage = result.get();
+                Locale locale = switch (chosenLanguage) {
+                    case "Українська" -> new Locale("uk");
+                    case "Español" -> new Locale("es");
+                    case "Français" -> new Locale("fr");
+                    case "Deutsch" -> new Locale("de");
+                    case "Czech" -> new Locale("cs");
+                    case "Polski" -> new Locale("pl");
+                    case "Nederlands" -> new Locale("nl");
+                    case "日本語" -> new Locale("ja");
+                    case "中国人" -> new Locale("zh");
+                    default -> new Locale("en");
+                };
+                languageManager.changeLanguage(locale);
                 }
-            }
+
         });
-
-
+        depositButtonMenu.textProperty().bind(languageManager.getStringBinding("DepositButton"));
+        DepositButton.textProperty().bind(languageManager.getStringBinding("DepositButton"));
+        creditButtonMenu.textProperty().bind(languageManager.getStringBinding("CreditButton"));
+        CreditButton.textProperty().bind(languageManager.getStringBinding("CreditButton"));
+        languageButton.textProperty().bind(languageManager.getStringBinding("languageButton"));
+        darkTheme.textProperty().bind(languageManager.getStringBinding("darkTheme"));
+        lightTheme.textProperty().bind(languageManager.getStringBinding("lightTheme"));
+        aboutUs.textProperty().bind(languageManager.getStringBinding("aboutUs"));
+        exitApp.textProperty().bind(languageManager.getStringBinding("exitApp"));
+        currency.textProperty().bind(languageManager.getStringBinding("currency"));
+        openFileButton.textProperty().bind(languageManager.getStringBinding("openFileButton"));
+        saveAsButton.textProperty().bind(languageManager.getStringBinding("saveAsButton"));
+        saveButton.textProperty().bind(languageManager.getStringBinding("saveButton"));
+        themeButton.textProperty().bind(languageManager.getStringBinding("themeButton"));
+        viewButton.textProperty().bind(languageManager.getStringBinding("viewButton"));
+        newButton.textProperty().bind(languageManager.getStringBinding("newButton"));
+        fileButton.textProperty().bind(languageManager.getStringBinding("fileButton"));
+        settingsButton.textProperty().bind(languageManager.getStringBinding("settingsButton"));
+        aboutButton.textProperty().bind(languageManager.getStringBinding("aboutButton"));
+        financialCalculatorLabel.textProperty().bind(languageManager.getStringBinding("financialCalculatorLabel"));
     }
 
-    public void setLanguage(String language) {
-        LanguageManager.getInstance().setLanguage(language);
-        DepositButton.setText(LanguageManager.getInstance().getTranslation("DepositButton"));
-        CreditButton.setText(LanguageManager.getInstance().getTranslation("CreditButton"));
-        creditButtonMenu.setText(LanguageManager.getInstance().getTranslation("creditButtonMenu"));
-        depositButtonMenu.setText(LanguageManager.getInstance().getTranslation("depositButtonMenu"));
-        languageButton.setText(LanguageManager.getInstance().getTranslation("languageButton"));
-        darkTheme.setText(LanguageManager.getInstance().getTranslation("darkTheme"));
-        lightTheme.setText(LanguageManager.getInstance().getTranslation("lightTheme"));
-        aboutUs.setText(LanguageManager.getInstance().getTranslation("aboutUs"));
-        exitApp.setText(LanguageManager.getInstance().getTranslation("exitApp"));
-        currency.setText(LanguageManager.getInstance().getTranslation("currency"));
-        openFileButton.setText(LanguageManager.getInstance().getTranslation("openFileButton"));
-        saveAsButton.setText(LanguageManager.getInstance().getTranslation("saveAsButton"));
-        saveButton.setText(LanguageManager.getInstance().getTranslation("saveButton"));
-        themeButton.setText(LanguageManager.getInstance().getTranslation("themeButton"));
-        viewButton.setText(LanguageManager.getInstance().getTranslation("viewButton"));
-        newButton.setText(LanguageManager.getInstance().getTranslation("newButton"));
-        fileButton.setText(LanguageManager.getInstance().getTranslation("fileButton"));
-        settingsButton.setText(LanguageManager.getInstance().getTranslation("settingsButton"));
-        aboutButton.setText(LanguageManager.getInstance().getTranslation("aboutButton"));
-        financialCalculatorLabel.setText(LanguageManager.getInstance().getTranslation("financialCalculatorLabel"));
-    }
+
 
     @Override
     public void handleCurrencySelection() {

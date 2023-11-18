@@ -8,6 +8,8 @@ import com.netrunners.financialcalculator.LogicalInstrumnts.FileInstruments.Sava
 import com.netrunners.financialcalculator.LogicalInstrumnts.TimeFunctions.LocalDateAdapter;
 import com.netrunners.financialcalculator.MenuControllers.ResultTableController;
 import com.netrunners.financialcalculator.StartMenu;
+import com.netrunners.financialcalculator.VisualInstruments.MenuActions.LanguageManager;
+import javafx.beans.binding.StringBinding;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -128,6 +130,7 @@ public abstract class Deposit implements Savable {
     }
 
     public String getNameOfWithdrawalType() {
+        LanguageManager languageManager = LanguageManager.getInstance();
         switch (withdrawalOption) {
             case 1 -> {
                 return "Months";
@@ -139,11 +142,12 @@ public abstract class Deposit implements Savable {
                 return "Years";
             }
             case 4 -> {
-                return "Periods";
+                return "EndofTerm";
             }
         }
-        return "None";
+        return languageManager.getStringBinding("None").get();
     }
+
 
 
 
