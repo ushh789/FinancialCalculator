@@ -41,6 +41,7 @@ public class Converter {
 
         return gson.fromJson(json.toString(), JsonArray.class).getAsJsonArray();
     }
+
     public static float getRateByCC(String cc) {
         try {
             JsonArray rates = getRates();
@@ -48,7 +49,9 @@ public class Converter {
                 LogHelper.log(Level.WARNING, "Failed to retrieve exchange rates", null);
                 throw new RuntimeException("Failed to retrieve exchange rates");
             }
-
+            if (cc.equals("UAH")){
+                return 1;
+            }
             for (JsonElement element : rates) {
                 JsonObject obj = element.getAsJsonObject();
                 if (obj.get("cc").getAsString().equals(cc)) {
@@ -60,6 +63,29 @@ public class Converter {
         } catch (IOException e) {
             LogHelper.log(Level.WARNING, "IOException in Converter.getRateByCC, caused by input: " + cc, null);
             throw new RuntimeException(e);
+        }
+    }
+
+    public static String getCC(String userSelectedCurrency) {
+        switch (userSelectedCurrency) {
+            case "$" -> {
+                return "USD";
+            }
+            case "£" -> {
+                return "GBP";
+            }
+            case "€" -> {
+                return "EUR";
+            }
+            case "zł" ->{
+                return "PLN";
+            }
+            case "₴" ->{
+                return "UAH";
+            }
+            default -> {
+                return "ERROR";
+            }
         }
     }
 }
