@@ -6,7 +6,7 @@ import javafx.scene.control.*;
 
 public class ErrorChecker {
 
-    public static boolean areFieldsValidInDeposit(TextField investInput, TextField depositAnnualPercentInput, MenuButton depositWithdrawalOption, DatePicker startDate, DatePicker endDate, DatePicker earlyWithdrawalDate , CheckBox earlyWithdrawal) {
+    public static boolean areFieldsValidInDeposit(TextField investInput, TextField depositAnnualPercentInput, MenuButton depositWithdrawalOption, DatePicker startDate, DatePicker endDate, DatePicker earlyWithdrawalDate, CheckBox earlyWithdrawal) {
         boolean investValid = InputFieldErrors.checkIfCorrectNumberGiven(investInput);
         boolean annualPercentValid = InputFieldErrors.checkIfCorrectPercentGiven(depositAnnualPercentInput);
         boolean withdrawalOptionValid = InputFieldErrors.withdrawalOptionIsSelected(depositWithdrawalOption);
@@ -30,27 +30,25 @@ public class ErrorChecker {
         } else {
             removeHighlight(depositWithdrawalOption);
         }
-        if(startDate.getValue() == null) {
+        if (startDate.getValue() == null) {
             highlightError(startDate);
-        }
-        else {
+        } else {
             removeHighlight(startDate);
         }
-        if(endDate.getValue() == null) {
+        if (endDate.getValue() == null) {
             highlightError(endDate);
-        }
-        else {
+        } else {
             removeHighlight(endDate);
         }
-        if(earlyWithdrawal.isSelected() && earlyWithdrawalDate.getValue() == null) {
+        if (earlyWithdrawal.isSelected() && earlyWithdrawalDate.getValue() == null) {
             highlightError(earlyWithdrawalDate);
-        }
-        else {
+        } else {
             removeHighlight(earlyWithdrawalDate);
         }
         return investValid && annualPercentValid && withdrawalOptionValid && startDate.getValue() != null && endDate.getValue() != null && (!earlyWithdrawal.isSelected() || earlyWithdrawalDate.getValue() != null);
     }
-    public static boolean areFieldsValidInCredit(TextField creditAmount, TextField creditAnnualPercent, MenuButton paymentOption , DatePicker creditStartDate, DatePicker creditFirstPaymentDate , CheckBox paymentHolidays, DatePicker creditHolidaysStartDate, DatePicker creditHolidaysEndDate) {
+
+    public static boolean areFieldsValidInCredit(TextField creditAmount, TextField creditAnnualPercent, MenuButton paymentOption, DatePicker creditStartDate, DatePicker creditFirstPaymentDate, CheckBox paymentHolidays, DatePicker creditHolidaysStartDate, DatePicker creditHolidaysEndDate) {
         boolean creditAmountValid = InputFieldErrors.checkIfCorrectNumberGiven(creditAmount);
         boolean creditAnnualPercentValid = InputFieldErrors.checkIfCorrectPercentGiven(creditAnnualPercent);
         boolean creditPaymentOptionValid = InputFieldErrors.paymentOptionIsSelected(paymentOption);

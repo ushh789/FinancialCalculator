@@ -221,8 +221,7 @@ public class ResultTableController {
             File file = fileChooser.showSaveDialog(null);
             if (file != null && file.getName().endsWith(".xlsx")) {
                 writeDataToExcel(finalData, credit, file);
-            }
-            else{
+            } else {
                 writeDataToCSV(finalData, credit, file);
             }
         });
@@ -243,8 +242,7 @@ public class ResultTableController {
             File file = fileChooser.showSaveDialog(null);
             if (file != null && file.getName().endsWith(".xlsx")) {
                 writeDataToExcel(finalData, credit, file);
-            }
-            else{
+            } else {
                 writeDataToCSV(finalData, credit, file);
             }
         });
@@ -269,10 +267,9 @@ public class ResultTableController {
             fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
             fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
             File file = fileChooser.showSaveDialog(null);
-            if(file != null && file.getName().endsWith(".xlsx")){
+            if (file != null && file.getName().endsWith(".xlsx")) {
                 writeDataToExcel(data, deposit, file);
-            }
-            else{
+            } else {
                 writeDataToCSV(data, deposit, file);
             }
         });
@@ -291,10 +288,9 @@ public class ResultTableController {
             fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
             fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
             File file = fileChooser.showSaveDialog(null);
-            if(file != null && file.getName().endsWith(".xlsx")){
+            if (file != null && file.getName().endsWith(".xlsx")) {
                 writeDataToExcel(data, deposit, file);
-            }
-            else{
+            } else {
                 writeDataToCSV(data, deposit, file);
             }
         });
@@ -408,6 +404,7 @@ public class ResultTableController {
 
     private List<Object[]> countCreditWithoutHolidaysData(Credit credit) {
         DaystoNextPeriod.add(0);
+        DaystoNextPeriodWithHolidays.add(0);
         LocalDate tempDate = credit.getStartDate();
         List<Object[]> data = new ArrayList<>();
         int numbersColumnFlag = 0;
@@ -427,6 +424,7 @@ public class ResultTableController {
                 periodProfitLoanColumn.textProperty().bind(languageManager.getStringBinding("PaymentLoan"));
             } else {
                 DaystoNextPeriod.add(daysToNextPeriod);
+                DaystoNextPeriodWithHolidays.add(daysToNextPeriod);
                 for (int i = 0; i < daysToNextPeriod; i++) {
                     periodPercents += credit.countLoan();
                     creditBody += dailyBodyPart;
@@ -450,43 +448,52 @@ public class ResultTableController {
     }
 
     private void writeDataToCSV(List<Object[]> data, Deposit deposit, File file) {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
-            writer.println(deposit.getNameOfWithdrawalType() + ";" + investmentloanColumn.getText() + ";" + periodProfitLoanColumn.getText() + ";" + totalColumn.getText());
+        if (file != null) {
+            try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
+                writer.println(deposit.getNameOfWithdrawalType() + ";" + investmentloanColumn.getText() + ";" + periodProfitLoanColumn.getText() + ";" + totalColumn.getText());
 
-            for (Object[] row : data) {
-                writer.println(row[0] + ";" + row[1] + ";" + row[2] + ";" + row[3]);
-                writer.flush();
+                for (Object[] row : data) {
+                    writer.println(row[0] + ";" + row[1] + ";" + row[2] + ";" + row[3]);
+                    writer.flush();
+                }
+                writer.println("Annual percent of deposit: " + deposit.getAnnualPercent());
+                writer.println("Currency: " + deposit.getCurrency());
+                writer.println("Start date: " + deposit.getStartDate());
+                writer.println("End date: " + deposit.getEndDate());
+                if (deposit.isEarlyWithdrawal()) {
+                    writer.println("Early withdrawal date: " + deposit.getEarlyWithdrawalDate());
+                }
+            } catch (IOException e) {
+                LogHelper.log(Level.SEVERE, "Error while writing Deposit to CSV", e);
             }
-            writer.println("Annual percent of deposit: " + deposit.getAnnualPercent());
-            writer.println("Currency: " + deposit.getCurrency());
-            writer.println("Start date: " + deposit.getStartDate());
-            writer.println("End date: " + deposit.getEndDate());
-            if (deposit.isEarlyWithdrawal()) {
-                writer.println("Early withdrawal date: " + deposit.getEarlyWithdrawalDate());
-            }
-        } catch (IOException e) {
-            LogHelper.log(Level.SEVERE, "Error while writing Deposit to CSV", e);
+        } else {
+            LogHelper.log(Level.WARNING, "No file selected", null);
         }
     }
 
     private void writeDataToCSV(List<Object[]> data, Credit credit, File file) {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
-            writer.println(credit.getNameOfPaymentType() + ";" + investmentloanColumn.getText() + ";" + periodProfitLoanColumn.getText() + ";" + totalColumn.getText() + ";" + periodPercentsColumn.getText());
-            for (Object[] row : data) {
-                writer.println(row[0] + ";" + row[1] + ";" + row[2] + ";" + row[3] + ";" + row[4]);
-                writer.flush();
+        if (file != null) {
+            try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
+                writer.println(credit.getNameOfPaymentType() + ";" + investmentloanColumn.getText() + ";" + periodProfitLoanColumn.getText() + ";" + totalColumn.getText() + ";" + periodPercentsColumn.getText());
+                for (Object[] row : data) {
+                    writer.println(row[0] + ";" + row[1] + ";" + row[2] + ";" + row[3] + ";" + row[4]);
+                    writer.flush();
+                }
+                writer.println("Annual percent of credit: " + credit.getAnnualPercent());
+                writer.println("Currency: " + credit.getCurrency());
+                writer.println("Start date: " + credit.getStartDate());
+                writer.println("End date: " + credit.getEndDate());
+                if (credit instanceof CreditWithHolidays) {
+                    writer.println("Holidays start date: " + ((CreditWithHolidays) credit).getHolidaysStart());
+                    writer.println("Holidays end date: " + ((CreditWithHolidays) credit).getHolidaysEnd());
+                }
+            } catch (IOException e) {
+                LogHelper.log(Level.SEVERE, "Error while writing Credit to CSV", e);
             }
-            writer.println("Annual percent of credit: " + credit.getAnnualPercent());
-            writer.println("Currency: " + credit.getCurrency());
-            writer.println("Start date: " + credit.getStartDate());
-            writer.println("End date: " + credit.getEndDate());
-            if (credit instanceof CreditWithHolidays) {
-                writer.println("Holidays start date: " + ((CreditWithHolidays) credit).getHolidaysStart());
-                writer.println("Holidays end date: " + ((CreditWithHolidays) credit).getHolidaysEnd());
-            }
-        } catch (IOException e) {
-            LogHelper.log(Level.SEVERE, "Error while writing Credit to CSV", e);
+        } else {
+            LogHelper.log(Level.WARNING, "No file selected", null);
         }
+
     }
 
     public void writeDataToExcel(List<Object[]> data, Deposit deposit, File file) {
@@ -500,7 +507,7 @@ public class ResultTableController {
             headerRow.createCell(2).setCellValue(periodProfitLoanColumn.getText());
             headerRow.createCell(3).setCellValue(totalColumn.getText());
             headerRow.createCell(4).setCellValue("Days in period");
-            for(int f=0;f<5;f++){
+            for (int f = 0; f < 5; f++) {
                 int width = sheet.getColumnWidth(f);
                 sheet.setColumnWidth(f, width * 2);
             }
@@ -511,16 +518,16 @@ public class ResultTableController {
                 if (capitalize) {
                     if (i == 0) {
                         row.createCell(1).setCellValue(tempinvest);
-                        row.createCell(2).setCellFormula("B" + (i + 2) + "*(1/365)*" + "B" + (infoStartRow+1) + "/100" + "*" + "E" + (i + 2));
+                        row.createCell(2).setCellFormula("B" + (i + 2) + "*(1/365)*" + "B" + (infoStartRow + 1) + "/100" + "*" + "E" + (i + 2));
                         row.createCell(3).setCellFormula("B" + (i + 2));
                     } else {
                         row.createCell(1).setCellFormula("D" + (i + 1));
-                        row.createCell(2).setCellFormula("B" + (i + 2) + "*(1/365)*" + "B" + (infoStartRow+1) + "/100" + "*" + "E" + (i + 2));
+                        row.createCell(2).setCellFormula("B" + (i + 2) + "*(1/365)*" + "B" + (infoStartRow + 1) + "/100" + "*" + "E" + (i + 2));
                         row.createCell(3).setCellFormula("D" + (i + 1) + "+C" + (i + 2));
                     }
                 } else {
                     row.createCell(1).setCellValue(tempinvest);
-                    row.createCell(2).setCellFormula("B" + (i + 2) + "*(1/365)*" + "B" + (infoStartRow+1) + "/100" + "*" + "E" + (i + 2));
+                    row.createCell(2).setCellFormula("B" + (i + 2) + "*(1/365)*" + "B" + (infoStartRow + 1) + "/100" + "*" + "E" + (i + 2));
                     if (i == 0) {
                         row.createCell(3).setCellFormula("B" + (i + 2));
                     } else {
@@ -575,17 +582,17 @@ public class ResultTableController {
                 row.createCell(0).setCellValue((int) data.get(i)[0]);
                 if (i == 0) {
                     row.createCell(1).setCellValue(loan);
-                    row.createCell(2).setCellFormula("B" + (i + 2) + "*(1/365)*" + "B" + (infoStartRow+1) + "/100" + "*" + "F" + (i + 2));
+                    row.createCell(2).setCellFormula("B" + (i + 2) + "*(1/365)*" + "B" + (infoStartRow + 1) + "/100" + "*" + "F" + (i + 2));
                     row.createCell(3).setCellFormula("B" + (i + 2));
-                    row.createCell(4).setCellFormula("B" + (i + 2) + "*(1/365)*" + "B" + (infoStartRow+1) + "/100" + "*" + "F" + (i + 2));
+                    row.createCell(4).setCellFormula("B" + (i + 2) + "*(1/365)*" + "B" + (infoStartRow + 1) + "/100" + "*" + "F" + (i + 2));
                 } else {
                     row.createCell(1).setCellFormula("D" + (i + 1));
                     row.createCell(2).setCellFormula("B" + (infoStartRow + 5) + "*" + "F" + (i + 2));
                     row.createCell(3).setCellFormula("D" + (i + 1) + "-C" + (i + 2));
-                    row.createCell(4).setCellFormula("B" + (i + 2) + "*(1/365)*" + "B" + (infoStartRow+1) + "/100" + "*" + "G" + (i + 2));
+                    row.createCell(4).setCellFormula("B" + (i + 2) + "*(1/365)*" + "B" + (infoStartRow + 1) + "/100" + "*" + "G" + (i + 2));
                     if (i == data.size() - 1) {
                         row.createCell(2).setCellFormula("B" + (i + 2));
-                        row.createCell(3).setCellValue(0);
+                        row.createCell(3).setCellFormula("B" + (i + 2) + "-C" + (i + 2));
                     }
                 }
                 row.createCell(5).setCellValue(DaystoNextPeriod.get(i));
