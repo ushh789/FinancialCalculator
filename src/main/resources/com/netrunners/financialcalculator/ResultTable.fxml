@@ -75,7 +75,12 @@
                 <Font size="14.0" />
             </font>
         </Label>
-      <Button fx:id="exportButton" layoutX="230.0" layoutY="556.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="150.0" text="Export">
+      <Button fx:id="exportButton" layoutX="60.0" layoutY="558.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="150.0" text="Export">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
+      <Button fx:id="convertButton" layoutX="410.0" layoutY="558.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="150.0" text="Convert">
          <font>
             <Font size="18.0" />
          </font>

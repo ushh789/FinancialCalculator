@@ -124,6 +124,9 @@ public class ResultTableController {
         exitApp.setOnAction(event -> ExitApp.exitApp());
         depositButtonMenu.setOnAction(event -> WindowsOpener.depositOpener());
         creditButtonMenu.setOnAction(event -> WindowsOpener.creditOpener());
+        exportButton.setOnAction(event -> {
+
+        });
         languageButton.setOnAction(event -> {
             List<String> choices = new ArrayList<>();
             choices.add("English");
@@ -221,8 +224,7 @@ public class ResultTableController {
             File file = fileChooser.showSaveDialog(null);
             if (file != null && file.getName().endsWith(".xlsx")) {
                 writeDataToExcel(finalData, credit, file);
-            }
-            else{
+            } else {
                 writeDataToCSV(finalData, credit, file);
             }
         });
@@ -243,8 +245,7 @@ public class ResultTableController {
             File file = fileChooser.showSaveDialog(null);
             if (file != null && file.getName().endsWith(".xlsx")) {
                 writeDataToExcel(finalData, credit, file);
-            }
-            else{
+            } else {
                 writeDataToCSV(finalData, credit, file);
             }
         });
@@ -269,10 +270,9 @@ public class ResultTableController {
             fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
             fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
             File file = fileChooser.showSaveDialog(null);
-            if(file != null && file.getName().endsWith(".xlsx")){
+            if (file != null && file.getName().endsWith(".xlsx")) {
                 writeDataToExcel(data, deposit, file);
-            }
-            else{
+            } else {
                 writeDataToCSV(data, deposit, file);
             }
         });
@@ -291,10 +291,9 @@ public class ResultTableController {
             fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
             fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
             File file = fileChooser.showSaveDialog(null);
-            if(file != null && file.getName().endsWith(".xlsx")){
+            if (file != null && file.getName().endsWith(".xlsx")) {
                 writeDataToExcel(data, deposit, file);
-            }
-            else{
+            } else {
                 writeDataToCSV(data, deposit, file);
             }
         });
@@ -500,7 +499,7 @@ public class ResultTableController {
             headerRow.createCell(2).setCellValue(periodProfitLoanColumn.getText());
             headerRow.createCell(3).setCellValue(totalColumn.getText());
             headerRow.createCell(4).setCellValue("Days in period");
-            for(int f=0;f<5;f++){
+            for (int f = 0; f < 5; f++) {
                 int width = sheet.getColumnWidth(f);
                 sheet.setColumnWidth(f, width * 2);
             }
@@ -511,16 +510,16 @@ public class ResultTableController {
                 if (capitalize) {
                     if (i == 0) {
                         row.createCell(1).setCellValue(tempinvest);
-                        row.createCell(2).setCellFormula("B" + (i + 2) + "*(1/365)*" + "B" + (infoStartRow+1) + "/100" + "*" + "E" + (i + 2));
+                        row.createCell(2).setCellFormula("B" + (i + 2) + "*(1/365)*" + "B" + (infoStartRow + 1) + "/100" + "*" + "E" + (i + 2));
                         row.createCell(3).setCellFormula("B" + (i + 2));
                     } else {
                         row.createCell(1).setCellFormula("D" + (i + 1));
-                        row.createCell(2).setCellFormula("B" + (i + 2) + "*(1/365)*" + "B" + (infoStartRow+1) + "/100" + "*" + "E" + (i + 2));
+                        row.createCell(2).setCellFormula("B" + (i + 2) + "*(1/365)*" + "B" + (infoStartRow + 1) + "/100" + "*" + "E" + (i + 2));
                         row.createCell(3).setCellFormula("D" + (i + 1) + "+C" + (i + 2));
                     }
                 } else {
                     row.createCell(1).setCellValue(tempinvest);
-                    row.createCell(2).setCellFormula("B" + (i + 2) + "*(1/365)*" + "B" + (infoStartRow+1) + "/100" + "*" + "E" + (i + 2));
+                    row.createCell(2).setCellFormula("B" + (i + 2) + "*(1/365)*" + "B" + (infoStartRow + 1) + "/100" + "*" + "E" + (i + 2));
                     if (i == 0) {
                         row.createCell(3).setCellFormula("B" + (i + 2));
                     } else {
@@ -575,14 +574,14 @@ public class ResultTableController {
                 row.createCell(0).setCellValue((int) data.get(i)[0]);
                 if (i == 0) {
                     row.createCell(1).setCellValue(loan);
-                    row.createCell(2).setCellFormula("B" + (i + 2) + "*(1/365)*" + "B" + (infoStartRow+1) + "/100" + "*" + "F" + (i + 2));
+                    row.createCell(2).setCellFormula("B" + (i + 2) + "*(1/365)*" + "B" + (infoStartRow + 1) + "/100" + "*" + "F" + (i + 2));
                     row.createCell(3).setCellFormula("B" + (i + 2));
-                    row.createCell(4).setCellFormula("B" + (i + 2) + "*(1/365)*" + "B" + (infoStartRow+1) + "/100" + "*" + "F" + (i + 2));
+                    row.createCell(4).setCellFormula("B" + (i + 2) + "*(1/365)*" + "B" + (infoStartRow + 1) + "/100" + "*" + "F" + (i + 2));
                 } else {
                     row.createCell(1).setCellFormula("D" + (i + 1));
                     row.createCell(2).setCellFormula("B" + (infoStartRow + 5) + "*" + "F" + (i + 2));
                     row.createCell(3).setCellFormula("D" + (i + 1) + "-C" + (i + 2));
-                    row.createCell(4).setCellFormula("B" + (i + 2) + "*(1/365)*" + "B" + (infoStartRow+1) + "/100" + "*" + "G" + (i + 2));
+                    row.createCell(4).setCellFormula("B" + (i + 2) + "*(1/365)*" + "B" + (infoStartRow + 1) + "/100" + "*" + "G" + (i + 2));
                     if (i == data.size() - 1) {
                         row.createCell(2).setCellFormula("B" + (i + 2));
                         row.createCell(3).setCellValue(0);
@@ -626,6 +625,8 @@ public class ResultTableController {
             LogHelper.log(Level.SEVERE, "Error while writing Deposit to Excel", e);
         }
     }
+
+
 
 
 }
