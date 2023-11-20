@@ -121,49 +121,13 @@ public class DepositMenuController implements CurrencyController {
 
     private String userSelectedCurrency;
 
-    public void updateText() {
-        creditButtonMenu.setText(LanguageManager.getInstance().getTranslation("creditButtonMenu"));
-        depositButtonMenu.setText(LanguageManager.getInstance().getTranslation("depositButtonMenu"));
-        languageButton.setText(LanguageManager.getInstance().getTranslation("languageButton"));
-        darkTheme.setText(LanguageManager.getInstance().getTranslation("darkTheme"));
-        lightTheme.setText(LanguageManager.getInstance().getTranslation("lightTheme"));
-        aboutUs.setText(LanguageManager.getInstance().getTranslation("aboutUs"));
-        exitApp.setText(LanguageManager.getInstance().getTranslation("exitApp"));
-        currency.setText(LanguageManager.getInstance().getTranslation("currency"));
-        openFileButton.setText(LanguageManager.getInstance().getTranslation("openFileButton"));
-        saveAsButton.setText(LanguageManager.getInstance().getTranslation("saveAsButton"));
-        saveButton.setText(LanguageManager.getInstance().getTranslation("saveButton"));
-        themeButton.setText(LanguageManager.getInstance().getTranslation("themeButton"));
-        viewButton.setText(LanguageManager.getInstance().getTranslation("viewButton"));
-        newButton.setText(LanguageManager.getInstance().getTranslation("newButton"));
-        fileButton.setText(LanguageManager.getInstance().getTranslation("fileButton"));
-        settingsButton.setText(LanguageManager.getInstance().getTranslation("settingsButton"));
-        aboutButton.setText(LanguageManager.getInstance().getTranslation("aboutButton"));
-        closeWindow.setText(LanguageManager.getInstance().getTranslation("closeWindow"));
-        depositLabel.setText(LanguageManager.getInstance().getTranslation("DepositButton"));
-        depositCapitalizationCheck.setText(LanguageManager.getInstance().getTranslation("depositCapitalizationCheck"));
-        depositEarlyWithdrawalCheck.setText(LanguageManager.getInstance().getTranslation("depositEarlyWithdrawalCheck"));
-        depositWithdrawalOption.setText(LanguageManager.getInstance().getTranslation("depositWithdrawalOption"));
-        depositSaveResult.setText(LanguageManager.getInstance().getTranslation("creditSaveResult"));
-        depositViewResult.setText(LanguageManager.getInstance().getTranslation("creditViewResult"));
-        depositAnnualPercentInput.setPromptText(LanguageManager.getInstance().getTranslation("depositAnnualPercentInput"));
-        investInput.setPromptText(LanguageManager.getInstance().getTranslation("investInput"));
-        depositContractBeginning.setPromptText(LanguageManager.getInstance().getTranslation("depositContractBeginning"));
-        depositContractEnding.setPromptText(LanguageManager.getInstance().getTranslation("depositContractEnding"));
-        depositWithdrawalDate.setPromptText(LanguageManager.getInstance().getTranslation("depositWithdrawalDate"));
-        WithdrawalOption1.setText(LanguageManager.getInstance().getTranslation("WithdrawalOption1"));
-        WithdrawalOption2.setText(LanguageManager.getInstance().getTranslation("WithdrawalOption2"));
-        WithdrawalOption3.setText(LanguageManager.getInstance().getTranslation("WithdrawalOption3"));
-        WithdrawalOption4.setText(LanguageManager.getInstance().getTranslation("WithdrawalOption4"));
-    }
+    private LanguageManager languageManager = LanguageManager.getInstance();
+
 
     @FXML
     void initialize() {
         DatePickerRestrictions.setDatePickerRestrictionsWithdrawalHolidays(depositContractBeginning, depositContractEnding, depositWithdrawalDate);
         userSelectedCurrency = "$";
-
-        updateText();
-        LanguageManager.getInstance().languageProperty().addListener((observable, oldValue, newValue) -> updateText());
         depositWithdrawalDate.setVisible(false);
         depositWithdrawalDate.setDisable(true);
         closeWindow.setOnAction(event -> closeCurrentWindow(closeWindow.getScene()));
@@ -176,10 +140,30 @@ public class DepositMenuController implements CurrencyController {
                 depositWithdrawalDate.setDisable(true);
             }
         });
-        WithdrawalOption1.setOnAction(event -> depositWithdrawalOption.setText(WithdrawalOption1.getText()));
-        WithdrawalOption2.setOnAction(event -> depositWithdrawalOption.setText(WithdrawalOption2.getText()));
-        WithdrawalOption3.setOnAction(event -> depositWithdrawalOption.setText(WithdrawalOption3.getText()));
-        WithdrawalOption4.setOnAction(event -> depositWithdrawalOption.setText(WithdrawalOption4.getText()));
+        WithdrawalOption1.setOnAction(event ->{
+            depositWithdrawalOption.textProperty().unbind();
+            depositWithdrawalOption.setText(WithdrawalOption1.getText());
+            depositWithdrawalOption.textProperty().bind(languageManager.getStringBinding("Option1"));
+        } );
+//
+        WithdrawalOption2.setOnAction(event -> {
+            depositWithdrawalOption.textProperty().unbind();
+            depositWithdrawalOption.setText(WithdrawalOption2.getText());
+            depositWithdrawalOption.textProperty().bind(languageManager.getStringBinding("Option2"));
+        });
+        WithdrawalOption3.setOnAction(event -> {
+            depositWithdrawalOption.textProperty().unbind();
+            depositWithdrawalOption.setText(WithdrawalOption3.getText());
+            depositWithdrawalOption.textProperty().bind(languageManager.getStringBinding("Option3"));
+        });
+        WithdrawalOption4.setOnAction(event -> {
+            depositWithdrawalOption.textProperty().unbind();
+            depositWithdrawalOption.setText(WithdrawalOption4.getText());
+            depositWithdrawalOption.textProperty().bind(languageManager.getStringBinding("Option4"));
+        });
+
+
+
 
         darkTheme.setOnAction(event -> ThemeSelector.setDarkTheme());
         lightTheme.setOnAction(event -> ThemeSelector.setLightTheme());
@@ -189,7 +173,6 @@ public class DepositMenuController implements CurrencyController {
         creditButtonMenu.setOnAction(event -> WindowsOpener.creditOpener());
         openFileButton.setOnAction(event -> OpenFile.openFromSave());
         currency.setOnAction(event -> handleCurrencySelection());
-
 
         languageButton.setOnAction(event -> {
             List<String> choices = new ArrayList<>();
@@ -212,33 +195,66 @@ public class DepositMenuController implements CurrencyController {
 
             Optional<String> result = dialog.showAndWait();
             if (result.isPresent()) {
-                switch (result.get()) {
-                    case "English" -> setLanguage("en");
-                    case "Українська" -> setLanguage("uk");
-                    case "Español" -> setLanguage("es");
-                    case "Français" -> setLanguage("fr");
-                    case "Deutsch" -> setLanguage("de");
-                    case "Czech" -> setLanguage("cs");
-                    case "Polski" -> setLanguage("pl");
-                    case "Nederlands" -> setLanguage("nl");
-                    case "日本語" -> setLanguage("ja");
-                    case "中国人" -> setLanguage("zh");
-                }
+                String chosenLanguage = result.get();
+                Locale locale = switch (chosenLanguage) {
+                    case "Українська" -> new Locale("uk");
+                    case "Español" -> new Locale("es");
+                    case "Français" -> new Locale("fr");
+                    case "Deutsch" -> new Locale("de");
+                    case "Czech" -> new Locale("cs");
+                    case "Polski" -> new Locale("pl");
+                    case "Nederlands" -> new Locale("nl");
+                    case "日本語" -> new Locale("ja");
+                    case "中国人" -> new Locale("zh");
+                    default -> new Locale("en");
+                };
+                languageManager.changeLanguage(locale);
+
             }
+
         });
+        depositButtonMenu.textProperty().bind(languageManager.getStringBinding("DepositButton"));
+        creditButtonMenu.textProperty().bind(languageManager.getStringBinding("CreditButton"));
+        languageButton.textProperty().bind(languageManager.getStringBinding("languageButton"));
+        darkTheme.textProperty().bind(languageManager.getStringBinding("darkTheme"));
+        lightTheme.textProperty().bind(languageManager.getStringBinding("lightTheme"));
+        aboutUs.textProperty().bind(languageManager.getStringBinding("aboutUs"));
+        exitApp.textProperty().bind(languageManager.getStringBinding("exitApp"));
+        currency.textProperty().bind(languageManager.getStringBinding("currency"));
+        openFileButton.textProperty().bind(languageManager.getStringBinding("openFileButton"));
+        saveAsButton.textProperty().bind(languageManager.getStringBinding("saveAsButton"));
+        saveButton.textProperty().bind(languageManager.getStringBinding("saveButton"));
+        depositLabel.textProperty().bind(languageManager.getStringBinding("DepositButton"));
+        depositCapitalizationCheck.textProperty().bind(languageManager.getStringBinding("DepositCapitalization"));
+        depositEarlyWithdrawalCheck.textProperty().bind(languageManager.getStringBinding("DepositEarlyWithdrawal"));
+        depositWithdrawalOption.textProperty().bind(languageManager.getStringBinding("WithdrawalOption"));
+        depositSaveResult.textProperty().bind(languageManager.getStringBinding("SaveResult"));
+        depositViewResult.textProperty().bind(languageManager.getStringBinding("ViewResult"));
+        depositAnnualPercentInput.promptTextProperty().bind(languageManager.getStringBinding("AnnualPercent"));
+        investInput.promptTextProperty().bind(languageManager.getStringBinding("InvestInput"));
+        depositContractBeginning.promptTextProperty().bind(languageManager.getStringBinding("ContractBeginning"));
+        depositContractEnding.promptTextProperty().bind(languageManager.getStringBinding("ContractEnding"));
+        depositWithdrawalDate.promptTextProperty().bind(languageManager.getStringBinding("DepositEarlyWithdrawalDate"));
+        WithdrawalOption1.textProperty().bind(languageManager.getStringBinding("Option1"));
+        WithdrawalOption2.textProperty().bind(languageManager.getStringBinding("Option2"));
+        WithdrawalOption3.textProperty().bind(languageManager.getStringBinding("Option3"));
+        WithdrawalOption4.textProperty().bind(languageManager.getStringBinding("Option4"));
+        newButton.textProperty().bind(languageManager.getStringBinding("newButton"));
+        fileButton.textProperty().bind(languageManager.getStringBinding("fileButton"));
+        settingsButton.textProperty().bind(languageManager.getStringBinding("settingsButton"));
+        aboutButton.textProperty().bind(languageManager.getStringBinding("aboutButton"));
+        viewButton.textProperty().bind(languageManager.getStringBinding("viewButton"));
+        themeButton.textProperty().bind(languageManager.getStringBinding("themeButton"));
+        closeWindow.textProperty().bind(languageManager.getStringBinding("closeWindow"));
+
 
         depositSaveResult.setOnAction(event -> {
             if (ErrorChecker.areFieldsValidInDeposit(investInput, depositAnnualPercentInput, depositWithdrawalOption, depositContractBeginning, depositContractEnding, depositWithdrawalDate, depositEarlyWithdrawalCheck)) {
                 float investment = Float.parseFloat(investInput.getText());
                 float annualPercent = Float.parseFloat(depositAnnualPercentInput.getText());
                 String depositCurrency = userSelectedCurrency;
-                int withdrawalOptionSelected = -1000;
-                switch (depositWithdrawalOption.getText()) {
-                    case "Monthly" -> withdrawalOptionSelected = 1;
-                    case "Quarterly" -> withdrawalOptionSelected = 2;
-                    case "Yearly" -> withdrawalOptionSelected = 3;
-                    case "At the end" -> withdrawalOptionSelected = 4;
-                }
+                int withdrawalOptionSelected = languageManager.checkOption(depositWithdrawalOption.getText());
+
                 LocalDate contractStartDate = depositContractBeginning.getValue();
                 LocalDate contractEndDate = depositContractEnding.getValue();
                 boolean earlyWithdrawalOption = depositEarlyWithdrawalCheck.isSelected();
@@ -268,13 +284,7 @@ public class DepositMenuController implements CurrencyController {
                 float investment = Float.parseFloat(investInput.getText());
                 float annualPercent = Float.parseFloat(depositAnnualPercentInput.getText());
                 String depositCurrency = userSelectedCurrency;
-                int withdrawalOptionSelected = -1000;
-                switch (depositWithdrawalOption.getText()) {
-                    case "Monthly" -> withdrawalOptionSelected = 1;
-                    case "Quarterly" -> withdrawalOptionSelected = 2;
-                    case "Yearly" -> withdrawalOptionSelected = 3;
-                    case "At the end" -> withdrawalOptionSelected = 4;
-                }
+                int withdrawalOptionSelected = languageManager.checkOption(depositWithdrawalOption.getText());
                 LocalDate contractStartDate = depositContractBeginning.getValue();
                 LocalDate contractEndDate = depositContractEnding.getValue();
                 boolean earlyWithdrawalOption = depositEarlyWithdrawalCheck.isSelected();
@@ -303,43 +313,8 @@ public class DepositMenuController implements CurrencyController {
 
     }
 
-    public void setLanguage(String language) {
-        LanguageManager.getInstance().setLanguage(language);
-        creditButtonMenu.setText(LanguageManager.getInstance().getTranslation("creditButtonMenu"));
-        depositButtonMenu.setText(LanguageManager.getInstance().getTranslation("depositButtonMenu"));
-        languageButton.setText(LanguageManager.getInstance().getTranslation("languageButton"));
-        darkTheme.setText(LanguageManager.getInstance().getTranslation("darkTheme"));
-        lightTheme.setText(LanguageManager.getInstance().getTranslation("lightTheme"));
-        aboutUs.setText(LanguageManager.getInstance().getTranslation("aboutUs"));
-        exitApp.setText(LanguageManager.getInstance().getTranslation("exitApp"));
-        currency.setText(LanguageManager.getInstance().getTranslation("currency"));
-        openFileButton.setText(LanguageManager.getInstance().getTranslation("openFileButton"));
-        saveAsButton.setText(LanguageManager.getInstance().getTranslation("saveAsButton"));
-        saveButton.setText(LanguageManager.getInstance().getTranslation("saveButton"));
-        themeButton.setText(LanguageManager.getInstance().getTranslation("themeButton"));
-        viewButton.setText(LanguageManager.getInstance().getTranslation("viewButton"));
-        newButton.setText(LanguageManager.getInstance().getTranslation("newButton"));
-        fileButton.setText(LanguageManager.getInstance().getTranslation("fileButton"));
-        settingsButton.setText(LanguageManager.getInstance().getTranslation("settingsButton"));
-        aboutButton.setText(LanguageManager.getInstance().getTranslation("aboutButton"));
-        closeWindow.setText(LanguageManager.getInstance().getTranslation("closeWindow"));
-        depositLabel.setText(LanguageManager.getInstance().getTranslation("DepositButton"));
-        depositCapitalizationCheck.setText(LanguageManager.getInstance().getTranslation("depositCapitalizationCheck"));
-        depositEarlyWithdrawalCheck.setText(LanguageManager.getInstance().getTranslation("depositEarlyWithdrawalCheck"));
-        depositWithdrawalOption.setText(LanguageManager.getInstance().getTranslation("depositWithdrawalOption"));
-        depositSaveResult.setText(LanguageManager.getInstance().getTranslation("creditSaveResult"));
-        depositViewResult.setText(LanguageManager.getInstance().getTranslation("creditViewResult"));
-        depositAnnualPercentInput.setPromptText(LanguageManager.getInstance().getTranslation("depositAnnualPercentInput"));
-        investInput.setPromptText(LanguageManager.getInstance().getTranslation("investInput"));
-        depositContractBeginning.setPromptText(LanguageManager.getInstance().getTranslation("depositContractBeginning"));
-        depositContractEnding.setPromptText(LanguageManager.getInstance().getTranslation("depositContractEnding"));
-        depositWithdrawalDate.setPromptText(LanguageManager.getInstance().getTranslation("depositWithdrawalDate"));
-        WithdrawalOption1.setText(LanguageManager.getInstance().getTranslation("WithdrawalOption1"));
-        WithdrawalOption2.setText(LanguageManager.getInstance().getTranslation("WithdrawalOption2"));
-        WithdrawalOption3.setText(LanguageManager.getInstance().getTranslation("WithdrawalOption3"));
-        WithdrawalOption4.setText(LanguageManager.getInstance().getTranslation("WithdrawalOption4"));
 
-    }
+
 
     @Override
     public void handleCurrencySelection() {

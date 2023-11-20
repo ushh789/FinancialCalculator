@@ -1,35 +1,26 @@
 package com.netrunners.financialcalculator.VisualInstruments.MenuActions;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import java.io.*;
+import java.util.Locale;
+import java.util.Properties;
+import java.util.ResourceBundle;
 
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-import java.lang.reflect.Type;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-
-import com.netrunners.financialcalculator.LogicalInstrumnts.FileInstruments.LogHelper;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.binding.StringBinding;
 
 public class LanguageManager {
     private static LanguageManager instance;
-    private final StringProperty currentLanguage;
-    private Map<String, List<String>> translations;
+    private ObservableResourceFactory resourceFactory;
+    private Properties properties;
+    private static final String PROPERTIES_FILE = "config.properties";
+
 
     private LanguageManager() {
-        currentLanguage = new SimpleStringProperty("en");
-        Gson gson = new Gson();
-        Type type = new TypeToken<Map<String, List<String>>>() {
-        }.getType();
-        try (InputStreamReader reader = new InputStreamReader(new FileInputStream("languages.json"), StandardCharsets.UTF_8)) {
-            translations = gson.fromJson(reader, type);
-        } catch (Exception e) {
-            LogHelper.log(Level.SEVERE, "Error reading languages.json: ", e);
-        }
+        resourceFactory = new ObservableResourceFactory();
+        properties = new Properties();
+        loadLanguage();
+    }
+    public Locale getLocale() {
+        return resourceFactory.getResources().getLocale();
     }
 
     public static LanguageManager getInstance() {
@@ -38,31 +29,55 @@ public class LanguageManager {
         }
         return instance;
     }
-
-    public void setLanguage(String language) {
-        this.currentLanguage.set(language);
+    private void loadLanguage() {
+        try (InputStream input = new FileInputStream(PROPERTIES_FILE)) {
+            properties.load(input);
+            if (properties.getProperty("language") != null) {
+                resourceFactory.setResources(ResourceBundle.getBundle("com/netrunners/financialcalculator/assets/messages", new Locale(properties.getProperty("language"))));
+            } else {
+                resourceFactory.setResources(ResourceBundle.getBundle("com/netrunners/financialcalculator/assets/messages", new Locale("en")));
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
-    public String getTranslation(String key) {
-        Map<String, Integer> languageIndexMap = Map.of(
-                "en", 0,
-                "uk", 1,
-                "es", 2,
-                "fr", 3,
-                "de", 4,
-                "cs", 5,
-                "pl", 6,
-                "nl", 7,
-                "ja", 8,
-                "zh", 9
-        );
-        int index = languageIndexMap.getOrDefault(currentLanguage.get(), -1);
-        return translations.get(key).get(index);
+    public void saveLanguage() {
+        try (OutputStream output = new FileOutputStream(PROPERTIES_FILE)) {
+            properties.setProperty("language", resourceFactory.getResources().getLocale().getLanguage());
+            properties.store(output, null);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
-    public StringProperty languageProperty() {
-        return currentLanguage;
+    public void changeLanguage(Locale locale) {
+        resourceFactory.setResources(ResourceBundle.getBundle("com/netrunners/financialcalculator/assets/messages", locale));
     }
 
+    public StringBinding getStringBinding(String key) {
+        return resourceFactory.getStringBinding(key);
+    }
+
+    public static int checkOption(String chosenOption){
+        LanguageManager languageManager = LanguageManager.getInstance();
+        String option1 = languageManager.getStringBinding("Option1").get();
+        String option2 = languageManager.getStringBinding("Option2").get();
+        String option3 = languageManager.getStringBinding("Option3").get();
+        String option4 = languageManager.getStringBinding("Option4").get();
+
+        if (chosenOption.equals(option1)) {
+            return 1;
+        } else if (chosenOption.equals(option2)) {
+            return 2;
+        } else if (chosenOption.equals(option3)) {
+            return 3;
+        } else if (chosenOption.equals(option4)) {
+            return 4;
+        } else {
+            return -1000;
+        }
+    }
 }
+
 

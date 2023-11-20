@@ -30,7 +30,7 @@
   "depositContractEnding": ["Contract Ending Date","Дата закінчення контракту","Fecha de finalización del contrato","Date de fin du contrat","Vertragsendedatum","Datum ukončení smlouvy","Data zakończenia umowy","Contract einddatum","契約終了日","合同结束日期"],
   "depositEarlyWithdrawalCheck": ["Early withdrawal","Дострокове виведення","Retiro anticipado","Retrait anticipé","Vorzeitige Auszahlung","Předčasný výběr","Wcześniejsza wypłata","Vroege opname","早期引き出し","提前取款"],
   "depositWithdrawalDate": ["Withdrawal Date","Дата виведення","Fecha de retiro","Date de retrait","Auszahlungsdatum","Datum výběru","Data wypłaty","Opnamedatum","引き出し日付","取款日期"],
-  "depositWithdrawalOption": ["Withdrawal option","Варіант виведення","Opción de retiro","Option de retrait","Auszahlungsoption","Možnost výběru","Opcja wypłaty","Opnameoptie", "引き出しオプション", "取款选项"],
+  "depositWithdrawalOption": ["Withdrawal option","Опція виведення","Opción de retiro","Option de retrait","Auszahlungsoption","Možnost výběru","Opcja wypłaty","Opnameoptie", "引き出しオプション", "取款选项"],
   "investInput": ["Investment", "Інвестиція", "Inversión", "Investissement", "Investition", "Investice", "Inwestycja", "Investering", "投資", "投资"],
   "WithdrawalOption1": ["Monthly", "Щомісячно", "Mensual", "Mensuel", "Monatlich", "Měsíčně", "Co miesiąc", "Maandelijks", "毎月", "每月"],
   "WithdrawalOption2": ["Quarterly", "Щоквартально", "Trimestral", "Trimestriel", "Quartalsweise", "Čtvrtletně", "Co kwartał", "Per kwartaal", "四半期", "季度"],

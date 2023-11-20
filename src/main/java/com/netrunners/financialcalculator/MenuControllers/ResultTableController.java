@@ -15,7 +15,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -27,6 +29,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
 import java.util.logging.Level;
 
 
@@ -43,6 +47,12 @@ public class ResultTableController {
 
     @FXML
     private MenuItem darkTheme;
+
+    @FXML
+    private Menu fileButton;
+
+    @FXML
+    private Menu aboutButton;
 
     @FXML
     private MenuItem depositButtonMenu;
@@ -76,6 +86,12 @@ public class ResultTableController {
 
     @FXML
     private MenuItem saveButton;
+    @FXML
+    private Menu viewButton;
+    @FXML
+    private Menu settingsButton;
+    @FXML
+    private Menu themeButton;
 
     @FXML
     private TableColumn<Object[], String> totalColumn;
@@ -84,46 +100,92 @@ public class ResultTableController {
     private TableColumn<Object[], String> periodPercentsColumn;
 
     @FXML
-    private Button saveFileButton;
+    private Button exportButton;
 
+    @FXML
+    private Menu newButton;
     @FXML
     private Label financialCalculatorLabel;
     float loan;
     float dailypart;
+    private LanguageManager languageManager = LanguageManager.getInstance();
     List<Integer> DaystoNextPeriodWithHolidays = new ArrayList<>();
     List<Integer> DaystoNextPeriod = new ArrayList<>();
 
 
     float tempinvest;
 
-    public void updateText() {
-        creditButtonMenu.setText(LanguageManager.getInstance().getTranslation("creditButtonMenu"));
-        depositButtonMenu.setText(LanguageManager.getInstance().getTranslation("depositButtonMenu"));
-        languageButton.setText(LanguageManager.getInstance().getTranslation("languageButton"));
-        darkTheme.setText(LanguageManager.getInstance().getTranslation("darkTheme"));
-        lightTheme.setText(LanguageManager.getInstance().getTranslation("lightTheme"));
-        aboutUs.setText(LanguageManager.getInstance().getTranslation("aboutUs"));
-        exitApp.setText(LanguageManager.getInstance().getTranslation("exitApp"));
-        currency.setText(LanguageManager.getInstance().getTranslation("currency"));
-        openFileButton.setText(LanguageManager.getInstance().getTranslation("openFileButton"));
-        saveAsButton.setText(LanguageManager.getInstance().getTranslation("saveAsButton"));
-        saveButton.setText(LanguageManager.getInstance().getTranslation("saveButton"));
-        financialCalculatorLabel.setText(LanguageManager.getInstance().getTranslation("resultTablelabel"));
-        periodProfitLoanColumn.setText(LanguageManager.getInstance().getTranslation("profitColumn"));
-        totalColumn.setText(LanguageManager.getInstance().getTranslation("totalColumn"));
-    }
-
     @FXML
     void initialize() {
         openFileButton.setDisable(true);
-        updateText();
-        LanguageManager.getInstance().languageProperty().addListener((observable, oldValue, newValue) -> updateText());
         darkTheme.setOnAction(event -> ThemeSelector.setDarkTheme());
         lightTheme.setOnAction(event -> ThemeSelector.setLightTheme());
         aboutUs.setOnAction(event -> AboutUsAlert.showAboutUs());
         exitApp.setOnAction(event -> ExitApp.exitApp());
         depositButtonMenu.setOnAction(event -> WindowsOpener.depositOpener());
         creditButtonMenu.setOnAction(event -> WindowsOpener.creditOpener());
+        exportButton.setOnAction(event -> {
+
+        });
+        languageButton.setOnAction(event -> {
+            List<String> choices = new ArrayList<>();
+            choices.add("English");
+            choices.add("Українська");
+            choices.add("Español");
+            choices.add("Français");
+            choices.add("Deutsch");
+            choices.add("Czech");
+            choices.add("Polski");
+            choices.add("Nederlands");
+            choices.add("日本語");
+            choices.add("中国人");
+            ChoiceDialog<String> dialog = new ChoiceDialog<>("English", choices);
+            dialog.setTitle("Choose Language");
+            Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+            stage.getIcons().add(new Image("file:src/main/resources/com/netrunners/financialcalculator/assets/Logo.png"));
+            dialog.setHeaderText(null);
+            dialog.setContentText("Choose your language:");
+
+            Optional<String> result = dialog.showAndWait();
+            if (result.isPresent()) {
+                String chosenLanguage = result.get();
+                Locale locale = switch (chosenLanguage) {
+                    case "Українська" -> new Locale("uk");
+                    case "Español" -> new Locale("es");
+                    case "Français" -> new Locale("fr");
+                    case "Deutsch" -> new Locale("de");
+                    case "Czech" -> new Locale("cs");
+                    case "Polski" -> new Locale("pl");
+                    case "Nederlands" -> new Locale("nl");
+                    case "日本語" -> new Locale("ja");
+                    case "中国人" -> new Locale("zh");
+                    default -> new Locale("en");
+                };
+                languageManager.changeLanguage(locale);
+
+            }
+        });
+        financialCalculatorLabel.textProperty().bind(languageManager.getStringBinding("ResultTableLabel"));
+        depositButtonMenu.textProperty().bind(languageManager.getStringBinding("DepositButton"));
+        creditButtonMenu.textProperty().bind(languageManager.getStringBinding("CreditButton"));
+        languageButton.textProperty().bind(languageManager.getStringBinding("languageButton"));
+        darkTheme.textProperty().bind(languageManager.getStringBinding("darkTheme"));
+        lightTheme.textProperty().bind(languageManager.getStringBinding("lightTheme"));
+        aboutUs.textProperty().bind(languageManager.getStringBinding("aboutUs"));
+        exitApp.textProperty().bind(languageManager.getStringBinding("exitApp"));
+        currency.textProperty().bind(languageManager.getStringBinding("currency"));
+        openFileButton.textProperty().bind(languageManager.getStringBinding("openFileButton"));
+        saveAsButton.textProperty().bind(languageManager.getStringBinding("saveAsButton"));
+        saveButton.textProperty().bind(languageManager.getStringBinding("saveButton"));
+        totalColumn.textProperty().bind(languageManager.getStringBinding("totalColumn"));
+        periodPercentsColumn.textProperty().bind(languageManager.getStringBinding("PeriodPercents"));
+        exportButton.textProperty().bind(languageManager.getStringBinding("Export"));
+        viewButton.textProperty().bind(languageManager.getStringBinding("viewButton"));
+        settingsButton.textProperty().bind(languageManager.getStringBinding("settingsButton"));
+        themeButton.textProperty().bind(languageManager.getStringBinding("themeButton"));
+        fileButton.textProperty().bind(languageManager.getStringBinding("fileButton"));
+        aboutButton.textProperty().bind(languageManager.getStringBinding("aboutButton"));
+        newButton.textProperty().bind(languageManager.getStringBinding("newButton"));
     }
 
     public void updateTable(Deposit deposit) {
@@ -152,14 +214,17 @@ public class ResultTableController {
         ObservableList<Object[]> observableData = FXCollections.observableArrayList(data);
         resultTable.setItems(observableData);
         List<Object[]> finalData = data;
-        saveFileButton.setOnAction(event -> {
+        exportButton.setOnAction(event -> {
             FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Save Data");
+            fileChooser.setTitle("Export result");
             File initialDirectory = new File("saves/");
             fileChooser.setInitialDirectory(initialDirectory);
             fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
             File file = fileChooser.showSaveDialog(null);
-            if (file != null) {
+            if (file != null && file.getName().endsWith(".xlsx")) {
+                writeDataToExcel(finalData, credit, file);
+            } else {
                 writeDataToCSV(finalData, credit, file);
             }
         });
@@ -178,8 +243,10 @@ public class ResultTableController {
             fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
             fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
             File file = fileChooser.showSaveDialog(null);
-            if (file != null) {
+            if (file != null && file.getName().endsWith(".xlsx")) {
                 writeDataToExcel(finalData, credit, file);
+            } else {
+                writeDataToCSV(finalData, credit, file);
             }
         });
     }
@@ -195,15 +262,18 @@ public class ResultTableController {
         resultTable.getColumns().addAll(periodColumn, investmentloanColumn, periodProfitLoanColumn, totalColumn);
         ObservableList<Object[]> observableData = FXCollections.observableArrayList(data);
         resultTable.setItems(observableData);
-        saveFileButton.setOnAction(event -> {
+        exportButton.setOnAction(event -> {
             FileChooser fileChooser = new FileChooser();
             File initialDirectory = new File("saves/");
             fileChooser.setInitialDirectory(initialDirectory);
-            fileChooser.setTitle("Save Data");
+            fileChooser.setTitle("Export result");
             fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
             File file = fileChooser.showSaveDialog(null);
-            if (file != null) {
+            if (file != null && file.getName().endsWith(".xlsx")) {
                 writeDataToExcel(data, deposit, file);
+            } else {
+                writeDataToCSV(data, deposit, file);
             }
         });
         saveButton.setOnAction(event -> {
@@ -221,8 +291,10 @@ public class ResultTableController {
             fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
             fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
             File file = fileChooser.showSaveDialog(null);
-            if (file != null) {
+            if (file != null && file.getName().endsWith(".xlsx")) {
                 writeDataToExcel(data, deposit, file);
+            } else {
+                writeDataToCSV(data, deposit, file);
             }
         });
     }
@@ -248,11 +320,12 @@ public class ResultTableController {
             int daysToNextPeriod = DateTimeFunctions.countDaysToNextPeriod(deposit, tempDate, endOfContract);
 
             if (numbersColumnFlag == 0) {
+                periodColumn.textProperty().bind(languageManager.getStringBinding(deposit.getNameOfWithdrawalType()));
+                investmentloanColumn.textProperty().bind(languageManager.getStringBinding("InvestInput"));
+                periodProfitLoanColumn.textProperty().bind(languageManager.getStringBinding("ProfitColumn"));
                 daysToNextPeriod = 0;
-                periodColumn.setText(deposit.getNameOfWithdrawalType());
-                investmentloanColumn.setText("Investment");
-                periodProfitLoanColumn.setText("Period profit");
-                totalColumn.setText("Total profit");
+
+
             } else {
                 DaystoNextPeriod.add(daysToNextPeriod);
                 if (capitalize) {
@@ -300,10 +373,9 @@ public class ResultTableController {
             float periodPercents = 0;
             int daysToNextPeriod = DateTimeFunctions.countDaysToNextPeriod(credit, tempDate);
             if (numbersColumnFlag == 0) {
-                periodColumn.setText(credit.getNameOfPaymentType());
-                investmentloanColumn.setText("Loan");
-                periodProfitLoanColumn.setText("Period loan");
-                totalColumn.setText("Total loan");
+                periodColumn.textProperty().bind(languageManager.getStringBinding(credit.getNameOfPaymentType()));
+                investmentloanColumn.textProperty().bind(languageManager.getStringBinding("LoanInput"));
+                periodProfitLoanColumn.textProperty().bind(languageManager.getStringBinding("PaymentLoan"));
             } else {
                 DaystoNextPeriod.add(daysToNextPeriod);
                 DaystoNextPeriodWithHolidays.add(daysToNextPeriod);
@@ -349,10 +421,9 @@ public class ResultTableController {
             float periodPercents = 0;
             int daysToNextPeriod = DateTimeFunctions.countDaysToNextPeriod(credit, tempDate);
             if (numbersColumnFlag == 0) {
-                periodColumn.setText(credit.getNameOfPaymentType());
-                investmentloanColumn.setText("Loan");
-                periodProfitLoanColumn.setText("Period loan");
-                totalColumn.setText("Total loan");
+                periodColumn.textProperty().bind(languageManager.getStringBinding(credit.getNameOfPaymentType()));
+                investmentloanColumn.textProperty().bind(languageManager.getStringBinding("LoanInput"));
+                periodProfitLoanColumn.textProperty().bind(languageManager.getStringBinding("PaymentLoan"));
             } else {
                 DaystoNextPeriod.add(daysToNextPeriod);
                 for (int i = 0; i < daysToNextPeriod; i++) {
@@ -423,27 +494,32 @@ public class ResultTableController {
             Sheet sheet = workbook.createSheet("Deposit Data");
             boolean capitalize = deposit instanceof CapitalisedDeposit;
             Row headerRow = sheet.createRow(0);
-            headerRow.createCell(0).setCellValue(deposit.getNameOfWithdrawalType());
+            headerRow.createCell(0).setCellValue(periodColumn.getText());
             headerRow.createCell(1).setCellValue(investmentloanColumn.getText());
             headerRow.createCell(2).setCellValue(periodProfitLoanColumn.getText());
             headerRow.createCell(3).setCellValue(totalColumn.getText());
             headerRow.createCell(4).setCellValue("Days in period");
+            for (int f = 0; f < 5; f++) {
+                int width = sheet.getColumnWidth(f);
+                sheet.setColumnWidth(f, width * 2);
+            }
             for (int i = 0; i < data.size(); i++) {
+
                 Row row = sheet.createRow(i + 1);
                 row.createCell(0).setCellValue((int) data.get(i)[0]);
                 if (capitalize) {
                     if (i == 0) {
                         row.createCell(1).setCellValue(tempinvest);
-                        row.createCell(2).setCellFormula("B" + (i + 2) + "*(1/365)*" + "B" + (infoStartRow+1) + "/100" + "*" + "E" + (i + 2));
+                        row.createCell(2).setCellFormula("B" + (i + 2) + "*(1/365)*" + "B" + (infoStartRow + 1) + "/100" + "*" + "E" + (i + 2));
                         row.createCell(3).setCellFormula("B" + (i + 2));
                     } else {
                         row.createCell(1).setCellFormula("D" + (i + 1));
-                        row.createCell(2).setCellFormula("B" + (i + 2) + "*(1/365)*" + "B" + (infoStartRow+1) + "/100" + "*" + "E" + (i + 2));
+                        row.createCell(2).setCellFormula("B" + (i + 2) + "*(1/365)*" + "B" + (infoStartRow + 1) + "/100" + "*" + "E" + (i + 2));
                         row.createCell(3).setCellFormula("D" + (i + 1) + "+C" + (i + 2));
                     }
                 } else {
                     row.createCell(1).setCellValue(tempinvest);
-                    row.createCell(2).setCellFormula("B" + (i + 2) + "*(1/365)*" + "B" + (infoStartRow+1) + "/100" + "*" + "E" + (i + 2));
+                    row.createCell(2).setCellFormula("B" + (i + 2) + "*(1/365)*" + "B" + (infoStartRow + 1) + "/100" + "*" + "E" + (i + 2));
                     if (i == 0) {
                         row.createCell(3).setCellFormula("B" + (i + 2));
                     } else {
@@ -498,14 +574,14 @@ public class ResultTableController {
                 row.createCell(0).setCellValue((int) data.get(i)[0]);
                 if (i == 0) {
                     row.createCell(1).setCellValue(loan);
-                    row.createCell(2).setCellFormula("B" + (i + 2) + "*(1/365)*" + "B" + (infoStartRow+1) + "/100" + "*" + "F" + (i + 2));
+                    row.createCell(2).setCellFormula("B" + (i + 2) + "*(1/365)*" + "B" + (infoStartRow + 1) + "/100" + "*" + "F" + (i + 2));
                     row.createCell(3).setCellFormula("B" + (i + 2));
-                    row.createCell(4).setCellFormula("B" + (i + 2) + "*(1/365)*" + "B" + (infoStartRow+1) + "/100" + "*" + "F" + (i + 2));
+                    row.createCell(4).setCellFormula("B" + (i + 2) + "*(1/365)*" + "B" + (infoStartRow + 1) + "/100" + "*" + "F" + (i + 2));
                 } else {
                     row.createCell(1).setCellFormula("D" + (i + 1));
                     row.createCell(2).setCellFormula("B" + (infoStartRow + 5) + "*" + "F" + (i + 2));
                     row.createCell(3).setCellFormula("D" + (i + 1) + "-C" + (i + 2));
-                    row.createCell(4).setCellFormula("B" + (i + 2) + "*(1/365)*" + "B" + (infoStartRow+1) + "/100" + "*" + "G" + (i + 2));
+                    row.createCell(4).setCellFormula("B" + (i + 2) + "*(1/365)*" + "B" + (infoStartRow + 1) + "/100" + "*" + "G" + (i + 2));
                     if (i == data.size() - 1) {
                         row.createCell(2).setCellFormula("B" + (i + 2));
                         row.createCell(3).setCellValue(0);
@@ -549,6 +625,8 @@ public class ResultTableController {
             LogHelper.log(Level.SEVERE, "Error while writing Deposit to Excel", e);
         }
     }
+
+
 
 
 }

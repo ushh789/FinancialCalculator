@@ -1,9 +1,7 @@
 package com.netrunners.financialcalculator.MenuControllers;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import com.netrunners.financialcalculator.ErrorHandling.ErrorChecker;
 import com.netrunners.financialcalculator.LogicalInstrumnts.FileInstruments.OpenFile;
@@ -120,50 +118,13 @@ public class CreditMenuController implements CurrencyController {
     @FXML
     private MenuItem newButton;
     private String userSelectedCurrency;
+    private LanguageManager languageManager = LanguageManager.getInstance();
 
-    public void updateText() {
-        creditButtonMenu.setText(LanguageManager.getInstance().getTranslation("creditButtonMenu"));
-        depositButtonMenu.setText(LanguageManager.getInstance().getTranslation("depositButtonMenu"));
-        languageButton.setText(LanguageManager.getInstance().getTranslation("languageButton"));
-        darkTheme.setText(LanguageManager.getInstance().getTranslation("darkTheme"));
-        lightTheme.setText(LanguageManager.getInstance().getTranslation("lightTheme"));
-        aboutUs.setText(LanguageManager.getInstance().getTranslation("aboutUs"));
-        exitApp.setText(LanguageManager.getInstance().getTranslation("exitApp"));
-        currency.setText(LanguageManager.getInstance().getTranslation("currency"));
-        openFileButton.setText(LanguageManager.getInstance().getTranslation("openFileButton"));
-        saveAsButton.setText(LanguageManager.getInstance().getTranslation("saveAsButton"));
-        saveButton.setText(LanguageManager.getInstance().getTranslation("saveButton"));
-        themeButton.setText(LanguageManager.getInstance().getTranslation("themeButton"));
-        viewButton.setText(LanguageManager.getInstance().getTranslation("viewButton"));
-        newButton.setText(LanguageManager.getInstance().getTranslation("newButton"));
-        fileButton.setText(LanguageManager.getInstance().getTranslation("fileButton"));
-        settingsButton.setText(LanguageManager.getInstance().getTranslation("settingsButton"));
-        aboutButton.setText(LanguageManager.getInstance().getTranslation("aboutButton"));
-        closeWindow.setText(LanguageManager.getInstance().getTranslation("closeWindow"));
-        creditLabel.setText(LanguageManager.getInstance().getTranslation("CreditButton"));
-        loanInput.setPromptText(LanguageManager.getInstance().getTranslation("loanInput"));
-        annualPercentInput.setPromptText(LanguageManager.getInstance().getTranslation("annualPercentInput"));
-        contractBeginning.setPromptText(LanguageManager.getInstance().getTranslation("contractBeginning"));
-        contractEnding.setPromptText(LanguageManager.getInstance().getTranslation("contractEnding"));
-        paymentOption.setText(LanguageManager.getInstance().getTranslation("paymentOption"));
-        checkPaymentHolidays.setText(LanguageManager.getInstance().getTranslation("checkPaymentHolidays"));
-        holidaysBeginning.setPromptText(LanguageManager.getInstance().getTranslation("holidaysBeginning"));
-        holidaysEnding.setPromptText(LanguageManager.getInstance().getTranslation("holidaysEnding"));
-        creditSaveResult.setText(LanguageManager.getInstance().getTranslation("creditSaveResult"));
-        creditViewResult.setText(LanguageManager.getInstance().getTranslation("creditViewResult"));
-        PaymentOption1.setText(LanguageManager.getInstance().getTranslation("PaymentOption1"));
-        PaymentOption2.setText(LanguageManager.getInstance().getTranslation("PaymentOption2"));
-        PaymentOption3.setText(LanguageManager.getInstance().getTranslation("PaymentOption3"));
-        PaymentOption4.setText(LanguageManager.getInstance().getTranslation("PaymentOption4"));
-    }
 
     @FXML
     void initialize() {
         DatePickerRestrictions.setDatePickerRestrictionsHolidays(contractBeginning, contractEnding, holidaysBeginning, holidaysEnding);
         userSelectedCurrency = "$";
-
-        updateText();
-        LanguageManager.getInstance().languageProperty().addListener((observable, oldValue, newValue) -> updateText());
         holidaysBeginning.setVisible(false);
         holidaysBeginning.setDisable(true);
         holidaysEnding.setVisible(false);
@@ -181,10 +142,26 @@ public class CreditMenuController implements CurrencyController {
                 holidaysEnding.setDisable(true);
             }
         });
-        PaymentOption1.setOnAction(event -> paymentOption.setText(PaymentOption1.getText()));
-        PaymentOption2.setOnAction(event -> paymentOption.setText(PaymentOption2.getText()));
-        PaymentOption3.setOnAction(event -> paymentOption.setText(PaymentOption3.getText()));
-        PaymentOption4.setOnAction(event -> paymentOption.setText(PaymentOption4.getText()));
+        PaymentOption1.setOnAction(event -> {
+            paymentOption.textProperty().unbind();
+            paymentOption.setText(PaymentOption1.getText());
+            paymentOption.textProperty().bind(languageManager.getStringBinding("Option1"));
+                });
+        PaymentOption2.setOnAction(event -> {
+            paymentOption.textProperty().unbind();
+            paymentOption.setText(PaymentOption2.getText());
+            paymentOption.textProperty().bind(languageManager.getStringBinding("Option2"));
+        });
+        PaymentOption3.setOnAction(event -> {
+            paymentOption.textProperty().unbind();
+            paymentOption.setText(PaymentOption3.getText());
+            paymentOption.textProperty().bind(languageManager.getStringBinding("Option3"));
+        });
+        PaymentOption4.setOnAction(event -> {
+            paymentOption.textProperty().unbind();
+            paymentOption.setText(PaymentOption4.getText());
+            paymentOption.textProperty().bind(languageManager.getStringBinding("Option4"));
+        });
 
         closeWindow.setOnAction(event -> closeCurrentWindow(closeWindow.getScene()));
         darkTheme.setOnAction(event -> ThemeSelector.setDarkTheme());
@@ -218,33 +195,66 @@ public class CreditMenuController implements CurrencyController {
 
             Optional<String> result = dialog.showAndWait();
             if (result.isPresent()) {
-                switch (result.get()) {
-                    case "English" -> setLanguage("en");
-                    case "Українська" -> setLanguage("uk");
-                    case "Español" -> setLanguage("es");
-                    case "Français" -> setLanguage("fr");
-                    case "Deutsch" -> setLanguage("de");
-                    case "Czech" -> setLanguage("cs");
-                    case "Polski" -> setLanguage("pl");
-                    case "Nederlands" -> setLanguage("nl");
-                    case "日本語" -> setLanguage("ja");
-                    case "中国人" -> setLanguage("zh");
-                }
+                String chosenLanguage = result.get();
+                Locale locale = switch (chosenLanguage) {
+                    case "Українська" -> new Locale("uk");
+                    case "Español" -> new Locale("es");
+                    case "Français" -> new Locale("fr");
+                    case "Deutsch" -> new Locale("de");
+                    case "Czech" -> new Locale("cs");
+                    case "Polski" -> new Locale("pl");
+                    case "Nederlands" -> new Locale("nl");
+                    case "日本語" -> new Locale("ja");
+                    case "中国人" -> new Locale("zh");
+                    default -> new Locale("en");
+                };
+                languageManager.changeLanguage(locale);
+
             }
+
         });
+        creditButtonMenu.textProperty().bind(languageManager.getStringBinding("CreditButton"));
+        depositButtonMenu.textProperty().bind(languageManager.getStringBinding("DepositButton"));
+        creditLabel.textProperty().bind(languageManager.getStringBinding("CreditButton"));
+        languageButton.textProperty().bind(languageManager.getStringBinding("languageButton"));
+        darkTheme.textProperty().bind(languageManager.getStringBinding("darkTheme"));
+        lightTheme.textProperty().bind(languageManager.getStringBinding("lightTheme"));
+        aboutUs.textProperty().bind(languageManager.getStringBinding("aboutUs"));
+        exitApp.textProperty().bind(languageManager.getStringBinding("exitApp"));
+        currency.textProperty().bind(languageManager.getStringBinding("currency"));
+        openFileButton.textProperty().bind(languageManager.getStringBinding("openFileButton"));
+        saveAsButton.textProperty().bind(languageManager.getStringBinding("saveAsButton"));
+        saveButton.textProperty().bind(languageManager.getStringBinding("saveButton"));
+        themeButton.textProperty().bind(languageManager.getStringBinding("themeButton"));
+        viewButton.textProperty().bind(languageManager.getStringBinding("viewButton"));
+        newButton.textProperty().bind(languageManager.getStringBinding("newButton"));
+        fileButton.textProperty().bind(languageManager.getStringBinding("fileButton"));
+        settingsButton.textProperty().bind(languageManager.getStringBinding("settingsButton"));
+        aboutButton.textProperty().bind(languageManager.getStringBinding("aboutButton"));
+        closeWindow.textProperty().bind(languageManager.getStringBinding("closeWindow"));
+        loanInput.promptTextProperty().bind(languageManager.getStringBinding("LoanInput"));
+        annualPercentInput.promptTextProperty().bind(languageManager.getStringBinding("AnnualPercent"));
+        contractBeginning.promptTextProperty().bind(languageManager.getStringBinding("ContractBeginning"));
+        contractEnding.promptTextProperty().bind(languageManager.getStringBinding("ContractEnding"));
+        paymentOption.textProperty().bind(languageManager.getStringBinding("PaymentOption"));
+        checkPaymentHolidays.textProperty().bind(languageManager.getStringBinding("CreditHolidaysCheck"));
+        holidaysBeginning.promptTextProperty().bind(languageManager.getStringBinding("HolidaysBeginning"));
+        holidaysEnding.promptTextProperty().bind(languageManager.getStringBinding("HolidaysEnding"));
+        creditSaveResult.textProperty().bind(languageManager.getStringBinding("SaveResult"));
+        creditViewResult.textProperty().bind(languageManager.getStringBinding("ViewResult"));
+        PaymentOption1.textProperty().bind(languageManager.getStringBinding("Option1"));
+        PaymentOption2.textProperty().bind(languageManager.getStringBinding("Option2"));
+        PaymentOption3.textProperty().bind(languageManager.getStringBinding("Option3"));
+        PaymentOption4.textProperty().bind(languageManager.getStringBinding("Option4"));
+
+
 
         creditSaveResult.setOnAction(event -> {
             if (ErrorChecker.areFieldsValidInCredit(loanInput, annualPercentInput, paymentOption, contractBeginning, contractEnding, checkPaymentHolidays, holidaysBeginning, holidaysEnding)) {
                 float creditLoan = Float.parseFloat(loanInput.getText());
                 float creditAnnualPercent = Float.parseFloat(annualPercentInput.getText());
                 String creditCurrency = userSelectedCurrency;
-                int paymentOptionSelected = -1000;
-                switch (paymentOption.getText()) {
-                    case "Monthly" -> paymentOptionSelected = 1;
-                    case "Quarterly" -> paymentOptionSelected = 2;
-                    case "Yearly" -> paymentOptionSelected = 3;
-                    case "At the end" -> paymentOptionSelected = 4;
-                }
+                int paymentOptionSelected = languageManager.checkOption(paymentOption.getText());
                 LocalDate contractStartDate = contractBeginning.getValue();
                 LocalDate contractEndDate = contractEnding.getValue();
                 if (checkPaymentHolidays.isSelected()) {
@@ -264,13 +274,8 @@ public class CreditMenuController implements CurrencyController {
                 float creditLoan = Float.parseFloat(loanInput.getText());
                 float creditAnnualPercent = Float.parseFloat(annualPercentInput.getText());
                 String creditCurrency = userSelectedCurrency;
-                int paymentOptionSelected = -1000;
-                switch (paymentOption.getText()) {
-                    case "Monthly" -> paymentOptionSelected = 1;
-                    case "Quarterly" -> paymentOptionSelected = 2;
-                    case "Yearly" -> paymentOptionSelected = 3;
-                    case "At the end" -> paymentOptionSelected = 4;
-                }
+                int paymentOptionSelected = languageManager.checkOption(paymentOption.getText());
+
                 LocalDate contractStartDate = contractBeginning.getValue();
                 LocalDate contractEndDate = contractEnding.getValue();
                 if (checkPaymentHolidays.isSelected()) {
@@ -284,43 +289,6 @@ public class CreditMenuController implements CurrencyController {
                 }
             }
         });
-    }
-
-    public void setLanguage(String language) {
-        LanguageManager.getInstance().setLanguage(language);
-        creditButtonMenu.setText(LanguageManager.getInstance().getTranslation("creditButtonMenu"));
-        depositButtonMenu.setText(LanguageManager.getInstance().getTranslation("depositButtonMenu"));
-        languageButton.setText(LanguageManager.getInstance().getTranslation("languageButton"));
-        darkTheme.setText(LanguageManager.getInstance().getTranslation("darkTheme"));
-        lightTheme.setText(LanguageManager.getInstance().getTranslation("lightTheme"));
-        aboutUs.setText(LanguageManager.getInstance().getTranslation("aboutUs"));
-        exitApp.setText(LanguageManager.getInstance().getTranslation("exitApp"));
-        currency.setText(LanguageManager.getInstance().getTranslation("currency"));
-        openFileButton.setText(LanguageManager.getInstance().getTranslation("openFileButton"));
-        saveAsButton.setText(LanguageManager.getInstance().getTranslation("saveAsButton"));
-        saveButton.setText(LanguageManager.getInstance().getTranslation("saveButton"));
-        themeButton.setText(LanguageManager.getInstance().getTranslation("themeButton"));
-        viewButton.setText(LanguageManager.getInstance().getTranslation("viewButton"));
-        newButton.setText(LanguageManager.getInstance().getTranslation("newButton"));
-        fileButton.setText(LanguageManager.getInstance().getTranslation("fileButton"));
-        settingsButton.setText(LanguageManager.getInstance().getTranslation("settingsButton"));
-        aboutButton.setText(LanguageManager.getInstance().getTranslation("aboutButton"));
-        closeWindow.setText(LanguageManager.getInstance().getTranslation("closeWindow"));
-        creditLabel.setText(LanguageManager.getInstance().getTranslation("CreditButton"));
-        loanInput.setPromptText(LanguageManager.getInstance().getTranslation("loanInput"));
-        annualPercentInput.setPromptText(LanguageManager.getInstance().getTranslation("annualPercentInput"));
-        contractBeginning.setPromptText(LanguageManager.getInstance().getTranslation("contractBeginning"));
-        contractEnding.setPromptText(LanguageManager.getInstance().getTranslation("contractEnding"));
-        paymentOption.setText(LanguageManager.getInstance().getTranslation("paymentOption"));
-        checkPaymentHolidays.setText(LanguageManager.getInstance().getTranslation("checkPaymentHolidays"));
-        holidaysBeginning.setPromptText(LanguageManager.getInstance().getTranslation("holidaysBeginning"));
-        holidaysEnding.setPromptText(LanguageManager.getInstance().getTranslation("holidaysEnding"));
-        creditSaveResult.setText(LanguageManager.getInstance().getTranslation("creditSaveResult"));
-        creditViewResult.setText(LanguageManager.getInstance().getTranslation("creditViewResult"));
-        PaymentOption1.setText(LanguageManager.getInstance().getTranslation("PaymentOption1"));
-        PaymentOption2.setText(LanguageManager.getInstance().getTranslation("PaymentOption2"));
-        PaymentOption3.setText(LanguageManager.getInstance().getTranslation("PaymentOption3"));
-        PaymentOption4.setText(LanguageManager.getInstance().getTranslation("PaymentOption4"));
     }
 
 
