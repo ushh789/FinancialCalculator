@@ -22,7 +22,7 @@ public class StartMenu extends Application {
     public void start(Stage primaryStage) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(StartMenu.class.getResource("StartMenu.fxml"));
-            primaryStage.setTitle("Financial Calculator by netrunners");
+            primaryStage.setTitle(LanguageManager.getInstance().getStringBinding("CalcLabel").get());
             primaryStage.getIcons().add(new Image("file:src/main/resources/com/netrunners/financialcalculator/assets/Logo.png"));
             if (Taskbar.isTaskbarSupported()) {
                 var taskbar = Taskbar.getTaskbar();

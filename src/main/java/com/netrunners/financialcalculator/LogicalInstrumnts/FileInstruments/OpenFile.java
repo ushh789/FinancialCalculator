@@ -9,6 +9,7 @@ import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpea
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Deposit.CapitalisedDeposit;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Deposit.Deposit;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Deposit.UncapitalisedDeposit;
+import com.netrunners.financialcalculator.VisualInstruments.MenuActions.LanguageManager;
 import javafx.stage.FileChooser;
 
 
@@ -23,7 +24,7 @@ public class OpenFile {
 
     public static void openFromSave() {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Choose save");
+        fileChooser.setTitle(LanguageManager.getInstance().getStringBinding("ChooseOpenFile").get());
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json"));
         File initialDirectory = new File("saves/");
         fileChooser.setInitialDirectory(initialDirectory);

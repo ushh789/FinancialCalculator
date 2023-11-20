@@ -186,11 +186,11 @@ public class CreditMenuController implements CurrencyController {
             choices.add("日本語");
             choices.add("中国人");
             ChoiceDialog<String> dialog = new ChoiceDialog<>("English", choices);
-            dialog.setTitle("Choose Language");
+            dialog.setTitle(LanguageManager.getInstance().getStringBinding("LanguageTitle").get());
             Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
             stage.getIcons().add(new Image("file:src/main/resources/com/netrunners/financialcalculator/assets/Logo.png"));
             dialog.setHeaderText(null);
-            dialog.setContentText("Choose your language:");
+            dialog.setContentText(LanguageManager.getInstance().getStringBinding("ChooseLanguage").get());
 
             Optional<String> result = dialog.showAndWait();
             if (result.isPresent()) {
@@ -300,11 +300,11 @@ public class CreditMenuController implements CurrencyController {
         String defaultCurrency = currencyManager.getCurrency();
 
         ChoiceDialog<String> dialog = new ChoiceDialog<>(defaultCurrency, choices);
-        dialog.setTitle("Choose Currency");
+        dialog.setTitle(LanguageManager.getInstance().getStringBinding("CurrencyTitle").get());
         Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
         stage.getIcons().add(new Image("file:src/main/resources/com/netrunners/financialcalculator/assets/Logo.png"));
         dialog.setHeaderText(null);
-        dialog.setContentText("Choose your currency:");
+        dialog.setContentText(LanguageManager.getInstance().getStringBinding("ChooseCurrency").get());
 
         Optional<String> result = dialog.showAndWait();
         if (result.isPresent()) {

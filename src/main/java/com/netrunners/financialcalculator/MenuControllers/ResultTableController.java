@@ -121,6 +121,7 @@ public class ResultTableController {
     void initialize() {
         userSelectedCurrency = "$";
         openFileButton.setDisable(true);
+        currency.setDisable(true);
         darkTheme.setOnAction(event -> ThemeSelector.setDarkTheme());
         lightTheme.setOnAction(event -> ThemeSelector.setLightTheme());
         aboutUs.setOnAction(event -> AboutUsAlert.showAboutUs());
@@ -138,11 +139,11 @@ public class ResultTableController {
             choices.add("€");
 
             ChoiceDialog<String> dialog = new ChoiceDialog<>("-", choices);
-            dialog.setTitle("Convert to");
+            dialog.setTitle(LanguageManager.getInstance().getStringBinding("ConvertTitle").get());
             Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
             stage.getIcons().add(new Image("file:src/main/resources/com/netrunners/financialcalculator/assets/Logo.png"));
             dialog.setHeaderText(null);
-            dialog.setContentText("Convert to: ");
+            dialog.setContentText(LanguageManager.getInstance().getStringBinding("ConvertTo").get());
 
             Optional<String> result = dialog.showAndWait();
 
@@ -198,11 +199,11 @@ public class ResultTableController {
             choices.add("日本語");
             choices.add("中国人");
             ChoiceDialog<String> dialog = new ChoiceDialog<>("English", choices);
-            dialog.setTitle("Choose Language");
+            dialog.setTitle(LanguageManager.getInstance().getStringBinding("LanguageTitle").get());
             Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
             stage.getIcons().add(new Image("file:src/main/resources/com/netrunners/financialcalculator/assets/Logo.png"));
             dialog.setHeaderText(null);
-            dialog.setContentText("Choose your language:");
+            dialog.setContentText(LanguageManager.getInstance().getStringBinding("ChooseLanguage").get());
 
             Optional<String> result = dialog.showAndWait();
             if (result.isPresent()) {
@@ -244,6 +245,7 @@ public class ResultTableController {
         fileButton.textProperty().bind(languageManager.getStringBinding("fileButton"));
         aboutButton.textProperty().bind(languageManager.getStringBinding("aboutButton"));
         newButton.textProperty().bind(languageManager.getStringBinding("newButton"));
+        convertButton.textProperty().bind(languageManager.getStringBinding("ConvertTitle"));
     }
 
     public void updateTable(Deposit deposit) {
@@ -275,7 +277,7 @@ public class ResultTableController {
         List<Object[]> finalData = data;
         exportButton.setOnAction(event -> {
             FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Export result");
+            fileChooser.setTitle(LanguageManager.getInstance().getStringBinding("Export").get());
             File initialDirectory = new File("saves/");
             fileChooser.setInitialDirectory(initialDirectory);
             fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
@@ -296,7 +298,7 @@ public class ResultTableController {
         });
         saveAsButton.setOnAction(event -> {
             FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Save Data");
+            fileChooser.setTitle(LanguageManager.getInstance().getStringBinding("saveAsButton").get());
             File initialDirectory = new File("saves/");
             fileChooser.setInitialDirectory(initialDirectory);
             fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
@@ -326,7 +328,7 @@ public class ResultTableController {
             FileChooser fileChooser = new FileChooser();
             File initialDirectory = new File("saves/");
             fileChooser.setInitialDirectory(initialDirectory);
-            fileChooser.setTitle("Export result");
+            fileChooser.setTitle(LanguageManager.getInstance().getStringBinding("Export").get());
             fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
             fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
             File file = fileChooser.showSaveDialog(null);
@@ -347,7 +349,7 @@ public class ResultTableController {
             FileChooser fileChooser = new FileChooser();
             File initialDirectory = new File("saves/");
             fileChooser.setInitialDirectory(initialDirectory);
-            fileChooser.setTitle("Save Data");
+            fileChooser.setTitle(LanguageManager.getInstance().getStringBinding("saveAsButton").get());
             fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
             fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
             File file = fileChooser.showSaveDialog(null);
@@ -467,6 +469,7 @@ public class ResultTableController {
 
     private List<Object[]> countCreditWithoutHolidaysData(Credit credit) {
         DaystoNextPeriod.add(0);
+        DaystoNextPeriodWithHolidays.add(0);
         LocalDate tempDate = credit.getStartDate();
         List<Object[]> data = new ArrayList<>();
         int numbersColumnFlag = 0;
@@ -486,6 +489,7 @@ public class ResultTableController {
                 periodProfitLoanColumn.textProperty().bind(languageManager.getStringBinding("PaymentLoan"));
             } else {
                 DaystoNextPeriod.add(daysToNextPeriod);
+                DaystoNextPeriodWithHolidays.add(daysToNextPeriod);
                 for (int i = 0; i < daysToNextPeriod; i++) {
                     periodPercents += credit.countLoan();
                     creditBody += dailyBodyPart;
@@ -509,42 +513,52 @@ public class ResultTableController {
     }
 
     private void writeDataToCSV(List<Object[]> data, Deposit deposit, File file) {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
-            writer.println(deposit.getNameOfWithdrawalType() + ";" + investmentloanColumn.getText() + ";" + periodProfitLoanColumn.getText() + ";" + totalColumn.getText());
+        if(file!=null){
+            try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
+                writer.println(deposit.getNameOfWithdrawalType() + ";" + investmentloanColumn.getText() + ";" + periodProfitLoanColumn.getText() + ";" + totalColumn.getText());
 
-            for (Object[] row : data) {
-                writer.println(row[0] + ";" + row[1] + ";" + row[2] + ";" + row[3]);
-                writer.flush();
+                for (Object[] row : data) {
+                    writer.println(row[0] + ";" + row[1] + ";" + row[2] + ";" + row[3]);
+                    writer.flush();
+                }
+                writer.println("Annual percent of deposit: " + deposit.getAnnualPercent());
+                writer.println("Currency: " + deposit.getCurrency());
+                writer.println("Start date: " + deposit.getStartDate());
+                writer.println("End date: " + deposit.getEndDate());
+                if (deposit.isEarlyWithdrawal()) {
+                    writer.println("Early withdrawal date: " + deposit.getEarlyWithdrawalDate());
+                }
+            } catch (IOException e) {
+                LogHelper.log(Level.SEVERE, "Error while writing Deposit to CSV", e);
             }
-            writer.println("Annual percent of deposit: " + deposit.getAnnualPercent());
-            writer.println("Currency: " + deposit.getCurrency());
-            writer.println("Start date: " + deposit.getStartDate());
-            writer.println("End date: " + deposit.getEndDate());
-            if (deposit.isEarlyWithdrawal()) {
-                writer.println("Early withdrawal date: " + deposit.getEarlyWithdrawalDate());
-            }
-        } catch (IOException e) {
-            LogHelper.log(Level.SEVERE, "Error while writing Deposit to CSV", e);
+        }
+        else{
+            LogHelper.log(Level.SEVERE, "Error while writing Deposit to CSV", null);
         }
     }
 
     private void writeDataToCSV(List<Object[]> data, Credit credit, File file) {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
-            writer.println(credit.getNameOfPaymentType() + ";" + investmentloanColumn.getText() + ";" + periodProfitLoanColumn.getText() + ";" + totalColumn.getText() + ";" + periodPercentsColumn.getText());
-            for (Object[] row : data) {
-                writer.println(row[0] + ";" + row[1] + ";" + row[2] + ";" + row[3] + ";" + row[4]);
-                writer.flush();
+        if(file!=null){
+            try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
+                writer.println(credit.getNameOfPaymentType() + ";" + investmentloanColumn.getText() + ";" + periodProfitLoanColumn.getText() + ";" + totalColumn.getText() + ";" + periodPercentsColumn.getText());
+                for (Object[] row : data) {
+                    writer.println(row[0] + ";" + row[1] + ";" + row[2] + ";" + row[3] + ";" + row[4]);
+                    writer.flush();
+                }
+                writer.println("Annual percent of credit: " + credit.getAnnualPercent());
+                writer.println("Currency: " + credit.getCurrency());
+                writer.println("Start date: " + credit.getStartDate());
+                writer.println("End date: " + credit.getEndDate());
+                if (credit instanceof CreditWithHolidays) {
+                    writer.println("Holidays start date: " + ((CreditWithHolidays) credit).getHolidaysStart());
+                    writer.println("Holidays end date: " + ((CreditWithHolidays) credit).getHolidaysEnd());
+                }
+            } catch (IOException e) {
+                LogHelper.log(Level.SEVERE, "Error while writing Credit to CSV", e);
             }
-            writer.println("Annual percent of credit: " + credit.getAnnualPercent());
-            writer.println("Currency: " + credit.getCurrency());
-            writer.println("Start date: " + credit.getStartDate());
-            writer.println("End date: " + credit.getEndDate());
-            if (credit instanceof CreditWithHolidays) {
-                writer.println("Holidays start date: " + ((CreditWithHolidays) credit).getHolidaysStart());
-                writer.println("Holidays end date: " + ((CreditWithHolidays) credit).getHolidaysEnd());
-            }
-        } catch (IOException e) {
-            LogHelper.log(Level.SEVERE, "Error while writing Credit to CSV", e);
+        }
+        else{
+            LogHelper.log(Level.SEVERE, "Error while writing Credit to CSV", null);
         }
     }
 

@@ -2,6 +2,7 @@ package com.netrunners.financialcalculator.VisualInstruments;
 
 import com.netrunners.financialcalculator.LogicalInstrumnts.FileInstruments.LogHelper;
 import com.netrunners.financialcalculator.StartMenu;
+import com.netrunners.financialcalculator.VisualInstruments.MenuActions.LanguageManager;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -15,7 +16,7 @@ public class WindowsOpener{
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(StartMenu.class.getResource("DepositMenu.fxml"));
             Stage stage = new Stage();
-            stage.setTitle("Deposit Menu");
+            stage.setTitle(LanguageManager.getInstance().getStringBinding("DepositButton").get());
             Scene scene = new Scene(fxmlLoader.load());
             scene.getStylesheets().add(StartMenu.currentTheme);
             stage.setScene(scene);
@@ -35,7 +36,7 @@ public class WindowsOpener{
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(StartMenu.class.getResource("CreditMenu.fxml"));
             Stage stage = new Stage();
-            stage.setTitle("Credit Menu");
+            stage.setTitle(LanguageManager.getInstance().getStringBinding("CreditButton").get());
             Scene scene = new Scene(fxmlLoader.load());
             scene.getStylesheets().add(StartMenu.currentTheme);
             stage.setScene(scene);
