@@ -1,5 +1,6 @@
 package com.netrunners.financialcalculator.MenuControllers;
 
+import com.netrunners.financialcalculator.LogicalInstrumnts.CurrencyConverter.Converter;
 import com.netrunners.financialcalculator.LogicalInstrumnts.FileInstruments.LogHelper;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TimeFunctions.DateTimeFunctions;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Deposit.*;
@@ -27,10 +28,7 @@ import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
 import java.util.logging.Level;
 
 
@@ -106,15 +104,22 @@ public class ResultTableController {
     private Menu newButton;
     @FXML
     private Label financialCalculatorLabel;
+    @FXML
+    private Button convertButton;
+
     float loan;
-    float dailypart;
+    float dailyPart;
     private LanguageManager languageManager = LanguageManager.getInstance();
     List<Integer> DaystoNextPeriodWithHolidays = new ArrayList<>();
     List<Integer> DaystoNextPeriod = new ArrayList<>();
+    private String userSelectedCurrency;
+
+
     float tempinvest;
 
     @FXML
     void initialize() {
+        userSelectedCurrency = "$";
         openFileButton.setDisable(true);
         darkTheme.setOnAction(event -> ThemeSelector.setDarkTheme());
         lightTheme.setOnAction(event -> ThemeSelector.setLightTheme());
@@ -125,6 +130,62 @@ public class ResultTableController {
         exportButton.setOnAction(event -> {
 
         });
+        convertButton.setOnAction(event -> {
+            List<String> choices = new ArrayList<>();
+            choices.add("₴");
+            choices.add("$");
+            choices.add("£");
+            choices.add("€");
+
+            ChoiceDialog<String> dialog = new ChoiceDialog<>("-", choices);
+            dialog.setTitle("Convert to");
+            Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+            stage.getIcons().add(new Image("file:src/main/resources/com/netrunners/financialcalculator/assets/Logo.png"));
+            dialog.setHeaderText(null);
+            dialog.setContentText("Convert to: ");
+
+            Optional<String> result = dialog.showAndWait();
+
+
+            if (result.isPresent()) {
+                String selectedConvertCurrency = result.get();
+
+                float rate = Converter.getRateByCC(Converter.getCC(userSelectedCurrency)) / Converter.getRateByCC(Converter.getCC(selectedConvertCurrency));
+                System.out.println(rate);
+                ObservableList<Object[]> investmentLoanColumnItems = investmentloanColumn.getTableView().getItems();
+                ObservableList<Object[]> periodProfitLoanColumnItems = periodProfitLoanColumn.getTableView().getItems();
+                ObservableList<Object[]> totalColumnItems = totalColumn.getTableView().getItems();
+                for (Object[] item : investmentLoanColumnItems) {
+                    item[1] = extractFloatValue((String) item[1]) * rate;
+                    String newValue = String.format("%.2f", item[1]) + selectedConvertCurrency;
+                    item[1] = newValue;
+                }
+                for (Object[] item : periodProfitLoanColumnItems) {
+                    item[2] = extractFloatValue((String) item[2]) * rate;
+                    String newValue = String.format("%.2f", item[2]) + selectedConvertCurrency;
+                    item[2] = newValue;
+                }
+                for (Object[] item : totalColumnItems) {
+                    item[3] = extractFloatValue((String) item[3]) * rate;
+                    String newValue = String.format("%.2f", item[3]) + selectedConvertCurrency;
+                    item[3] = newValue;
+                }
+
+                if (periodPercentsColumn.isVisible()){
+                    ObservableList<Object[]> periodPercentsColumnItems = periodPercentsColumn.getTableView().getItems();
+                    for (Object[] item : periodPercentsColumnItems) {
+                        item[4] = extractFloatValue((String) item[4]) * rate;
+                        String newValue = String.format("%.2f", item[4]) + selectedConvertCurrency;
+                        item[4] = newValue;
+                    }
+                }
+
+
+
+
+                resultTable.refresh();
+            }
+            });
         languageButton.setOnAction(event -> {
             List<String> choices = new ArrayList<>();
             choices.add("English");
@@ -195,6 +256,7 @@ public class ResultTableController {
     }
 
     private void fillColumns(Credit credit) {
+        userSelectedCurrency = credit.getCurrency();
         resultTable.getColumns().clear();
         periodPercentsColumn.setVisible(true);
         periodColumn.setCellValueFactory(cellData -> cellData.getValue()[0] == null ? null : new SimpleObjectProperty<>((Integer) cellData.getValue()[0]));
@@ -250,6 +312,7 @@ public class ResultTableController {
     }
 
     private void fillColumns(Deposit deposit) {
+        userSelectedCurrency = deposit.getCurrency();
         resultTable.getColumns().clear();
         periodPercentsColumn.setVisible(false);
         periodColumn.setCellValueFactory(cellData -> cellData.getValue()[0] == null ? null : new SimpleObjectProperty<>((Integer) cellData.getValue()[0]));
@@ -361,7 +424,7 @@ public class ResultTableController {
         List<Object[]> data = new ArrayList<>();
         int numbersColumnFlag = 0;
         float dailyBodyPart = credit.countCreditBodyPerDay();
-        dailypart = credit.countCreditBodyPerDay();
+        dailyPart = credit.countCreditBodyPerDay();
         float tempLoan;
         loan = credit.getLoan();
         while (!tempDate.equals(credit.getEndDate())) {
@@ -405,12 +468,11 @@ public class ResultTableController {
 
     private List<Object[]> countCreditWithoutHolidaysData(Credit credit) {
         DaystoNextPeriod.add(0);
-        DaystoNextPeriodWithHolidays.add(0);
         LocalDate tempDate = credit.getStartDate();
         List<Object[]> data = new ArrayList<>();
         int numbersColumnFlag = 0;
         float dailyBodyPart = credit.countCreditBodyPerDay();
-        dailypart = credit.countCreditBodyPerDay();
+        dailyPart = credit.countCreditBodyPerDay();
         loan = credit.getLoan();
         float tempLoan;
         while (tempDate.isBefore(credit.getEndDate())) {
@@ -425,7 +487,6 @@ public class ResultTableController {
                 periodProfitLoanColumn.textProperty().bind(languageManager.getStringBinding("PaymentLoan"));
             } else {
                 DaystoNextPeriod.add(daysToNextPeriod);
-                DaystoNextPeriodWithHolidays.add(daysToNextPeriod);
                 for (int i = 0; i < daysToNextPeriod; i++) {
                     periodPercents += credit.countLoan();
                     creditBody += dailyBodyPart;
@@ -449,52 +510,43 @@ public class ResultTableController {
     }
 
     private void writeDataToCSV(List<Object[]> data, Deposit deposit, File file) {
-        if (file != null) {
-            try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
-                writer.println(deposit.getNameOfWithdrawalType() + ";" + investmentloanColumn.getText() + ";" + periodProfitLoanColumn.getText() + ";" + totalColumn.getText());
+        try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
+            writer.println(deposit.getNameOfWithdrawalType() + ";" + investmentloanColumn.getText() + ";" + periodProfitLoanColumn.getText() + ";" + totalColumn.getText());
 
-                for (Object[] row : data) {
-                    writer.println(row[0] + ";" + row[1] + ";" + row[2] + ";" + row[3]);
-                    writer.flush();
-                }
-                writer.println("Annual percent of deposit: " + deposit.getAnnualPercent());
-                writer.println("Currency: " + deposit.getCurrency());
-                writer.println("Start date: " + deposit.getStartDate());
-                writer.println("End date: " + deposit.getEndDate());
-                if (deposit.isEarlyWithdrawal()) {
-                    writer.println("Early withdrawal date: " + deposit.getEarlyWithdrawalDate());
-                }
-            } catch (IOException e) {
-                LogHelper.log(Level.SEVERE, "Error while writing Deposit to CSV", e);
+            for (Object[] row : data) {
+                writer.println(row[0] + ";" + row[1] + ";" + row[2] + ";" + row[3]);
+                writer.flush();
             }
-        } else {
-            LogHelper.log(Level.WARNING, "No file selected", null);
+            writer.println("Annual percent of deposit: " + deposit.getAnnualPercent());
+            writer.println("Currency: " + deposit.getCurrency());
+            writer.println("Start date: " + deposit.getStartDate());
+            writer.println("End date: " + deposit.getEndDate());
+            if (deposit.isEarlyWithdrawal()) {
+                writer.println("Early withdrawal date: " + deposit.getEarlyWithdrawalDate());
+            }
+        } catch (IOException e) {
+            LogHelper.log(Level.SEVERE, "Error while writing Deposit to CSV", e);
         }
     }
 
     private void writeDataToCSV(List<Object[]> data, Credit credit, File file) {
-        if (file != null) {
-            try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
-                writer.println(credit.getNameOfPaymentType() + ";" + investmentloanColumn.getText() + ";" + periodProfitLoanColumn.getText() + ";" + totalColumn.getText() + ";" + periodPercentsColumn.getText());
-                for (Object[] row : data) {
-                    writer.println(row[0] + ";" + row[1] + ";" + row[2] + ";" + row[3] + ";" + row[4]);
-                    writer.flush();
-                }
-                writer.println("Annual percent of credit: " + credit.getAnnualPercent());
-                writer.println("Currency: " + credit.getCurrency());
-                writer.println("Start date: " + credit.getStartDate());
-                writer.println("End date: " + credit.getEndDate());
-                if (credit instanceof CreditWithHolidays) {
-                    writer.println("Holidays start date: " + ((CreditWithHolidays) credit).getHolidaysStart());
-                    writer.println("Holidays end date: " + ((CreditWithHolidays) credit).getHolidaysEnd());
-                }
-            } catch (IOException e) {
-                LogHelper.log(Level.SEVERE, "Error while writing Credit to CSV", e);
+        try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
+            writer.println(credit.getNameOfPaymentType() + ";" + investmentloanColumn.getText() + ";" + periodProfitLoanColumn.getText() + ";" + totalColumn.getText() + ";" + periodPercentsColumn.getText());
+            for (Object[] row : data) {
+                writer.println(row[0] + ";" + row[1] + ";" + row[2] + ";" + row[3] + ";" + row[4]);
+                writer.flush();
             }
-        } else {
-            LogHelper.log(Level.WARNING, "No file selected", null);
+            writer.println("Annual percent of credit: " + credit.getAnnualPercent());
+            writer.println("Currency: " + credit.getCurrency());
+            writer.println("Start date: " + credit.getStartDate());
+            writer.println("End date: " + credit.getEndDate());
+            if (credit instanceof CreditWithHolidays) {
+                writer.println("Holidays start date: " + ((CreditWithHolidays) credit).getHolidaysStart());
+                writer.println("Holidays end date: " + ((CreditWithHolidays) credit).getHolidaysEnd());
+            }
+        } catch (IOException e) {
+            LogHelper.log(Level.SEVERE, "Error while writing Credit to CSV", e);
         }
-
     }
 
     public void writeDataToExcel(List<Object[]> data, Deposit deposit, File file) {
@@ -593,7 +645,7 @@ public class ResultTableController {
                     row.createCell(4).setCellFormula("B" + (i + 2) + "*(1/365)*" + "B" + (infoStartRow + 1) + "/100" + "*" + "G" + (i + 2));
                     if (i == data.size() - 1) {
                         row.createCell(2).setCellFormula("B" + (i + 2));
-                        row.createCell(3).setCellFormula("B" + (i + 2) + "-C" + (i + 2));
+                        row.createCell(3).setCellValue(0);
                     }
                 }
                 row.createCell(5).setCellValue(DaystoNextPeriod.get(i));
@@ -618,7 +670,7 @@ public class ResultTableController {
 
             row = sheet.createRow(infoStartRow + 4);
             row.createCell(0).setCellValue("Daily credit body part: ");
-            row.createCell(1).setCellValue(dailypart);
+            row.createCell(1).setCellValue(dailyPart);
 
             if (credit instanceof CreditWithHolidays) {
                 row = sheet.createRow(infoStartRow + 5);
@@ -635,7 +687,11 @@ public class ResultTableController {
         }
     }
 
-
+    private float extractFloatValue(String cellValue) {
+        String numericValue = cellValue.replace(',', '.');
+        numericValue = numericValue.substring(0, numericValue.length()-1);
+        return Float.parseFloat(numericValue);
+    }
 
 
 }
