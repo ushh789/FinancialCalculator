@@ -5,10 +5,7 @@ import com.netrunners.financialcalculator.LogicalInstrumnts.FileInstruments.LogH
 import com.netrunners.financialcalculator.LogicalInstrumnts.TimeFunctions.DateTimeFunctions;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Deposit.*;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Credit.*;
-import com.netrunners.financialcalculator.VisualInstruments.MenuActions.AboutUsAlert;
-import com.netrunners.financialcalculator.VisualInstruments.MenuActions.ExitApp;
-import com.netrunners.financialcalculator.VisualInstruments.MenuActions.LanguageManager;
-import com.netrunners.financialcalculator.VisualInstruments.MenuActions.ThemeSelector;
+import com.netrunners.financialcalculator.VisualInstruments.MenuActions.*;
 import com.netrunners.financialcalculator.VisualInstruments.WindowsOpener;
 
 import javafx.beans.property.SimpleObjectProperty;
@@ -288,6 +285,7 @@ public class ResultTableController {
             String formattedNow = now.format(formatter);
             File file = new File("saves/Credit_result_" + formattedNow + ".csv");
             writeDataToCSV(finalData, credit, file);
+            SavingAlert.showSavingAlert();
         });
         saveAsButton.setOnAction(event -> {
             FileChooser fileChooser = new FileChooser();
@@ -337,6 +335,7 @@ public class ResultTableController {
             String formattedNow = now.format(formatter);
             File file = new File("saves/Deposit_result_" + formattedNow + ".csv");
             writeDataToCSV(data, deposit, file);
+            SavingAlert.showSavingAlert();
         });
         saveAsButton.setOnAction(event -> {
             FileChooser fileChooser = new FileChooser();

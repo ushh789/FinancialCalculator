@@ -16,7 +16,7 @@ public class WindowsOpener{
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(StartMenu.class.getResource("DepositMenu.fxml"));
             Stage stage = new Stage();
-            stage.setTitle(LanguageManager.getInstance().getStringBinding("DepositButton").get());
+            stage.titleProperty().bind(LanguageManager.getInstance().getStringBinding("DepositButton"));
             Scene scene = new Scene(fxmlLoader.load());
             scene.getStylesheets().add(StartMenu.currentTheme);
             stage.setScene(scene);
@@ -36,7 +36,7 @@ public class WindowsOpener{
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(StartMenu.class.getResource("CreditMenu.fxml"));
             Stage stage = new Stage();
-            stage.setTitle(LanguageManager.getInstance().getStringBinding("CreditButton").get());
+            stage.titleProperty().bind(LanguageManager.getInstance().getStringBinding("CreditButton"));
             Scene scene = new Scene(fxmlLoader.load());
             scene.getStylesheets().add(StartMenu.currentTheme);
             stage.setScene(scene);
