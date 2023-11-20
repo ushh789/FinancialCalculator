@@ -124,6 +124,9 @@ public class ResultTableController {
         exitApp.setOnAction(event -> ExitApp.exitApp());
         depositButtonMenu.setOnAction(event -> WindowsOpener.depositOpener());
         creditButtonMenu.setOnAction(event -> WindowsOpener.creditOpener());
+        exportButton.setOnAction(event -> {
+
+        });
         languageButton.setOnAction(event -> {
             List<String> choices = new ArrayList<>();
             choices.add("English");
@@ -633,6 +636,8 @@ public class ResultTableController {
             LogHelper.log(Level.SEVERE, "Error while writing Deposit to Excel", e);
         }
     }
+
+
 
 
 }
