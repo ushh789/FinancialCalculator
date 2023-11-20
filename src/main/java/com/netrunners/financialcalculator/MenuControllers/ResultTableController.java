@@ -119,7 +119,6 @@ public class ResultTableController {
 
     @FXML
     void initialize() {
-        userSelectedCurrency = "$";
         openFileButton.setDisable(true);
         currency.setDisable(true);
         darkTheme.setOnAction(event -> ThemeSelector.setDarkTheme());
@@ -146,11 +145,8 @@ public class ResultTableController {
             dialog.setContentText(LanguageManager.getInstance().getStringBinding("ConvertTo").get());
 
             Optional<String> result = dialog.showAndWait();
-
-
             if (result.isPresent()) {
                 String selectedConvertCurrency = result.get();
-
                 float rate = Converter.getRateByCC(Converter.getCC(userSelectedCurrency)) / Converter.getRateByCC(Converter.getCC(selectedConvertCurrency));
                 ObservableList<Object[]> investmentLoanColumnItems = investmentloanColumn.getTableView().getItems();
                 ObservableList<Object[]> periodProfitLoanColumnItems = periodProfitLoanColumn.getTableView().getItems();
@@ -171,7 +167,7 @@ public class ResultTableController {
                     item[3] = newValue;
                 }
 
-                if (periodPercentsColumn.isVisible()){
+                if (periodPercentsColumn.isVisible()) {
                     ObservableList<Object[]> periodPercentsColumnItems = periodPercentsColumn.getTableView().getItems();
                     for (Object[] item : periodPercentsColumnItems) {
                         item[4] = extractFloatValue((String) item[4]) * rate;
@@ -179,13 +175,10 @@ public class ResultTableController {
                         item[4] = newValue;
                     }
                 }
-
-
-
-
+                userSelectedCurrency = selectedConvertCurrency;
                 resultTable.refresh();
             }
-            });
+        });
         languageButton.setOnAction(event -> {
             List<String> choices = new ArrayList<>();
             choices.add("English");
@@ -702,7 +695,7 @@ public class ResultTableController {
 
     private float extractFloatValue(String cellValue) {
         String numericValue = cellValue.replace(',', '.');
-        numericValue = numericValue.substring(0, numericValue.length()-1);
+        numericValue = numericValue.substring(0, numericValue.length() - 1);
         return Float.parseFloat(numericValue);
     }
 
