@@ -10,7 +10,9 @@ import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpea
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Deposit.Deposit;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Deposit.UncapitalisedDeposit;
 import com.netrunners.financialcalculator.VisualInstruments.MenuActions.LanguageManager;
+import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 
 import java.io.File;
@@ -28,7 +30,7 @@ public class OpenFile {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json"));
         File initialDirectory = new File("saves/");
         fileChooser.setInitialDirectory(initialDirectory);
-        File selectedFile = fileChooser.showOpenDialog(startMenuScene.getWindow());
+        File selectedFile = fileChooser.showOpenDialog(null);
         if (selectedFile != null) {
             try (FileReader reader = new FileReader(selectedFile)) {
                 Gson gson = new Gson();

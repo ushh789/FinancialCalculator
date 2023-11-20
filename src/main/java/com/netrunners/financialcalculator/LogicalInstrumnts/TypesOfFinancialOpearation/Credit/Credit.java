@@ -62,7 +62,7 @@ public class Credit implements Savable {
         String json = gson.toJson(jsonObject);
 
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Save Data");
+        fileChooser.setTitle(LanguageManager.getInstance().getStringBinding("saveButton").get());
         File initialDirectory = new File("saves/");
         fileChooser.setInitialDirectory(initialDirectory);
         fileChooser.getExtensionFilters().addAll(
@@ -86,7 +86,7 @@ public class Credit implements Savable {
             resultTableController.updateTable(this);
 
             Stage stage = new Stage();
-            stage.setTitle("Result");
+            stage.setTitle(LanguageManager.getInstance().getStringBinding("ResultTableLabel").get());
             Scene scene = new Scene(root);
             scene.getStylesheets().add(StartMenu.currentTheme);
             stage.setScene(scene);

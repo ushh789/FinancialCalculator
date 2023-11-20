@@ -124,10 +124,11 @@ public class DepositMenuController implements CurrencyController {
 
     @FXML
     void initialize() {
-        System.out.println(CurrencyManager.getInstance().getCurrency());
         DatePickerRestrictions.setDatePickerRestrictionsWithdrawalHolidays(depositContractBeginning, depositContractEnding, depositWithdrawalDate);
         depositWithdrawalDate.setVisible(false);
         depositWithdrawalDate.setDisable(true);
+        saveButton.setDisable(true);
+        saveAsButton.setDisable(true);
         closeWindow.setOnAction(event -> closeCurrentWindow(closeWindow.getScene()));
         depositEarlyWithdrawalCheck.setOnAction(event -> {
             if (depositEarlyWithdrawalCheck.isSelected()) {

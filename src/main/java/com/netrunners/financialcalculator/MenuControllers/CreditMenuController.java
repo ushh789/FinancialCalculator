@@ -122,12 +122,13 @@ public class CreditMenuController implements CurrencyController {
 
     @FXML
     void initialize() {
-        System.out.println(CurrencyManager.getInstance().getCurrency());
         DatePickerRestrictions.setDatePickerRestrictionsHolidays(contractBeginning, contractEnding, holidaysBeginning, holidaysEnding);
         holidaysBeginning.setVisible(false);
         holidaysBeginning.setDisable(true);
         holidaysEnding.setVisible(false);
         holidaysEnding.setDisable(true);
+        saveButton.setDisable(true);
+        saveAsButton.setDisable(true);
         checkPaymentHolidays.setOnAction(event -> {
             if (checkPaymentHolidays.isSelected()) {
                 holidaysBeginning.setVisible(true);
