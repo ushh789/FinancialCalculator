@@ -119,15 +119,13 @@ public class DepositMenuController implements CurrencyController {
     @FXML
     private Menu viewButton;
 
-    private String userSelectedCurrency;
-
     private LanguageManager languageManager = LanguageManager.getInstance();
 
 
     @FXML
     void initialize() {
+        System.out.println(CurrencyManager.getInstance().getCurrency());
         DatePickerRestrictions.setDatePickerRestrictionsWithdrawalHolidays(depositContractBeginning, depositContractEnding, depositWithdrawalDate);
-        userSelectedCurrency = "$";
         depositWithdrawalDate.setVisible(false);
         depositWithdrawalDate.setDisable(true);
         closeWindow.setOnAction(event -> closeCurrentWindow(closeWindow.getScene()));
@@ -145,7 +143,6 @@ public class DepositMenuController implements CurrencyController {
             depositWithdrawalOption.setText(WithdrawalOption1.getText());
             depositWithdrawalOption.textProperty().bind(languageManager.getStringBinding("Option1"));
         } );
-//
         WithdrawalOption2.setOnAction(event -> {
             depositWithdrawalOption.textProperty().unbind();
             depositWithdrawalOption.setText(WithdrawalOption2.getText());
@@ -252,7 +249,7 @@ public class DepositMenuController implements CurrencyController {
             if (ErrorChecker.areFieldsValidInDeposit(investInput, depositAnnualPercentInput, depositWithdrawalOption, depositContractBeginning, depositContractEnding, depositWithdrawalDate, depositEarlyWithdrawalCheck)) {
                 float investment = Float.parseFloat(investInput.getText());
                 float annualPercent = Float.parseFloat(depositAnnualPercentInput.getText());
-                String depositCurrency = userSelectedCurrency;
+                String depositCurrency = CurrencyManager.getInstance().getCurrency();
                 int withdrawalOptionSelected = languageManager.checkOption(depositWithdrawalOption.getText());
 
                 LocalDate contractStartDate = depositContractBeginning.getValue();
@@ -283,7 +280,7 @@ public class DepositMenuController implements CurrencyController {
             if (ErrorChecker.areFieldsValidInDeposit(investInput, depositAnnualPercentInput, depositWithdrawalOption, depositContractBeginning, depositContractEnding, depositWithdrawalDate, depositEarlyWithdrawalCheck)) {
                 float investment = Float.parseFloat(investInput.getText());
                 float annualPercent = Float.parseFloat(depositAnnualPercentInput.getText());
-                String depositCurrency = userSelectedCurrency;
+                String depositCurrency = CurrencyManager.getInstance().getCurrency();
                 int withdrawalOptionSelected = languageManager.checkOption(depositWithdrawalOption.getText());
                 LocalDate contractStartDate = depositContractBeginning.getValue();
                 LocalDate contractEndDate = depositContractEnding.getValue();
@@ -309,8 +306,6 @@ public class DepositMenuController implements CurrencyController {
                 }
             }
         });
-
-
     }
 
 
@@ -324,15 +319,21 @@ public class DepositMenuController implements CurrencyController {
         choices.add("£");
         choices.add("€");
 
-        ChoiceDialog<String> dialog = new ChoiceDialog<>("₴", choices);
+        CurrencyManager currencyManager = CurrencyManager.getInstance();
+        String defaultCurrency = currencyManager.getCurrency();
+
+        ChoiceDialog<String> dialog = new ChoiceDialog<>(defaultCurrency, choices);
         dialog.setTitle("Choose Currency");
         Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
         stage.getIcons().add(new Image("file:src/main/resources/com/netrunners/financialcalculator/assets/Logo.png"));
         dialog.setHeaderText(null);
         dialog.setContentText("Choose your currency:");
 
-        dialog.showAndWait();
-        userSelectedCurrency = dialog.getSelectedItem();
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()) {
+            String selectedCurrency = result.get();
+            currencyManager.changeCurrency(selectedCurrency);
+        }
     }
 }
 

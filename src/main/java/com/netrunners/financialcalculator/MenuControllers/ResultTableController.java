@@ -111,8 +111,6 @@ public class ResultTableController {
     private LanguageManager languageManager = LanguageManager.getInstance();
     List<Integer> DaystoNextPeriodWithHolidays = new ArrayList<>();
     List<Integer> DaystoNextPeriod = new ArrayList<>();
-
-
     float tempinvest;
 
     @FXML

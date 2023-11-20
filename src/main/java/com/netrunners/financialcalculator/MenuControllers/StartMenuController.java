@@ -74,15 +74,14 @@ public class StartMenuController implements LanguageUpdater, CurrencyController 
 
     @FXML
     private Label financialCalculatorLabel;
-    private String userSelectedCurrency;
 
     private LanguageManager languageManager = LanguageManager.getInstance();
 
 
     @FXML
     void initialize() {
-        //Зберігати мову при закритті програми
-        userSelectedCurrency = "$";
+        //Sout Current currency
+        System.out.println(CurrencyManager.getInstance().getCurrency());
         saveButton.setDisable(true);
         saveAsButton.setDisable(true);
         DepositButton.setOnAction(event -> WindowsOpener.depositOpener());
@@ -165,15 +164,21 @@ public class StartMenuController implements LanguageUpdater, CurrencyController 
         choices.add("£");
         choices.add("€");
 
-        ChoiceDialog<String> dialog = new ChoiceDialog<>("₴", choices);
+        CurrencyManager currencyManager = CurrencyManager.getInstance();
+        String defaultCurrency = currencyManager.getCurrency();
+
+        ChoiceDialog<String> dialog = new ChoiceDialog<>(defaultCurrency, choices);
         dialog.setTitle("Choose Currency");
         Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
         stage.getIcons().add(new Image("file:src/main/resources/com/netrunners/financialcalculator/assets/Logo.png"));
         dialog.setHeaderText(null);
         dialog.setContentText("Choose your currency:");
 
-        dialog.showAndWait();
-        userSelectedCurrency = dialog.getSelectedItem();
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()) {
+            String selectedCurrency = result.get();
+            currencyManager.changeCurrency(selectedCurrency);
+        }
     }
 }
 
