@@ -151,7 +151,6 @@ public class ResultTableController {
                 String selectedConvertCurrency = result.get();
 
                 float rate = Converter.getRateByCC(Converter.getCC(userSelectedCurrency)) / Converter.getRateByCC(Converter.getCC(selectedConvertCurrency));
-                System.out.println(rate);
                 ObservableList<Object[]> investmentLoanColumnItems = investmentloanColumn.getTableView().getItems();
                 ObservableList<Object[]> periodProfitLoanColumnItems = periodProfitLoanColumn.getTableView().getItems();
                 ObservableList<Object[]> totalColumnItems = totalColumn.getTableView().getItems();
