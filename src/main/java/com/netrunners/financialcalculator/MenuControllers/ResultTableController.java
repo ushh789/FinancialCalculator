@@ -148,10 +148,16 @@ public class ResultTableController {
                 ObservableList<Object[]> investmentLoanColumnItems = investmentloanColumn.getTableView().getItems();
                 ObservableList<Object[]> periodProfitLoanColumnItems = periodProfitLoanColumn.getTableView().getItems();
                 ObservableList<Object[]> totalColumnItems = totalColumn.getTableView().getItems();
+
                 for (Object[] item : investmentLoanColumnItems) {
                     item[1] = extractFloatValue((String) item[1]) * rate;
                     String newValue = String.format("%.2f", item[1]) + selectedConvertCurrency;
                     item[1] = newValue;
+                    if(!investmentLoanColumnItems.isEmpty()) {
+                        if(loan==0){tempinvest = extractFloatValue((String) investmentLoanColumnItems.get(0)[1]);}
+                        else{ loan = extractFloatValue((String) investmentLoanColumnItems.get(0)[1]);}
+
+                    }
                 }
                 for (Object[] item : periodProfitLoanColumnItems) {
                     item[2] = extractFloatValue((String) item[2]) * rate;
@@ -280,6 +286,8 @@ public class ResultTableController {
             }
         });
         saveButton.setOnAction(event -> {
+            System.out.println(loan);
+            System.out.println(tempinvest);
             LocalDateTime now = LocalDateTime.now();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
             String formattedNow = now.format(formatter);
@@ -601,7 +609,7 @@ public class ResultTableController {
 
             row = sheet.createRow(infoStartRow + 1);
             row.createCell(0).setCellValue("Currency: ");
-            row.createCell(1).setCellValue(deposit.getCurrency());
+            row.createCell(1).setCellValue(userSelectedCurrency);
 
             row = sheet.createRow(infoStartRow + 2);
             row.createCell(0).setCellValue("Start date: ");
@@ -625,6 +633,9 @@ public class ResultTableController {
 
     public void writeDataToExcel(List<Object[]> data, Credit credit, File file) {
         try (Workbook workbook = new XSSFWorkbook(); FileOutputStream fileOut = new FileOutputStream(file)) {
+            for(int f = 0; f < data.size(); f++){
+                //System.out.println(data.get(f)[0] + " " + data.get(f)[1] + " " + data.get(f)[2] + " " + data.get(f)[3] + " " + data.get(f)[4]);
+            }
             int infoStartRow = data.size() + 2;
             Sheet sheet = workbook.createSheet("Credit Data");
             Row headerRow = sheet.createRow(0);
@@ -638,6 +649,7 @@ public class ResultTableController {
             for (int i = 0; i < data.size(); i++) {
                 Row row = sheet.createRow(i + 1);
                 row.createCell(0).setCellValue((int) data.get(i)[0]);
+                //System.out.println(data.get(i)[1] + " " + data.get(i)[2] + " " + data.get(i)[3] + " " + data.get(i)[4]);
                 if (i == 0) {
                     row.createCell(1).setCellValue(loan);
                     row.createCell(2).setCellFormula("B" + (i + 2) + "*(1/365)*" + "B" + (infoStartRow + 1) + "/100" + "*" + "F" + (i + 2));
@@ -663,7 +675,7 @@ public class ResultTableController {
 
             row = sheet.createRow(infoStartRow + 1);
             row.createCell(0).setCellValue("Currency: ");
-            row.createCell(1).setCellValue(credit.getCurrency());
+            row.createCell(1).setCellValue(userSelectedCurrency);
 
             row = sheet.createRow(infoStartRow + 2);
             row.createCell(0).setCellValue("Start date: ");
