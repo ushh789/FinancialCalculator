@@ -10,9 +10,7 @@ import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpea
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Deposit.Deposit;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Deposit.UncapitalisedDeposit;
 import com.netrunners.financialcalculator.VisualInstruments.MenuActions.LanguageManager;
-import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
 
 import java.io.File;
@@ -21,7 +19,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.logging.Level;
 
-import static com.netrunners.financialcalculator.StartMenu.startMenuScene;
 public class OpenFile {
 
     public static void openFromSave() {
