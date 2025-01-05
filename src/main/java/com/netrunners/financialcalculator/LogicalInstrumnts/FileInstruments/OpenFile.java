@@ -37,11 +37,11 @@ public class OpenFile {
                 switch (operationType) {
                     case "Credit" -> {
                         Credit credit = createCredit(jsonObject);
-                        credit.sendCreditToResultTable();
+                        credit.sendToResultTable();
                     }
                     case "Deposit" -> {
                         Deposit deposit = createDeposit(jsonObject);
-                        deposit.sendDepositToResultTable();
+                        deposit.sendToResultTable();
                     }
                     default ->  LogHelper.log(Level.WARNING, "Can't open file with operation type: " + operationType, null);
                 }

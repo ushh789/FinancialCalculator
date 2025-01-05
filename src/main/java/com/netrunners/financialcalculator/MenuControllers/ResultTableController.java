@@ -5,6 +5,7 @@ import com.netrunners.financialcalculator.LogicalInstrumnts.FileInstruments.LogH
 import com.netrunners.financialcalculator.LogicalInstrumnts.TimeFunctions.DateTimeFunctions;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Deposit.*;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Credit.*;
+import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.ResultTableSender;
 import com.netrunners.financialcalculator.VisualInstruments.MenuActions.*;
 import com.netrunners.financialcalculator.VisualInstruments.WindowsOpener;
 
@@ -244,12 +245,12 @@ public class ResultTableController {
         convertButton.textProperty().bind(languageManager.getStringBinding("ConvertTitle"));
     }
 
-    public void updateTable(Deposit deposit) {
-        fillColumns(deposit);
-    }
-
-    public void updateTable(Credit credit) {
-        fillColumns(credit);
+    public void updateTable(ResultTableSender financialOperation) {
+        if (financialOperation instanceof Credit) {
+            fillColumns((Credit) financialOperation);
+        } else if (financialOperation instanceof Deposit) {
+            fillColumns((Deposit) financialOperation);
+        }
     }
 
     private void fillColumns(Credit credit) {

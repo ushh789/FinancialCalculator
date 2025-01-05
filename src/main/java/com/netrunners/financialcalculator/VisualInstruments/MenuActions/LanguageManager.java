@@ -7,11 +7,13 @@ import java.util.ResourceBundle;
 
 import javafx.beans.binding.StringBinding;
 
+import static com.netrunners.financialcalculator.VisualInstruments.MenuActions.FileConstants.MESSAGES_PATH;
+import static com.netrunners.financialcalculator.VisualInstruments.MenuActions.FileConstants.PROPERTIES_FILE;
+
 public class LanguageManager {
     private static LanguageManager instance;
     private ObservableResourceFactory resourceFactory;
     private Properties properties;
-    private static final String PROPERTIES_FILE = "config.properties";
 
 
     private LanguageManager() {
@@ -33,9 +35,9 @@ public class LanguageManager {
         try (InputStream input = new FileInputStream(PROPERTIES_FILE)) {
             properties.load(input);
             if (properties.getProperty("language") != null) {
-                resourceFactory.setResources(ResourceBundle.getBundle("com/netrunners/financialcalculator/assets/messages", new Locale(properties.getProperty("language"))));
+                resourceFactory.setResources(ResourceBundle.getBundle(MESSAGES_PATH, new Locale(properties.getProperty("language"))));
             } else {
-                resourceFactory.setResources(ResourceBundle.getBundle("com/netrunners/financialcalculator/assets/messages", new Locale("en")));
+                resourceFactory.setResources(ResourceBundle.getBundle(MESSAGES_PATH, new Locale("en")));
             }
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -52,7 +54,7 @@ public class LanguageManager {
     }
 
     public void changeLanguage(Locale locale) {
-        resourceFactory.setResources(ResourceBundle.getBundle("com/netrunners/financialcalculator/assets/messages", locale));
+        resourceFactory.setResources(ResourceBundle.getBundle(MESSAGES_PATH, locale));
     }
 
     public StringBinding getStringBinding(String key) {

@@ -18,7 +18,7 @@ import javafx.stage.Stage;
 
 import static com.netrunners.financialcalculator.MenuControllers.closeWindow.closeCurrentWindow;
 
-public class CreditMenuController implements CurrencyController {
+public class CreditMenuController{
     @FXML
     private MenuItem PaymentOption1;
 
@@ -163,7 +163,7 @@ public class CreditMenuController implements CurrencyController {
             paymentOption.textProperty().bind(languageManager.getStringBinding("Option4"));
         });
 
-        closeWindow.setOnAction(event -> closeCurrentWindow(closeWindow.getScene()));
+        closeWindow.setOnAction(event -> ExitApp.closeCurrentWindow(closeWindow.getScene()));
         darkTheme.setOnAction(event -> ThemeSelector.setDarkTheme());
         lightTheme.setOnAction(event -> ThemeSelector.setLightTheme());
         aboutUs.setOnAction(event -> AboutUsAlert.showAboutUs());
@@ -171,7 +171,7 @@ public class CreditMenuController implements CurrencyController {
         depositButtonMenu.setOnAction(event -> WindowsOpener.depositOpener());
         creditButtonMenu.setOnAction(event -> WindowsOpener.creditOpener());
         openFileButton.setOnAction(event -> OpenFile.openFromSave());
-        currency.setOnAction(event -> handleCurrencySelection());
+        currency.setOnAction(event -> CurrencyManager.handleCurrencySelection());
 
 
         languageButton.setOnAction(event -> {
@@ -279,39 +279,13 @@ public class CreditMenuController implements CurrencyController {
                     LocalDate holidaysStartDate = holidaysBeginning.getValue();
                     LocalDate holidaysEndDate = holidaysEnding.getValue();
                     Credit credit = new CreditWithHolidays(creditLoan, creditCurrency, creditAnnualPercent, contractStartDate, contractEndDate, paymentOptionSelected, holidaysStartDate, holidaysEndDate);
-                    credit.sendCreditToResultTable();
+                    credit.sendToResultTable();
                 } else {
                     Credit credit = new CreditWithoutHolidays(creditLoan, creditCurrency, creditAnnualPercent, contractStartDate, contractEndDate, paymentOptionSelected);
-                    credit.sendCreditToResultTable();
+                    credit.sendToResultTable();
                 }
             }
         });
-    }
-
-
-    @Override
-    public void handleCurrencySelection() {
-        List<String> choices = new ArrayList<>();
-        choices.add("₴");
-        choices.add("$");
-        choices.add("£");
-        choices.add("€");
-
-        CurrencyManager currencyManager = CurrencyManager.getInstance();
-        String defaultCurrency = currencyManager.getCurrency();
-
-        ChoiceDialog<String> dialog = new ChoiceDialog<>(defaultCurrency, choices);
-        dialog.setTitle(LanguageManager.getInstance().getStringBinding("CurrencyTitle").get());
-        Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
-        stage.getIcons().add(new Image("file:src/main/resources/com/netrunners/financialcalculator/assets/Logo.png"));
-        dialog.setHeaderText(null);
-        dialog.setContentText(LanguageManager.getInstance().getStringBinding("ChooseCurrency").get());
-
-        Optional<String> result = dialog.showAndWait();
-        if (result.isPresent()) {
-            String selectedCurrency = result.get();
-            currencyManager.changeCurrency(selectedCurrency);
-        }
     }
 }
 

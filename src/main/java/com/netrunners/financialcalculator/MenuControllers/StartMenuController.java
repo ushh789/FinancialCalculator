@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 import java.util.*;
 import java.util.List;
 
-public class StartMenuController implements LanguageUpdater, CurrencyController {
+public class StartMenuController implements LanguageUpdater {
 
     @FXML
     private Button CreditButton;
@@ -90,7 +90,7 @@ public class StartMenuController implements LanguageUpdater, CurrencyController 
         lightTheme.setOnAction(event -> ThemeSelector.setLightTheme());
         aboutUs.setOnAction(event -> AboutUsAlert.showAboutUs());
         exitApp.setOnAction(event -> ExitApp.exitApp());
-        currency.setOnAction(event -> handleCurrencySelection());
+        currency.setOnAction(event -> CurrencyManager.handleCurrencySelection());
         openFileButton.setOnAction(event -> OpenFile.openFromSave());
         languageButton.setOnAction(event -> {
             List<String> choices = new ArrayList<>();
@@ -152,31 +152,5 @@ public class StartMenuController implements LanguageUpdater, CurrencyController 
         financialCalculatorLabel.textProperty().bind(languageManager.getStringBinding("financialCalculatorLabel"));
     }
 
-
-
-    @Override
-    public void handleCurrencySelection() {
-        List<String> choices = new ArrayList<>();
-        choices.add("₴");
-        choices.add("$");
-        choices.add("£");
-        choices.add("€");
-
-        CurrencyManager currencyManager = CurrencyManager.getInstance();
-        String defaultCurrency = currencyManager.getCurrency();
-
-        ChoiceDialog<String> dialog = new ChoiceDialog<>(defaultCurrency, choices);
-        dialog.setTitle(LanguageManager.getInstance().getStringBinding("CurrencyTitle").get());
-        Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
-        stage.getIcons().add(new Image("file:src/main/resources/com/netrunners/financialcalculator/assets/Logo.png"));
-        dialog.setHeaderText(null);
-        dialog.setContentText(LanguageManager.getInstance().getStringBinding("ChooseCurrency").get());
-
-        Optional<String> result = dialog.showAndWait();
-        if (result.isPresent()) {
-            String selectedCurrency = result.get();
-            currencyManager.changeCurrency(selectedCurrency);
-        }
-    }
 }
 

@@ -1,7 +1,5 @@
 package com.netrunners.financialcalculator.MenuControllers;
 
-import static com.netrunners.financialcalculator.MenuControllers.closeWindow.closeCurrentWindow;
-
 import java.time.LocalDate;
 import java.util.*;
 
@@ -18,7 +16,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-public class DepositMenuController implements CurrencyController {
+public class DepositMenuController{
 
     @FXML
     private MenuItem WithdrawalOption1;
@@ -129,7 +127,7 @@ public class DepositMenuController implements CurrencyController {
         depositWithdrawalDate.setDisable(true);
         saveButton.setDisable(true);
         saveAsButton.setDisable(true);
-        closeWindow.setOnAction(event -> closeCurrentWindow(closeWindow.getScene()));
+        closeWindow.setOnAction(event -> ExitApp.closeCurrentWindow(closeWindow.getScene()));
         depositEarlyWithdrawalCheck.setOnAction(event -> {
             if (depositEarlyWithdrawalCheck.isSelected()) {
                 depositWithdrawalDate.setVisible(true);
@@ -170,7 +168,7 @@ public class DepositMenuController implements CurrencyController {
         depositButtonMenu.setOnAction(event -> WindowsOpener.depositOpener());
         creditButtonMenu.setOnAction(event -> WindowsOpener.creditOpener());
         openFileButton.setOnAction(event -> OpenFile.openFromSave());
-        currency.setOnAction(event -> handleCurrencySelection());
+        currency.setOnAction(event -> CurrencyManager.handleCurrencySelection());
 
         languageButton.setOnAction(event -> {
             List<String> choices = new ArrayList<>();
@@ -291,50 +289,22 @@ public class DepositMenuController implements CurrencyController {
                 if (depositCapitalizationCheck.isSelected()) {
                     if (depositEarlyWithdrawalCheck.isSelected()) {
                         Deposit deposit = new CapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate, earlyWithdrawalOption, earlyWithdrawal, withdrawalOptionSelected);
-                        deposit.sendDepositToResultTable();
+                        deposit.sendToResultTable();
                     } else {
                         Deposit deposit = new CapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate, earlyWithdrawalOption, withdrawalOptionSelected);
-                        deposit.sendDepositToResultTable();
+                        deposit.sendToResultTable();
                     }
                 } else {
                     if (depositEarlyWithdrawalCheck.isSelected()) {
                         Deposit deposit = new UncapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate, earlyWithdrawalOption, earlyWithdrawal, withdrawalOptionSelected);
-                        deposit.sendDepositToResultTable();
+                        deposit.sendToResultTable();
                     } else {
                         Deposit deposit = new UncapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate, earlyWithdrawalOption, withdrawalOptionSelected);
-                        deposit.sendDepositToResultTable();
+                        deposit.sendToResultTable();
                     }
                 }
             }
         });
-    }
-
-
-
-
-    @Override
-    public void handleCurrencySelection() {
-        List<String> choices = new ArrayList<>();
-        choices.add("₴");
-        choices.add("$");
-        choices.add("£");
-        choices.add("€");
-
-        CurrencyManager currencyManager = CurrencyManager.getInstance();
-        String defaultCurrency = currencyManager.getCurrency();
-
-        ChoiceDialog<String> dialog = new ChoiceDialog<>(defaultCurrency, choices);
-        dialog.setTitle(LanguageManager.getInstance().getStringBinding("CurrencyTitle").get());
-        Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
-        stage.getIcons().add(new Image("file:src/main/resources/com/netrunners/financialcalculator/assets/Logo.png"));
-        dialog.setHeaderText(null);
-        dialog.setContentText(LanguageManager.getInstance().getStringBinding("ChooseCurrency").get());
-
-        Optional<String> result = dialog.showAndWait();
-        if (result.isPresent()) {
-            String selectedCurrency = result.get();
-            currencyManager.changeCurrency(selectedCurrency);
-        }
     }
 }
 

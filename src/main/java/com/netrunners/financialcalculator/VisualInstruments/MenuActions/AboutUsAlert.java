@@ -9,7 +9,7 @@ public class AboutUsAlert {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("About our application");
         Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-        stage.getIcons().add(new Image("file:src/main/resources/com/netrunners/financialcalculator/assets/Logo.png"));
+        stage.getIcons().add(new Image(FileConstants.LOGO));
         alert.setHeaderText(null);
         alert.setContentText("""
                     Title: Financial Calculator by Netrunners

@@ -6,6 +6,8 @@ import javafx.scene.control.DatePicker;
 import javafx.util.Callback;
 import java.time.LocalDate;
 
+import static com.netrunners.financialcalculator.VisualInstruments.MenuActions.FileConstants.DARK_THEME;
+
 public class DatePickerRestrictions {
 
     public static void setDatePickerRestrictionsWithdrawalHolidays(DatePicker start, DatePicker end, DatePicker newDate) {
@@ -20,7 +22,7 @@ public class DatePickerRestrictions {
 
                                 if (end.getValue() != null && item.isAfter(end.getValue().minusDays(1))) {
                                     setDisable(true);
-                                    if (StartMenu.currentTheme.equals("file:src/main/resources/com/netrunners/financialcalculator/assets/darkTheme.css")) {
+                                    if (StartMenu.getCurrentTheme().equals(DARK_THEME)) {
                                         setStyle("-fx-background-color: gray;");
                                     } else {
                                         setStyle("-fx-background-color: dimgray;-fx-text-fill: white;");
@@ -44,7 +46,7 @@ public class DatePickerRestrictions {
 
                                 if (start.getValue() != null && item.isBefore(start.getValue().plusDays(1))) {
                                     setDisable(true);
-                                    if (StartMenu.currentTheme.equals("file:src/main/resources/com/netrunners/financialcalculator/assets/darkTheme.css")) {
+                                    if (StartMenu.getCurrentTheme().equals(DARK_THEME)) {
                                         setStyle("-fx-background-color: gray;");
                                     } else {
                                         setStyle("-fx-background-color: dimgray;-fx-text-fill: white;");
@@ -82,7 +84,7 @@ public class DatePickerRestrictions {
                                 if ((start.getValue() != null && item.isBefore(start.getValue())) ||
                                         (end.getValue() != null && item.isAfter(end.getValue()))) {
                                     setDisable(true);
-                                    if (StartMenu.currentTheme.equals("file:src/main/resources/com/netrunners/financialcalculator/assets/darkTheme.css")) {
+                                    if (StartMenu.getCurrentTheme().equals(DARK_THEME)) {
                                         setStyle("-fx-background-color: gray;");
                                     } else {
                                         setStyle("-fx-background-color: dimgray;-fx-text-fill: white;");
@@ -113,7 +115,7 @@ public class DatePickerRestrictions {
 
                                 if (end.getValue() != null && item.isAfter(end.getValue().minusDays(1))) {
                                     setDisable(true);
-                                    if (StartMenu.currentTheme.equals("file:src/main/resources/com/netrunners/financialcalculator/assets/darkTheme.css")) {
+                                    if (StartMenu.getCurrentTheme().equals(DARK_THEME)) {
                                         setStyle("-fx-background-color: gray;");
                                     } else {
                                         setStyle("-fx-background-color: dimgray;-fx-text-fill: white;");
@@ -137,7 +139,7 @@ public class DatePickerRestrictions {
 
                                 if (start.getValue() != null && item.isBefore(start.getValue().plusDays(1))) {
                                     setDisable(true);
-                                    if (StartMenu.currentTheme.equals("file:src/main/resources/com/netrunners/financialcalculator/assets/darkTheme.css")) {
+                                    if (StartMenu.getCurrentTheme().equals(DARK_THEME)) {
                                         setStyle("-fx-background-color: gray;");
                                     } else {
                                         setStyle("-fx-background-color: dimgray;-fx-text-fill: white;");
@@ -182,7 +184,7 @@ public class DatePickerRestrictions {
                                         (end.getValue() != null && !item.isBefore(end.getValue().plusDays(1))) ||
                                         (newDate2.getValue() != null && item.isAfter(newDate2.getValue()))) {
                                     setDisable(true);
-                                    if (StartMenu.currentTheme.equals("file:src/main/resources/com/netrunners/financialcalculator/assets/darkTheme.css")) {
+                                    if (StartMenu.getCurrentTheme().equals(DARK_THEME)) {
                                         setStyle("-fx-background-color: gray;");
                                     } else {
                                         setStyle("-fx-background-color: dimgray;-fx-text-fill: white;");
@@ -208,7 +210,7 @@ public class DatePickerRestrictions {
                                         (end.getValue() != null && item.isAfter(end.getValue().plusDays(1))) ||
                                         (newDate1.getValue() != null && item.isBefore(newDate1.getValue()))) {
                                     setDisable(true);
-                                    if (StartMenu.currentTheme.equals("file:src/main/resources/com/netrunners/financialcalculator/assets/darkTheme.css")) {
+                                    if (StartMenu.getCurrentTheme().equals(DARK_THEME)) {
                                         setStyle("-fx-background-color: gray;");
                                     } else {
                                         setStyle("-fx-background-color: dimgray;-fx-text-fill: white;");

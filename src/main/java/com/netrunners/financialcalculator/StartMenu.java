@@ -17,7 +17,7 @@ import java.util.logging.Level;
 public class StartMenu extends Application {
     public static Scene startMenuScene;
     public static List<Scene> openScenes = new ArrayList<>();
-    public static String currentTheme = "file:src/main/resources/com/netrunners/financialcalculator/assets/lightTheme.css";
+    private static String currentTheme = "file:src/main/resources/com/netrunners/financialcalculator/assets/lightTheme.css";
     @Override
     public void start(Stage primaryStage) {
         try {
@@ -56,5 +56,13 @@ public class StartMenu extends Application {
     @Override
     public void stop() {
         LanguageManager.getInstance().saveLanguage();
+    }
+
+    public static void setCurrentTheme(String currentTheme) {
+        StartMenu.currentTheme = currentTheme;
+    }
+
+    public static String getCurrentTheme() {
+        return currentTheme;
     }
 }

@@ -3,22 +3,24 @@ package com.netrunners.financialcalculator.VisualInstruments.MenuActions;
 import com.netrunners.financialcalculator.StartMenu;
 import javafx.scene.Scene;
 
+import static com.netrunners.financialcalculator.VisualInstruments.MenuActions.FileConstants.DARK_THEME;
+import static com.netrunners.financialcalculator.VisualInstruments.MenuActions.FileConstants.LIGHT_THEME;
+
 
 public class ThemeSelector {
-    public static void setDarkTheme(){
-        StartMenu.currentTheme = "file:src/main/resources/com/netrunners/financialcalculator/assets/darkTheme.css";
+    private static void setTheme(String theme) {
+        StartMenu.setCurrentTheme(theme);
         for (Scene scene : StartMenu.openScenes) {
             scene.getStylesheets().clear();
-            scene.getStylesheets().add(StartMenu.currentTheme);
+            scene.getStylesheets().add(StartMenu.getCurrentTheme());
         }
-
     }
-    public static void setLightTheme(){
-        StartMenu.currentTheme = "file:src/main/resources/com/netrunners/financialcalculator/assets/lightTheme.css";
-        for (Scene scene : StartMenu.openScenes) {
-            scene.getStylesheets().clear();
-            scene.getStylesheets().add(StartMenu.currentTheme);
-        }
 
+    public static void setDarkTheme() {
+        setTheme(DARK_THEME);
+    }
+
+    public static void setLightTheme() {
+        setTheme(LIGHT_THEME);
     }
 }

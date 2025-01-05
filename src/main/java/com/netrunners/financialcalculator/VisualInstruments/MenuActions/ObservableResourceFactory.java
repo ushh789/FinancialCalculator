@@ -7,7 +7,7 @@ import javafx.beans.binding.StringBinding;
 import java.util.ResourceBundle;
 
 public class ObservableResourceFactory {
-    private ObjectProperty<ResourceBundle> resources = new SimpleObjectProperty<>();
+    private final ObjectProperty<ResourceBundle> resources = new SimpleObjectProperty<>();
 
     public ObjectProperty<ResourceBundle> resourcesProperty() {
         return resources;
