@@ -16,28 +16,28 @@ public class DateTimeFunctions {
 
     public static int countDaysToNextPeriod(Credit credit, LocalDate date) {
         switch (credit.getPaymentType()) {
-            case 1 -> {
+            case MONTHS -> {
                 if (date.plusMonths(1).withDayOfMonth(1).isAfter(credit.getEndDate())) {
                     return countDaysBetweenDates(date, credit.getEndDate());
                 } else {
                     return countDaysBetweenDates(date, date.plusMonths(1).withDayOfMonth(1));
                 }
             }
-            case 2 -> {
+            case QUARTERS -> {
                 if (date.plusMonths(3).withDayOfMonth(1).isAfter(credit.getEndDate())) {
                     return countDaysBetweenDates(date, credit.getEndDate());
                 } else {
                     return countDaysBetweenDates(date, date.plusMonths(3).withDayOfMonth(1));
                 }
             }
-            case 3 -> {
+            case YEARS -> {
                 if (date.plusYears(1).withMonth(1).withDayOfMonth(1).isAfter(credit.getEndDate())) {
                     return countDaysBetweenDates(date, credit.getEndDate());
                 } else {
                     return countDaysBetweenDates(date, date.plusYears(1).withMonth(1).withDayOfMonth(1));
                 }
             }
-            case 4 -> {
+            case END_OF_TERM -> {
                 return countDaysBetweenDates(date, credit.getEndDate());
             }
         }
@@ -46,28 +46,28 @@ public class DateTimeFunctions {
 
     public static int countDaysToNextPeriod(Deposit deposit, LocalDate tempDate, LocalDate endDate) {
         switch (deposit.getWithdrawalOption()) {
-            case 1 -> {
+            case MONTHS -> {
                 if (tempDate.plusMonths(1).withDayOfMonth(1).isAfter(endDate)) {
                     return countDaysBetweenDates(tempDate, endDate);
                 } else {
                     return countDaysBetweenDates(tempDate, tempDate.plusMonths(1).withDayOfMonth(1));
                 }
             }
-            case 2 -> {
+            case QUARTERS -> {
                 if (tempDate.plusMonths(3).withDayOfMonth(1).isAfter(endDate)) {
                     return countDaysBetweenDates(tempDate, endDate);
                 } else {
                     return countDaysBetweenDates(tempDate, tempDate.plusMonths(3).withDayOfMonth(1));
                 }
             }
-            case 3 -> {
+            case YEARS -> {
                 if (tempDate.plusYears(1).withMonth(1).withDayOfMonth(1).isAfter(endDate)) {
                     return countDaysBetweenDates(tempDate, endDate);
                 } else {
                     return countDaysBetweenDates(tempDate, tempDate.plusYears(1).withMonth(1).withDayOfMonth(1));
                 }
             }
-            case 4 -> {
+            case END_OF_TERM -> {
                 return countDaysBetweenDates(tempDate, endDate);
             }
         }

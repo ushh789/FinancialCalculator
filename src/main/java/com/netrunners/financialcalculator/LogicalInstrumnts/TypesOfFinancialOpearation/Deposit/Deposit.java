@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.netrunners.financialcalculator.LogicalInstrumnts.FileInstruments.LogHelper;
 import com.netrunners.financialcalculator.LogicalInstrumnts.FileInstruments.Savable;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TimeFunctions.LocalDateAdapter;
+import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.OperationType;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.ResultTableSender;
 import com.netrunners.financialcalculator.VisualInstruments.MenuActions.LanguageManager;
 import com.netrunners.financialcalculator.VisualInstruments.WindowsOpener;
@@ -23,7 +24,7 @@ public abstract class Deposit implements Savable, ResultTableSender {
     protected String currency;
     protected LocalDate startDate;
     protected LocalDate endDate;
-    protected int withdrawalOption;
+    protected OperationType withdrawalOption;
     protected boolean earlyWithdrawal;
     protected LocalDate earlyWithdrawalDate;
 
@@ -32,7 +33,7 @@ public abstract class Deposit implements Savable, ResultTableSender {
         return investment * (1f / 365f) * (annualPercent / 100f);
     }
 
-    public Deposit(float investment, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, boolean earlyWithdrawal, LocalDate earlyWithdrawalDate, int withdrawalOption) {
+    public Deposit(float investment, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, boolean earlyWithdrawal, LocalDate earlyWithdrawalDate, OperationType withdrawalOption) {
         this.investment = investment;
         this.currency = currency;
         this.annualPercent = annualPercent;
@@ -43,7 +44,7 @@ public abstract class Deposit implements Savable, ResultTableSender {
         this.withdrawalOption = withdrawalOption;
     }
 
-    public Deposit(float investment, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, boolean earlyWithdrawal, int withdrawalOption) {
+    public Deposit(float investment, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, boolean earlyWithdrawal, OperationType withdrawalOption) {
         this.investment = investment;
         this.currency = currency;
         this.annualPercent = annualPercent;
@@ -60,7 +61,7 @@ public abstract class Deposit implements Savable, ResultTableSender {
         jsonObject.addProperty("currency", this.currency);
         jsonObject.addProperty("startDate", this.startDate.toString());
         jsonObject.addProperty("endDate", this.endDate.toString());
-        jsonObject.addProperty("withdrawalOption", this.withdrawalOption);
+        jsonObject.addProperty("withdrawalOption", this.withdrawalOption.getKey());
         if (this.earlyWithdrawal) {
             jsonObject.addProperty("earlyWithdrawalDate", this.earlyWithdrawalDate.toString());
         } else {
@@ -99,22 +100,11 @@ public abstract class Deposit implements Savable, ResultTableSender {
     }
 
     public String getNameOfWithdrawalType() {
-        LanguageManager languageManager = LanguageManager.getInstance();
-        switch (withdrawalOption) {
-            case 1 -> {
-                return "Months";
-            }
-            case 2 -> {
-                return "Quarters";
-            }
-            case 3 -> {
-                return "Years";
-            }
-            case 4 -> {
-                return "EndofTerm";
-            }
+        if (withdrawalOption == null) {
+            return LanguageManager.getInstance().getStringBinding("None").get();
+        } else {
+            return withdrawalOption.getKey();
         }
-        return languageManager.getStringBinding("None").get();
     }
 
     @Override
@@ -147,7 +137,7 @@ public abstract class Deposit implements Savable, ResultTableSender {
         return endDate;
     }
 
-    public int getWithdrawalOption() {
+    public OperationType getWithdrawalOption() {
         return withdrawalOption;
     }
 

@@ -3,6 +3,7 @@ package com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpe
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TimeFunctions.DateTimeFunctions;
+import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.OperationType;
 
 import java.time.LocalDate;
 import java.util.Map;
@@ -11,7 +12,7 @@ public class CreditWithHolidays extends Credit{
     private final LocalDate holidaysStart;
     private final LocalDate holidaysEnd;
 
-    public CreditWithHolidays(float loan, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, int paymentType, LocalDate holidaysStart, LocalDate holidaysEnd) {
+    public CreditWithHolidays(float loan, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, OperationType paymentType, LocalDate holidaysStart, LocalDate holidaysEnd) {
         super(loan, currency, annualPercent, startDate, endDate, paymentType);
         this.holidaysStart = holidaysStart;
         this.holidaysEnd = holidaysEnd;

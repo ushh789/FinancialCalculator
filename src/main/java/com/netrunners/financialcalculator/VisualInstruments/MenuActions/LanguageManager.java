@@ -3,13 +3,13 @@ package com.netrunners.financialcalculator.VisualInstruments.MenuActions;
 import java.io.*;
 import java.util.*;
 
+import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.OperationType;
 import javafx.beans.binding.StringBinding;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-import static com.netrunners.financialcalculator.VisualInstruments.MenuActions.FileConstants.MESSAGES_PATH;
-import static com.netrunners.financialcalculator.VisualInstruments.MenuActions.FileConstants.PROPERTIES_FILE;
+import static com.netrunners.financialcalculator.VisualInstruments.MenuActions.FileConstants.*;
 
 public class LanguageManager {
     private static LanguageManager instance;
@@ -64,7 +64,7 @@ public class LanguageManager {
         return resourceFactory.getStringBinding(key);
     }
 
-    public static int checkOption(String chosenOption) {
+    public static OperationType checkOption(String chosenOption) {
         LanguageManager languageManager = LanguageManager.getInstance();
         String option1 = languageManager.getStringBinding("Option1").get();
         String option2 = languageManager.getStringBinding("Option2").get();
@@ -72,15 +72,15 @@ public class LanguageManager {
         String option4 = languageManager.getStringBinding("Option4").get();
 
         if (chosenOption.equals(option1)) {
-            return 1;
+            return OperationType.MONTHS;
         } else if (chosenOption.equals(option2)) {
-            return 2;
+            return OperationType.QUARTERS;
         } else if (chosenOption.equals(option3)) {
-            return 3;
+            return OperationType.YEARS;
         } else if (chosenOption.equals(option4)) {
-            return 4;
+            return OperationType.END_OF_TERM;
         } else {
-            return -1000;
+            return null;
         }
     }
 
@@ -99,7 +99,7 @@ public class LanguageManager {
         ChoiceDialog<String> dialog = new ChoiceDialog<>("English", choices);
         dialog.setTitle(LanguageManager.getInstance().getStringBinding("LanguageTitle").get());
         Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
-        stage.getIcons().add(new Image("file:src/main/resources/com/netrunners/financialcalculator/assets/Logo.png"));
+        stage.getIcons().add(new Image(LOGO));
         dialog.setHeaderText(null);
         dialog.setContentText(LanguageManager.getInstance().getStringBinding("ChooseLanguage").get());
 
@@ -121,6 +121,8 @@ public class LanguageManager {
             instance.changeLanguage(locale);
         }
     }
+
+
 }
 
 

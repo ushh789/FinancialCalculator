@@ -53,7 +53,6 @@ public class ErrorChecker {
         boolean creditAnnualPercentValid = InputFieldErrors.checkIfCorrectPercentGiven(creditAnnualPercent);
         boolean creditPaymentOptionValid = InputFieldErrors.paymentOptionIsSelected(paymentOption);
 
-
         if (!creditAmountValid) {
             highlightError(creditAmount);
             creditAmount.setText("");

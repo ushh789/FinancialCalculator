@@ -1,16 +1,23 @@
 package com.netrunners.financialcalculator.MenuControllers;
 
-import java.time.LocalDate;
-
 import com.netrunners.financialcalculator.ErrorHandling.ErrorChecker;
 import com.netrunners.financialcalculator.LogicalInstrumnts.FileInstruments.OpenFile;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TimeFunctions.DatePickerRestrictions;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Deposit.CapitalisedDeposit;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Deposit.Deposit;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Deposit.UncapitalisedDeposit;
-import com.netrunners.financialcalculator.VisualInstruments.MenuActions.*;
+import com.netrunners.financialcalculator.VisualInstruments.MenuActions.ExitApp;
+import com.netrunners.financialcalculator.VisualInstruments.MenuActions.LanguageManager;
+import com.netrunners.financialcalculator.VisualInstruments.MenuActions.CurrencyManager;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 
 public class DepositMenuController {
 
@@ -182,29 +189,52 @@ public class DepositMenuController {
 
         depositSaveResult.setOnAction(event -> {
             if (ErrorChecker.areFieldsValidInDeposit(investInput, depositAnnualPercentInput, depositWithdrawalOption, depositContractBeginning, depositContractEnding, depositWithdrawalDate, depositEarlyWithdrawalCheck)) {
-                float investment = Float.parseFloat(investInput.getText());
-                float annualPercent = Float.parseFloat(depositAnnualPercentInput.getText());
-                String depositCurrency = CurrencyManager.getInstance().getCurrency();
-                int withdrawalOptionSelected = LanguageManager.checkOption(depositWithdrawalOption.getText());
-                LocalDate contractStartDate = depositContractBeginning.getValue();
-                LocalDate contractEndDate = depositContractEnding.getValue();
-                boolean earlyWithdrawalOption = depositEarlyWithdrawalCheck.isSelected();
-                LocalDate earlyWithdrawal;
-                earlyWithdrawal = depositWithdrawalDate.getValue();
                 if (depositCapitalizationCheck.isSelected()) {
                     if (depositEarlyWithdrawalCheck.isSelected()) {
-                        Deposit deposit = new CapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate, earlyWithdrawalOption, earlyWithdrawal, withdrawalOptionSelected);
+                        Deposit deposit = new CapitalisedDeposit(
+                                Float.parseFloat(investInput.getText()),
+                                CurrencyManager.getInstance().getCurrency(),
+                                Float.parseFloat(depositAnnualPercentInput.getText()),
+                                depositContractBeginning.getValue(), depositContractEnding.getValue(),
+                                depositEarlyWithdrawalCheck.isSelected(), depositWithdrawalDate.getValue(),
+                                LanguageManager.checkOption(depositWithdrawalOption.getText())
+                        );
                         deposit.save();
                     } else {
-                        Deposit deposit = new CapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate, earlyWithdrawalOption, withdrawalOptionSelected);
+                        Deposit deposit = new CapitalisedDeposit(
+                                Float.parseFloat(investInput.getText()),
+                                CurrencyManager.getInstance().getCurrency(),
+                                Float.parseFloat(depositAnnualPercentInput.getText()),
+                                depositContractBeginning.getValue(),
+                                depositContractEnding.getValue(),
+                                depositEarlyWithdrawalCheck.isSelected(),
+                                LanguageManager.checkOption(depositWithdrawalOption.getText())
+                        );
                         deposit.save();
                     }
                 } else {
                     if (depositEarlyWithdrawalCheck.isSelected()) {
-                        Deposit deposit = new UncapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate, earlyWithdrawalOption, earlyWithdrawal, withdrawalOptionSelected);
+                        Deposit deposit = new UncapitalisedDeposit(
+                                Float.parseFloat(investInput.getText()),
+                                CurrencyManager.getInstance().getCurrency(),
+                                Float.parseFloat(depositAnnualPercentInput.getText()),
+                                depositContractBeginning.getValue(),
+                                depositContractEnding.getValue(),
+                                depositEarlyWithdrawalCheck.isSelected(),
+                                depositWithdrawalDate.getValue(),
+                                LanguageManager.checkOption(depositWithdrawalOption.getText())
+                        );
                         deposit.save();
                     } else {
-                        Deposit deposit = new UncapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate, earlyWithdrawalOption, withdrawalOptionSelected);
+                        Deposit deposit = new UncapitalisedDeposit(Float.parseFloat(
+                                investInput.getText()),
+                                CurrencyManager.getInstance().getCurrency(),
+                                Float.parseFloat(depositAnnualPercentInput.getText()),
+                                depositContractBeginning.getValue(),
+                                depositContractEnding.getValue(),
+                                depositEarlyWithdrawalCheck.isSelected(),
+                                LanguageManager.checkOption(depositWithdrawalOption.getText())
+                        );
                         deposit.save();
                     }
                 }
@@ -212,29 +242,54 @@ public class DepositMenuController {
         });
         depositViewResult.setOnAction(event -> {
             if (ErrorChecker.areFieldsValidInDeposit(investInput, depositAnnualPercentInput, depositWithdrawalOption, depositContractBeginning, depositContractEnding, depositWithdrawalDate, depositEarlyWithdrawalCheck)) {
-                float investment = Float.parseFloat(investInput.getText());
-                float annualPercent = Float.parseFloat(depositAnnualPercentInput.getText());
-                String depositCurrency = CurrencyManager.getInstance().getCurrency();
-                int withdrawalOptionSelected = LanguageManager.checkOption(depositWithdrawalOption.getText());
-                LocalDate contractStartDate = depositContractBeginning.getValue();
-                LocalDate contractEndDate = depositContractEnding.getValue();
-                boolean earlyWithdrawalOption = depositEarlyWithdrawalCheck.isSelected();
-                LocalDate earlyWithdrawal;
-                earlyWithdrawal = depositWithdrawalDate.getValue();
                 if (depositCapitalizationCheck.isSelected()) {
                     if (depositEarlyWithdrawalCheck.isSelected()) {
-                        Deposit deposit = new CapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate, earlyWithdrawalOption, earlyWithdrawal, withdrawalOptionSelected);
+                        Deposit deposit = new CapitalisedDeposit(
+                                Float.parseFloat(investInput.getText()),
+                                CurrencyManager.getInstance().getCurrency(),
+                                Float.parseFloat(depositAnnualPercentInput.getText()),
+                                depositContractBeginning.getValue(),
+                                depositContractEnding.getValue(),
+                                depositEarlyWithdrawalCheck.isSelected(),
+                                depositWithdrawalDate.getValue(),
+                                LanguageManager.checkOption(depositWithdrawalOption.getText())
+                        );
                         deposit.sendToResultTable();
                     } else {
-                        Deposit deposit = new CapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate, earlyWithdrawalOption, withdrawalOptionSelected);
+                        Deposit deposit = new CapitalisedDeposit(
+                                Float.parseFloat(investInput.getText()),
+                                CurrencyManager.getInstance().getCurrency(),
+                                Float.parseFloat(depositAnnualPercentInput.getText()),
+                                depositContractBeginning.getValue(),
+                                depositContractEnding.getValue(),
+                                depositEarlyWithdrawalCheck.isSelected(),
+                                LanguageManager.checkOption(depositWithdrawalOption.getText())
+                        );
                         deposit.sendToResultTable();
                     }
                 } else {
                     if (depositEarlyWithdrawalCheck.isSelected()) {
-                        Deposit deposit = new UncapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate, earlyWithdrawalOption, earlyWithdrawal, withdrawalOptionSelected);
+                        Deposit deposit = new UncapitalisedDeposit(
+                                Float.parseFloat(investInput.getText()),
+                                CurrencyManager.getInstance().getCurrency(),
+                                Float.parseFloat(depositAnnualPercentInput.getText()),
+                                depositContractBeginning.getValue(),
+                                depositContractEnding.getValue(),
+                                depositEarlyWithdrawalCheck.isSelected(),
+                                depositWithdrawalDate.getValue(),
+                                LanguageManager.checkOption(depositWithdrawalOption.getText())
+                        );
                         deposit.sendToResultTable();
                     } else {
-                        Deposit deposit = new UncapitalisedDeposit(investment, depositCurrency, annualPercent, contractStartDate, contractEndDate, earlyWithdrawalOption, withdrawalOptionSelected);
+                        Deposit deposit = new UncapitalisedDeposit(
+                                Float.parseFloat(investInput.getText()),
+                                CurrencyManager.getInstance().getCurrency(),
+                                Float.parseFloat(depositAnnualPercentInput.getText()),
+                                depositContractBeginning.getValue(),
+                                depositContractEnding.getValue(),
+                                depositEarlyWithdrawalCheck.isSelected(),
+                                LanguageManager.checkOption(depositWithdrawalOption.getText())
+                        );
                         deposit.sendToResultTable();
                     }
                 }

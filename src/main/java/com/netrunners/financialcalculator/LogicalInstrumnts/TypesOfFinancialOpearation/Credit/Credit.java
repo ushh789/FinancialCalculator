@@ -7,18 +7,11 @@ import com.netrunners.financialcalculator.LogicalInstrumnts.FileInstruments.LogH
 import com.netrunners.financialcalculator.LogicalInstrumnts.FileInstruments.Savable;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TimeFunctions.DateTimeFunctions;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TimeFunctions.LocalDateAdapter;
-
+import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.OperationType;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.ResultTableSender;
-import com.netrunners.financialcalculator.MenuControllers.ResultTableController;
-import com.netrunners.financialcalculator.StartMenu;
 import com.netrunners.financialcalculator.VisualInstruments.MenuActions.LanguageManager;
 import com.netrunners.financialcalculator.VisualInstruments.WindowsOpener;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -33,10 +26,10 @@ public class Credit implements Savable, ResultTableSender {
     protected float annualPercent;
     protected LocalDate startDate;
     protected LocalDate endDate;
-    protected int paymentType;
+    protected OperationType paymentType;
     protected int contractDuration;
 
-    public Credit(float loan, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, int paymentType) {
+    public Credit(float loan, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, OperationType paymentType) {
         this.loan = loan;
         this.currency = currency;
         this.annualPercent = annualPercent;
@@ -50,8 +43,8 @@ public class Credit implements Savable, ResultTableSender {
         return loan * (1f / 365f) * (annualPercent / 100f);
     }
 
-    public float countCreditBodyPerDay(){
-        return loan/contractDuration;
+    public float countCreditBodyPerDay() {
+        return loan / contractDuration;
     }
 
 
@@ -86,7 +79,7 @@ public class Credit implements Savable, ResultTableSender {
         jsonObject.addProperty("loan", this.loan);
         jsonObject.addProperty("annualPercent", this.annualPercent);
         jsonObject.addProperty("currency", this.currency);
-        jsonObject.addProperty("paymentType", this.paymentType);
+        jsonObject.addProperty("paymentType", this.paymentType.getKey());
         jsonObject.addProperty("startDate", this.startDate.toString());
         jsonObject.addProperty("endDate", this.endDate.toString());
         return jsonObject;
@@ -112,7 +105,7 @@ public class Credit implements Savable, ResultTableSender {
         return endDate;
     }
 
-    public int getPaymentType() {
+    public OperationType getPaymentType() {
         return paymentType;
     }
 
@@ -121,22 +114,11 @@ public class Credit implements Savable, ResultTableSender {
     }
 
     public String getNameOfPaymentType() {
-        LanguageManager languageManager = LanguageManager.getInstance();
-        switch (paymentType) {
-            case 1 -> {
-                return "Months";
-            }
-            case 2 -> {
-                return "Quarters";
-            }
-            case 3 -> {
-                return "Years";
-            }
-            case 4 -> {
-                return "EndofTerm";
-            }
+        if (paymentType == null) {
+            return LanguageManager.getInstance().getStringBinding("None").get();
+        } else {
+            return paymentType.getKey();
         }
-        return languageManager.getStringBinding("None").get();
     }
 
     @Override

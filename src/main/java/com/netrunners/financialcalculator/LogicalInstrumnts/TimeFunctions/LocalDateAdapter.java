@@ -12,7 +12,6 @@ import java.util.logging.Level;
 
 public class LocalDateAdapter extends TypeAdapter<LocalDate> {
 
-
     @Override
     public void write(final JsonWriter jsonWriter, final LocalDate localDate) {
         try {

@@ -19,11 +19,13 @@ public class InputFieldErrors {
     private static List<String> withdrawalOptions;
 
     private static final Logger logger = Logger.getLogger(LogHelper.class.getName());
+
     static {
         Gson gson = new Gson();
         try {
             InputStreamReader reader = new InputStreamReader(new FileInputStream("languages.json"), StandardCharsets.UTF_8);
-            Type type = new TypeToken<Map<String, List<String>>>(){}.getType();
+            Type type = new TypeToken<Map<String, List<String>>>() {
+            }.getType();
             Map<String, List<String>> map = gson.fromJson(reader, type);
             paymentOptions = map.get("paymentOption");
             withdrawalOptions = map.get("depositWithdrawalOption");
@@ -31,14 +33,17 @@ public class InputFieldErrors {
             logger.log(Level.SEVERE, "Error while reading languages.json", e);
         }
     }
+
     public static boolean checkIfCorrectNumberGiven(TextField field) {
         String input = field.getText();
         return !(input.isEmpty()) && RegexChecker.checkIfOnlyNumbersGiven(field.getText());
     }
+
     public static boolean checkIfCorrectPercentGiven(TextField field) {
         String input = field.getText();
         return !(input.isEmpty()) && RegexChecker.checkIfOnlyNumbersGiven(field.getText()) && Float.parseFloat(input) <= 100;
     }
+
     public static boolean withdrawalOptionIsSelected(MenuButton menuButton) {
         for (String option : withdrawalOptions) {
             if (menuButton.getText().contains(option)) {

@@ -7,7 +7,6 @@ import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpea
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Credit.*;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.ResultTableSender;
 import com.netrunners.financialcalculator.VisualInstruments.MenuActions.*;
-import com.netrunners.financialcalculator.VisualInstruments.WindowsOpener;
 
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -179,7 +178,7 @@ public class ResultTableController {
             String formattedNow = LocalDateTime.now().format(formatter);
             File file = new File("saves/Credit_result_" + formattedNow + ".csv");
             writeDataToCSV(finalData, credit, file);
-            SavingAlert.showSavingAlert();
+            FilesActions.showSavingAlert();
         });
         saveAsButton.setOnAction(event -> {
             FileChooser fileChooser = new FileChooser();
@@ -229,7 +228,7 @@ public class ResultTableController {
             String formattedNow = now.format(formatter);
             File file = new File("saves/Deposit_result_" + formattedNow + ".csv");
             writeDataToCSV(data, deposit, file);
-            SavingAlert.showSavingAlert();
+            FilesActions.showSavingAlert();
         });
         saveAsButton.setOnAction(event -> {
             FileChooser fileChooser = new FileChooser();

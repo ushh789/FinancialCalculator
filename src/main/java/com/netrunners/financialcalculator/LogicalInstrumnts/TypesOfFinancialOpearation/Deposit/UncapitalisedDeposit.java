@@ -2,16 +2,17 @@ package com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpe
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.OperationType;
 
 import java.time.LocalDate;
 import java.util.Map;
 
 public class UncapitalisedDeposit extends Deposit {
-    public UncapitalisedDeposit(float investment, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, boolean earlyWithdrawal, LocalDate earlyWithdrawalDate, int withdrawalOption) {
+    public UncapitalisedDeposit(float investment, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, boolean earlyWithdrawal, LocalDate earlyWithdrawalDate, OperationType withdrawalOption) {
         super(investment, currency, annualPercent, startDate, endDate, earlyWithdrawal, earlyWithdrawalDate, withdrawalOption);
     }
 
-    public UncapitalisedDeposit(float investment, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, boolean earlyWithdrawal, int withdrawalOption) {
+    public UncapitalisedDeposit(float investment, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, boolean earlyWithdrawal, OperationType withdrawalOption) {
         super(investment, currency, annualPercent, startDate, endDate, earlyWithdrawal, withdrawalOption);
     }
 

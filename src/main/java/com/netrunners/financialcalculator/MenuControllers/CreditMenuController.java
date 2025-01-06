@@ -8,9 +8,18 @@ import com.netrunners.financialcalculator.LogicalInstrumnts.TimeFunctions.DatePi
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Credit.Credit;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Credit.CreditWithHolidays;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Credit.CreditWithoutHolidays;
-import com.netrunners.financialcalculator.VisualInstruments.MenuActions.*;
+import com.netrunners.financialcalculator.VisualInstruments.MenuActions.ExitApp;
+import com.netrunners.financialcalculator.VisualInstruments.MenuActions.LanguageManager;
+import com.netrunners.financialcalculator.VisualInstruments.MenuActions.CurrencyManager;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 
 public class CreditMenuController {
     @FXML
@@ -184,38 +193,62 @@ public class CreditMenuController {
 
         creditSaveResult.setOnAction(event -> {
             if (ErrorChecker.areFieldsValidInCredit(loanInput, annualPercentInput, paymentOption, contractBeginning, contractEnding, checkPaymentHolidays, holidaysBeginning, holidaysEnding)) {
-                float creditLoan = Float.parseFloat(loanInput.getText());
-                float creditAnnualPercent = Float.parseFloat(annualPercentInput.getText());
-                String creditCurrency = CurrencyManager.getInstance().getCurrency();
-                int paymentOptionSelected = LanguageManager.checkOption(paymentOption.getText());
-                LocalDate contractStartDate = contractBeginning.getValue();
-                LocalDate contractEndDate = contractEnding.getValue();
                 if (checkPaymentHolidays.isSelected()) {
                     LocalDate holidaysStartDate = holidaysBeginning.getValue();
                     LocalDate holidaysEndDate = holidaysEnding.getValue();
-                    Credit credit = new CreditWithHolidays(creditLoan, creditCurrency, creditAnnualPercent, contractStartDate, contractEndDate, paymentOptionSelected, holidaysStartDate, holidaysEndDate);
+
+                    Credit credit = new CreditWithHolidays(
+                            Float.parseFloat(loanInput.getText()),
+                            CurrencyManager.getInstance().getCurrency(),
+                            Float.parseFloat(annualPercentInput.getText()),
+                            contractBeginning.getValue(),
+                            contractEnding.getValue(),
+                            LanguageManager.checkOption(paymentOption.getText()),
+                            holidaysStartDate,
+                            holidaysEndDate
+                    );
+
                     credit.save();
                 } else {
-                    Credit credit = new CreditWithoutHolidays(creditLoan, creditCurrency, creditAnnualPercent, contractStartDate, contractEndDate, paymentOptionSelected);
+                    Credit credit = new CreditWithoutHolidays(
+                            Float.parseFloat(loanInput.getText()),
+                            CurrencyManager.getInstance().getCurrency(),
+                            Float.parseFloat(annualPercentInput.getText()),
+                            contractBeginning.getValue(),
+                            contractEnding.getValue(),
+                            LanguageManager.checkOption(paymentOption.getText())
+                    );
+
                     credit.save();
                 }
             }
         });
         creditViewResult.setOnAction(event -> {
             if (ErrorChecker.areFieldsValidInCredit(loanInput, annualPercentInput, paymentOption, contractBeginning, contractEnding, checkPaymentHolidays, holidaysBeginning, holidaysEnding)) {
-                float creditLoan = Float.parseFloat(loanInput.getText());
-                float creditAnnualPercent = Float.parseFloat(annualPercentInput.getText());
-                String creditCurrency = CurrencyManager.getInstance().getCurrency();
-                int paymentOptionSelected = LanguageManager.checkOption(paymentOption.getText());
-                LocalDate contractStartDate = contractBeginning.getValue();
-                LocalDate contractEndDate = contractEnding.getValue();
                 if (checkPaymentHolidays.isSelected()) {
                     LocalDate holidaysStartDate = holidaysBeginning.getValue();
                     LocalDate holidaysEndDate = holidaysEnding.getValue();
-                    Credit credit = new CreditWithHolidays(creditLoan, creditCurrency, creditAnnualPercent, contractStartDate, contractEndDate, paymentOptionSelected, holidaysStartDate, holidaysEndDate);
+
+                    Credit credit = new CreditWithHolidays(
+                            Float.parseFloat(loanInput.getText()),
+                            CurrencyManager.getInstance().getCurrency(),
+                            Float.parseFloat(annualPercentInput.getText()), contractBeginning.getValue(),
+                            contractEnding.getValue(), LanguageManager.checkOption(paymentOption.getText()),
+                            holidaysStartDate,
+                            holidaysEndDate
+                    );
+
                     credit.sendToResultTable();
                 } else {
-                    Credit credit = new CreditWithoutHolidays(creditLoan, creditCurrency, creditAnnualPercent, contractStartDate, contractEndDate, paymentOptionSelected);
+                    Credit credit = new CreditWithoutHolidays(
+                            Float.parseFloat(loanInput.getText()),
+                            CurrencyManager.getInstance().getCurrency(),
+                            Float.parseFloat(annualPercentInput.getText()),
+                            contractBeginning.getValue(),
+                            contractEnding.getValue(),
+                            LanguageManager.checkOption(paymentOption.getText())
+                    );
+
                     credit.sendToResultTable();
                 }
             }

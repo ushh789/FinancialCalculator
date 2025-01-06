@@ -2,13 +2,14 @@ package com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpe
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.OperationType;
 
 import java.time.LocalDate;
 import java.util.Map;
 
 public class CreditWithoutHolidays extends Credit{
 
-    public CreditWithoutHolidays(float loan, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, int paymentType) {
+    public CreditWithoutHolidays(float loan, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, OperationType paymentType) {
         super(loan, currency, annualPercent, startDate, endDate, paymentType);
     }
 

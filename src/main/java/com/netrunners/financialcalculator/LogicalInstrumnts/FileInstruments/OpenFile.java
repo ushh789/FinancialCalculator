@@ -9,8 +9,8 @@ import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpea
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Deposit.CapitalisedDeposit;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Deposit.Deposit;
 import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.Deposit.UncapitalisedDeposit;
-import com.netrunners.financialcalculator.VisualInstruments.MenuActions.LanguageManager;
-import javafx.stage.FileChooser;
+import com.netrunners.financialcalculator.LogicalInstrumnts.TypesOfFinancialOpearation.OperationType;
+import com.netrunners.financialcalculator.VisualInstruments.MenuActions.FilesActions;
 
 
 import java.io.File;
@@ -22,12 +22,7 @@ import java.util.logging.Level;
 public class OpenFile {
 
     public static void openFromSave() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle(LanguageManager.getInstance().getStringBinding("ChooseOpenFile").get());
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json"));
-        File initialDirectory = new File("saves/");
-        fileChooser.setInitialDirectory(initialDirectory);
-        File selectedFile = fileChooser.showOpenDialog(null);
+        File selectedFile = FilesActions.showFileChooser();
         if (selectedFile != null) {
             try (FileReader reader = new FileReader(selectedFile)) {
                 Gson gson = new Gson();
@@ -43,7 +38,8 @@ public class OpenFile {
                         Deposit deposit = createDeposit(jsonObject);
                         deposit.sendToResultTable();
                     }
-                    default ->  LogHelper.log(Level.WARNING, "Can't open file with operation type: " + operationType, null);
+                    default ->
+                            LogHelper.log(Level.WARNING, "Can't open file with operation type: " + operationType, null);
                 }
             } catch (IOException | JsonParseException e) {
                 LogHelper.log(Level.SEVERE, "Error while opening file", e);
@@ -56,7 +52,7 @@ public class OpenFile {
         try {
             float loan = jsonObject.get("loan").getAsFloat();
             float annualPercent = jsonObject.get("annualPercent").getAsFloat();
-            int paymentType = jsonObject.get("paymentType").getAsInt();
+            OperationType paymentType = OperationType.valueOf(jsonObject.get("paymentType").getAsString());
             String currency = jsonObject.get("currency").getAsString();
             String startDateString = jsonObject.get("startDate").getAsString();
             LocalDate startDate = LocalDate.parse(startDateString);
@@ -83,7 +79,7 @@ public class OpenFile {
         try {
             float investment = jsonObject.get("investment").getAsFloat();
             float annualPercent = jsonObject.get("annualPercent").getAsFloat();
-            int withdrawalOption = jsonObject.get("withdrawalOption").getAsInt();
+            OperationType withdrawalOption = OperationType.valueOf(jsonObject.get("withdrawalOption").getAsString());
             boolean earlyWithdrawal = jsonObject.get("earlyWithdrawal").getAsBoolean();
             String currency = jsonObject.get("currency").getAsString();
             String startDateString = jsonObject.get("startDate").getAsString();
