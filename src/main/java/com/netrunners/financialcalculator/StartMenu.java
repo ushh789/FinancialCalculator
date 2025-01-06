@@ -9,26 +9,36 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-import java.awt.*;
+import java.awt.Taskbar;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
+import static com.netrunners.financialcalculator.VisualInstruments.MenuActions.FileConstants.LOGO;
+import static com.netrunners.financialcalculator.VisualInstruments.MenuActions.FileConstants.LOGO_PATH;
+import static com.netrunners.financialcalculator.VisualInstruments.MenuActions.FileConstants.LIGHT_THEME;
+
 public class StartMenu extends Application {
     public static Scene startMenuScene;
     public static List<Scene> openScenes = new ArrayList<>();
-    private static String currentTheme = "file:src/main/resources/com/netrunners/financialcalculator/assets/lightTheme.css";
+    private static String currentTheme = LIGHT_THEME;
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     @Override
     public void start(Stage primaryStage) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(StartMenu.class.getResource("StartMenu.fxml"));
             primaryStage.titleProperty().bind(LanguageManager.getInstance().getStringBinding("CalcLabel"));
-            primaryStage.getIcons().add(new Image("file:src/main/resources/com/netrunners/financialcalculator/assets/Logo.png"));
+            primaryStage.getIcons().add(new Image(LOGO));
             if (Taskbar.isTaskbarSupported()) {
                 var taskbar = Taskbar.getTaskbar();
                 if (taskbar.isSupported(Taskbar.Feature.ICON_IMAGE)) {
                     final Toolkit defaultToolkit = Toolkit.getDefaultToolkit();
-                    var dockIcon = defaultToolkit.getImage("src/main/resources/com/netrunners/financialcalculator/assets/Logo.png");
+                    var dockIcon = defaultToolkit.getImage(LOGO_PATH);
                     taskbar.setIconImage(dockIcon);
                 }
 
@@ -47,10 +57,6 @@ public class StartMenu extends Application {
         } catch (Exception e) {
             LogHelper.log(Level.SEVERE, "Error opening StartMenu.fxml: ", e);
         }
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 
     @Override
