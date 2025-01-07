@@ -1,7 +1,7 @@
 package com.netrunners.financialcalculator;
 
-import com.netrunners.financialcalculator.LogicalInstrumnts.FileInstruments.LogHelper;
-import com.netrunners.financialcalculator.VisualInstruments.MenuActions.LanguageManager;
+import com.netrunners.financialcalculator.logic.files.LogHelper;
+import com.netrunners.financialcalculator.ui.LanguageManager;
 import javafx.application.Application;
 
 import javafx.scene.Scene;
@@ -15,9 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
-import static com.netrunners.financialcalculator.VisualInstruments.MenuActions.FileConstants.LOGO;
-import static com.netrunners.financialcalculator.VisualInstruments.MenuActions.FileConstants.LOGO_PATH;
-import static com.netrunners.financialcalculator.VisualInstruments.MenuActions.FileConstants.LIGHT_THEME;
+import static com.netrunners.financialcalculator.constants.FileConstants.LOGO;
+import static com.netrunners.financialcalculator.constants.FileConstants.LOGO_PATH;
+import static com.netrunners.financialcalculator.constants.FileConstants.LIGHT_THEME;
 
 public class StartMenu extends Application {
     public static Scene startMenuScene;

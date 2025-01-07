@@ -14,106 +14,106 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="600.0" maxWidth="600.0" minHeight="620.0" minWidth="620.0" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.netrunners.financialcalculator.MenuControllers.DepositMenuController">
-    <children>
-        <MenuBar layoutX="-9.0" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="609.0" scaleZ="90.0" AnchorPane.leftAnchor="-10.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-            <menus>
-                <Menu fx:id="fileButton" mnemonicParsing="false" text="File">
-                    <items>
-                        <Menu fx:id="newButton" mnemonicParsing="false" text="New">
-                            <items>
-                                <MenuItem fx:id="depositButtonMenu" mnemonicParsing="false" text="Deposit" />
-                                <MenuItem fx:id="creditButtonMenu" mnemonicParsing="false" text="Credit" />
-                            </items>
-                        </Menu>
-                        <MenuItem fx:id="openFileButton" mnemonicParsing="false" text="Open" />
-                        <MenuItem fx:id="saveButton" mnemonicParsing="false" text="Save" />
-                        <MenuItem fx:id="saveAsButton" mnemonicParsing="false" text="Save As" />
-                        <MenuItem fx:id="exitApp" mnemonicParsing="false" text="Exit" />
-                    </items>
-                </Menu>
-                <Menu fx:id="viewButton" mnemonicParsing="false" text="View">
-                    <items>
-                        <Menu fx:id="themeButton" mnemonicParsing="false" text="Theme">
-                            <items>
-                                <MenuItem fx:id="darkTheme" mnemonicParsing="false" text="Dark" />
-                                <MenuItem fx:id="lightTheme" mnemonicParsing="false" text="Light" />
-                            </items>
-                        </Menu>
-                    </items>
-                </Menu>
-                <Menu fx:id="settingsButton" mnemonicParsing="false" text="Settings">
-                    <items>
-                        <MenuItem fx:id="languageButton" mnemonicParsing="false" text="Language" />
-                        <MenuItem fx:id="currency" mnemonicParsing="false" text="Currency" />
-                    </items>
-                </Menu>
-                <Menu fx:id="aboutButton" mnemonicParsing="false" text="About">
-                    <items>
-                        <MenuItem fx:id="aboutUs" mnemonicParsing="false" text="About us" />
-                    </items>
-                </Menu>
-            </menus>
-        </MenuBar>
-        <Label fx:id="depositLabel" alignment="CENTER" layoutX="-5.0" layoutY="72.0" text="Deposit" AnchorPane.leftAnchor="-5.0" AnchorPane.rightAnchor="5.0">
-            <font>
-                <Font name="Leelawadee UI Bold" size="48.0" />
-            </font>
-            <padding>
-                <Insets bottom="100.0" />
-            </padding>
-        </Label>
-        <Label layoutX="14.0" layoutY="350.0" text="All rights reserved 2023 © " AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0">
-            <font>
-                <Font size="14.0" />
-            </font>
-        </Label>
-        <Label layoutX="470.0" layoutY="367.0" text="Made by netrunners" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
-            <font>
-                <Font size="14.0" />
-            </font>
-        </Label>
-      <TextField fx:id="investInput" layoutX="123.0" layoutY="157.0" prefHeight="51.0" prefWidth="364.0" promptText="Investment">
-         <font>
-            <Font size="24.0" />
-         </font>
-      </TextField>
-      <TextField fx:id="depositAnnualPercentInput" layoutX="123.0" layoutY="229.0" prefHeight="51.0" prefWidth="364.0" promptText="Annual Percent">
-         <font>
-            <Font size="24.0" />
-         </font>
-      </TextField>
-      <DatePicker fx:id="depositContractBeginning" layoutX="123.0" layoutY="298.0" prefHeight="25.0" prefWidth="174.0" promptText="Contract beginning date" />
-      <DatePicker fx:id="depositContractEnding" layoutX="316.0" layoutY="298.0" promptText="Contract ending date" />
-      <MenuButton fx:id="depositWithdrawalOption" layoutX="359.0" layoutY="353.0" mnemonicParsing="false" text="Withdrawal option">
+<AnchorPane maxHeight="600.0" maxWidth="600.0" minHeight="620.0" minWidth="620.0" prefHeight="600.0" prefWidth="600.0"
+            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.netrunners.financialcalculator.controller.DepositMenuController">
+    <MenuBar layoutX="-9.0" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="609.0" scaleZ="90.0"
+             AnchorPane.leftAnchor="-10.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <Menu fx:id="fileButton" mnemonicParsing="false" text="File">
+            <Menu fx:id="newButton" mnemonicParsing="false" text="New">
+                <MenuItem fx:id="depositButtonMenu" mnemonicParsing="false" text="Deposit"/>
+                <MenuItem fx:id="creditButtonMenu" mnemonicParsing="false" text="Credit"/>
+            </Menu>
+            <MenuItem fx:id="openFileButton" mnemonicParsing="false" text="Open"/>
+            <MenuItem fx:id="saveButton" mnemonicParsing="false" text="Save"/>
+            <MenuItem fx:id="saveAsButton" mnemonicParsing="false" text="Save As"/>
+            <MenuItem fx:id="exitApp" mnemonicParsing="false" text="Exit"/>
+        </Menu>
+        <Menu fx:id="viewButton" mnemonicParsing="false" text="View">
+            <Menu fx:id="themeButton" mnemonicParsing="false" text="Theme">
+                <MenuItem fx:id="darkTheme" mnemonicParsing="false" text="Dark"/>
+                <MenuItem fx:id="lightTheme" mnemonicParsing="false" text="Light"/>
+            </Menu>
+        </Menu>
+        <Menu fx:id="settingsButton" mnemonicParsing="false" text="Settings">
+            <MenuItem fx:id="languageButton" mnemonicParsing="false" text="Language"/>
+            <MenuItem fx:id="currency" mnemonicParsing="false" text="Currency"/>
+        </Menu>
+        <Menu fx:id="aboutButton" mnemonicParsing="false" text="About">
+            <MenuItem fx:id="aboutUs" mnemonicParsing="false" text="About us"/>
+        </Menu>
+    </MenuBar>
+    <Label fx:id="depositLabel" alignment="CENTER" layoutX="-5.0" layoutY="72.0" text="Deposit"
+           AnchorPane.leftAnchor="-5.0" AnchorPane.rightAnchor="5.0">
+        <font>
+            <Font name="Leelawadee UI Bold" size="48.0"/>
+        </font>
+        <padding>
+            <Insets bottom="100.0"/>
+        </padding>
+    </Label>
+    <Label layoutX="14.0" layoutY="350.0" text="All rights reserved 2023 © " AnchorPane.bottomAnchor="5.0"
+           AnchorPane.leftAnchor="5.0">
+        <font>
+            <Font size="14.0"/>
+        </font>
+    </Label>
+    <Label layoutX="470.0" layoutY="367.0" text="Made by netrunners" AnchorPane.bottomAnchor="5.0"
+           AnchorPane.rightAnchor="5.0">
+        <font>
+            <Font size="14.0"/>
+        </font>
+    </Label>
+    <TextField fx:id="investInput" layoutX="123.0" layoutY="157.0" prefHeight="51.0" prefWidth="364.0"
+               promptText="Investment">
+        <font>
+            <Font size="24.0"/>
+        </font>
+    </TextField>
+    <TextField fx:id="depositAnnualPercentInput" layoutX="123.0" layoutY="229.0" prefHeight="51.0" prefWidth="364.0"
+               promptText="Annual Percent">
+        <font>
+            <Font size="24.0"/>
+        </font>
+    </TextField>
+    <DatePicker fx:id="depositContractBeginning" layoutX="123.0" layoutY="298.0" prefHeight="25.0" prefWidth="174.0"
+                promptText="Contract beginning date"/>
+    <DatePicker fx:id="depositContractEnding" layoutX="316.0" layoutY="298.0" promptText="Contract ending date"/>
+    <MenuButton fx:id="depositWithdrawalOption" layoutX="359.0" layoutY="353.0" mnemonicParsing="false"
+                text="Withdrawal option">
         <items>
-            <MenuItem fx:id="WithdrawalOption1" mnemonicParsing="false" text="Monthly" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-          <MenuItem fx:id="WithdrawalOption2" mnemonicParsing="false" text="Quarterly" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-          <MenuItem fx:id="WithdrawalOption3" mnemonicParsing="false" text="Yearly" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem fx:id="WithdrawalOption4" mnemonicParsing="false" text="At the end" />
-            <SeparatorMenuItem mnemonicParsing="false" />
+            <MenuItem fx:id="WithdrawalOption1" mnemonicParsing="false" text="Monthly"/>
+            <SeparatorMenuItem mnemonicParsing="false"/>
+            <MenuItem fx:id="WithdrawalOption2" mnemonicParsing="false" text="Quarterly"/>
+            <SeparatorMenuItem mnemonicParsing="false"/>
+            <MenuItem fx:id="WithdrawalOption3" mnemonicParsing="false" text="Yearly"/>
+            <SeparatorMenuItem mnemonicParsing="false"/>
+            <MenuItem fx:id="WithdrawalOption4" mnemonicParsing="false" text="At the end"/>
+            <SeparatorMenuItem mnemonicParsing="false"/>
         </items>
-      </MenuButton>
-      <CheckBox fx:id="depositCapitalizationCheck" layoutX="125.0" layoutY="344.0" mnemonicParsing="false" text="Capitalization" />
-      <CheckBox fx:id="depositEarlyWithdrawalCheck" layoutX="125.0" layoutY="365.0" mnemonicParsing="false" text="Early withdrawal" />
-      <DatePicker fx:id="depositWithdrawalDate" layoutX="125.0" layoutY="389.0" prefHeight="25.0" prefWidth="131.0" promptText="Withdrawal date" />
-      <Button fx:id="depositViewResult" layoutX="165.0" layoutY="429.0" mnemonicParsing="false" prefWidth="290.0" text="View result">
-         <font>
-            <Font size="24.0" />
-         </font>
-      </Button>
-      <Button fx:id="depositSaveResult" layoutX="165.0" layoutY="496.0" mnemonicParsing="false" prefWidth="290.0" text="Save result">
-         <font>
-            <Font size="24.0" />
-         </font>
-      </Button>
-      <Button fx:id="closeWindow" layoutX="260.0" layoutY="556.0" mnemonicParsing="false" prefWidth="100.0" style="-fx-background-color: #F08080;" text="Close">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Button>
-    </children>
+    </MenuButton>
+    <CheckBox fx:id="depositCapitalizationCheck" layoutX="125.0" layoutY="344.0" mnemonicParsing="false"
+              text="Capitalization"/>
+    <CheckBox fx:id="depositEarlyWithdrawalCheck" layoutX="125.0" layoutY="365.0" mnemonicParsing="false"
+              text="Early withdrawal"/>
+    <DatePicker fx:id="depositWithdrawalDate" layoutX="125.0" layoutY="389.0" prefHeight="25.0" prefWidth="131.0"
+                promptText="Withdrawal date"/>
+    <Button fx:id="depositViewResult" layoutX="165.0" layoutY="429.0" mnemonicParsing="false" prefWidth="290.0"
+            text="View result">
+        <font>
+            <Font size="24.0"/>
+        </font>
+    </Button>
+    <Button fx:id="depositSaveResult" layoutX="165.0" layoutY="496.0" mnemonicParsing="false" prefWidth="290.0"
+            text="Save result">
+        <font>
+            <Font size="24.0"/>
+        </font>
+    </Button>
+    <Button fx:id="closeWindow" layoutX="260.0" layoutY="556.0" mnemonicParsing="false" prefWidth="100.0"
+            style="-fx-background-color: #F08080;" text="Close">
+        <font>
+            <Font size="18.0"/>
+        </font>
+    </Button>
 </AnchorPane>

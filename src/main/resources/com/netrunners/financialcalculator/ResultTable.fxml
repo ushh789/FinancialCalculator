@@ -10,80 +10,72 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="600.0" maxWidth="600.0" minHeight="620.0" minWidth="620.0" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.netrunners.financialcalculator.MenuControllers.ResultTableController">
-    <children>
-        <MenuBar layoutX="-9.0" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="609.0" scaleZ="90.0" AnchorPane.leftAnchor="-10.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-            <menus>
-                <Menu fx:id="fileButton" mnemonicParsing="false" text="File">
-                    <items>
-                        <Menu fx:id="newButton" mnemonicParsing="false" text="New">
-                            <items>
-                                <MenuItem fx:id="depositButtonMenu" mnemonicParsing="false" text="Deposit" />
-                                <MenuItem fx:id="creditButtonMenu" mnemonicParsing="false" text="Credit" />
-                            </items>
-                        </Menu>
-                        <MenuItem fx:id="openFileButton" mnemonicParsing="false" text="Open" />
-                        <MenuItem fx:id="saveButton" mnemonicParsing="false" text="Save" />
-                        <MenuItem fx:id="saveAsButton" mnemonicParsing="false" text="Save As" />
-                        <MenuItem fx:id="exitApp" mnemonicParsing="false" text="Exit" />
-                    </items>
-                </Menu>
-                <Menu fx:id="viewButton" mnemonicParsing="false" text="View">
-                    <items>
-                        <Menu fx:id="themeButton" mnemonicParsing="false" text="Theme">
-                            <items>
-                                <MenuItem fx:id="darkTheme" mnemonicParsing="false" text="Dark" />
-                                <MenuItem fx:id="lightTheme" mnemonicParsing="false" text="Light" />
-                            </items>
-                        </Menu>
-                    </items>
-                </Menu>
-                <Menu fx:id="settingsButton" mnemonicParsing="false" text="Settings">
-                    <items>
-                        <MenuItem fx:id="languageButton" mnemonicParsing="false" text="Language" />
-                        <MenuItem fx:id="currency" mnemonicParsing="false" text="Currency" />
-                    </items>
-                </Menu>
-                <Menu fx:id="aboutButton" mnemonicParsing="false" text="About">
-                    <items>
-                        <MenuItem fx:id="aboutUs" mnemonicParsing="false" text="About us" />
-                    </items>
-                </Menu>
-            </menus>
-        </MenuBar>
-      <TableView fx:id="resultTable" editable="true" layoutX="60.0" layoutY="125.0" prefHeight="400.0" prefWidth="500.0">
+<AnchorPane maxHeight="600.0" maxWidth="600.0" minHeight="620.0" minWidth="620.0" prefHeight="600.0" prefWidth="600.0"
+            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.netrunners.financialcalculator.controller.ResultTableController">
+    <MenuBar layoutX="-9.0" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="609.0" scaleZ="90.0"
+             AnchorPane.leftAnchor="-10.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <Menu fx:id="fileButton" mnemonicParsing="false" text="File">
+            <Menu fx:id="newButton" mnemonicParsing="false" text="New">
+                <MenuItem fx:id="depositButtonMenu" mnemonicParsing="false" text="Deposit"/>
+                <MenuItem fx:id="creditButtonMenu" mnemonicParsing="false" text="Credit"/>
+            </Menu>
+            <MenuItem fx:id="openFileButton" mnemonicParsing="false" text="Open"/>
+            <MenuItem fx:id="saveButton" mnemonicParsing="false" text="Save"/>
+            <MenuItem fx:id="saveAsButton" mnemonicParsing="false" text="Save As"/>
+            <MenuItem fx:id="exitApp" mnemonicParsing="false" text="Exit"/>
+        </Menu>
+        <Menu fx:id="viewButton" mnemonicParsing="false" text="View">
+            <Menu fx:id="themeButton" mnemonicParsing="false" text="Theme">
+                <MenuItem fx:id="darkTheme" mnemonicParsing="false" text="Dark"/>
+                <MenuItem fx:id="lightTheme" mnemonicParsing="false" text="Light"/>
+            </Menu>
+        </Menu>
+        <Menu fx:id="settingsButton" mnemonicParsing="false" text="Settings">
+            <MenuItem fx:id="languageButton" mnemonicParsing="false" text="Language"/>
+            <MenuItem fx:id="currency" mnemonicParsing="false" text="Currency"/>
+        </Menu>
+        <Menu fx:id="aboutButton" mnemonicParsing="false" text="About">
+            <MenuItem fx:id="aboutUs" mnemonicParsing="false" text="About us"/>
+        </Menu>
+    </MenuBar>
+    <TableView fx:id="resultTable" editable="true" layoutX="60.0" layoutY="125.0" prefHeight="400.0" prefWidth="500.0">
         <columns>
-          <TableColumn fx:id="periodColumn" prefWidth="75.0" sortable="false" />
-          <TableColumn fx:id="investmentloanColumn" prefWidth="142.0" sortable="false" />
-            <TableColumn fx:id="periodProfitLoanColumn" editable="false" prefWidth="143.0" sortable="false" />
-            <TableColumn fx:id="totalColumn" editable="false" prefWidth="139.0" sortable="false" />
-            <TableColumn fx:id="periodPercentsColumn" prefWidth="139.0" sortable="false" />
+            <TableColumn fx:id="periodColumn" prefWidth="75.0" sortable="false"/>
+            <TableColumn fx:id="investmentloanColumn" prefWidth="142.0" sortable="false"/>
+            <TableColumn fx:id="periodProfitLoanColumn" editable="false" prefWidth="143.0" sortable="false"/>
+            <TableColumn fx:id="totalColumn" editable="false" prefWidth="139.0" sortable="false"/>
+            <TableColumn fx:id="periodPercentsColumn" prefWidth="139.0" sortable="false"/>
         </columns>
-      </TableView>
-        <Label fx:id="financialCalculatorLabel" alignment="CENTER" layoutX="67.0" layoutY="25.0" prefHeight="100.0" prefWidth="620.0" text="Result table" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-            <font>
-                <Font name="Leelawadee UI Bold" size="48.0" />
-            </font>
-        </Label>
-        <Label layoutX="14.0" layoutY="350.0" text="All rights reserved 2023 © " AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0">
-            <font>
-                <Font size="14.0" />
-            </font>
-        </Label>
-        <Label layoutX="470.0" layoutY="367.0" text="Made by netrunners" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
-            <font>
-                <Font size="14.0" />
-            </font>
-        </Label>
-      <Button fx:id="exportButton" layoutX="60.0" layoutY="558.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="150.0" text="Export">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Button>
-      <Button fx:id="convertButton" layoutX="410.0" layoutY="558.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="150.0" text="Convert">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Button>
-    </children>
+    </TableView>
+    <Label fx:id="financialCalculatorLabel" alignment="CENTER" layoutX="67.0" layoutY="25.0" prefHeight="100.0"
+           prefWidth="620.0" text="Result table" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <font>
+            <Font name="Leelawadee UI Bold" size="48.0"/>
+        </font>
+    </Label>
+    <Label layoutX="14.0" layoutY="350.0" text="All rights reserved 2023 © " AnchorPane.bottomAnchor="5.0"
+           AnchorPane.leftAnchor="5.0">
+        <font>
+            <Font size="14.0"/>
+        </font>
+    </Label>
+    <Label layoutX="470.0" layoutY="367.0" text="Made by netrunners" AnchorPane.bottomAnchor="5.0"
+           AnchorPane.rightAnchor="5.0">
+        <font>
+            <Font size="14.0"/>
+        </font>
+    </Label>
+    <Button fx:id="exportButton" layoutX="60.0" layoutY="558.0" mnemonicParsing="false" prefHeight="39.0"
+            prefWidth="150.0" text="Export">
+        <font>
+            <Font size="18.0"/>
+        </font>
+    </Button>
+    <Button fx:id="convertButton" layoutX="410.0" layoutY="558.0" mnemonicParsing="false" prefHeight="39.0"
+            prefWidth="150.0" text="Convert">
+        <font>
+            <Font size="18.0"/>
+        </font>
+    </Button>
 </AnchorPane>
