@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
 
-public class DateTimeFunctions {
+public class DateTimeUtils {
 
     public static int countDaysBetweenDates(LocalDate startDate, LocalDate endDate) {
         return (int) ChronoUnit.DAYS.between(startDate, endDate);

@@ -23,6 +23,7 @@ public class StartMenu extends Application {
     public static Scene startMenuScene;
     public static List<Scene> openScenes = new ArrayList<>();
     private static String currentTheme = LIGHT_THEME;
+    private static final int WINDOW_SIZE = 600;
 
     public static void main(String[] args) {
         launch(args);
@@ -41,14 +42,13 @@ public class StartMenu extends Application {
                     var dockIcon = defaultToolkit.getImage(LOGO_PATH);
                     taskbar.setIconImage(dockIcon);
                 }
-
             }
 
-            primaryStage.setScene(new Scene(fxmlLoader.load(), 600, 600));
-            primaryStage.maxHeightProperty().setValue(600);
-            primaryStage.maxWidthProperty().setValue(600);
-            primaryStage.minHeightProperty().setValue(620);
-            primaryStage.minWidthProperty().setValue(620);
+            primaryStage.setScene(new Scene(fxmlLoader.load(), WINDOW_SIZE, WINDOW_SIZE));
+            primaryStage.maxHeightProperty().setValue(WINDOW_SIZE);
+            primaryStage.maxWidthProperty().setValue(WINDOW_SIZE);
+            primaryStage.minHeightProperty().setValue(WINDOW_SIZE + 20);
+            primaryStage.minWidthProperty().setValue(WINDOW_SIZE + 20);
             primaryStage.getScene().getStylesheets().add(currentTheme);
             startMenuScene = primaryStage.getScene();
             StartMenu.openScenes.add(startMenuScene);

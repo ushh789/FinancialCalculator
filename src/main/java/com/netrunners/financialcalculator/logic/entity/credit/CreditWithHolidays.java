@@ -2,7 +2,7 @@ package com.netrunners.financialcalculator.logic.entity.credit;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.netrunners.financialcalculator.logic.time.DateTimeFunctions;
+import com.netrunners.financialcalculator.logic.time.DateTimeUtils;
 import com.netrunners.financialcalculator.logic.entity.OperationPeriodType;
 
 import java.time.LocalDate;
@@ -62,7 +62,7 @@ public class CreditWithHolidays extends Credit{
     }
 
     public int countHolidaysDuration() {
-        return DateTimeFunctions.countDaysBetweenDates(holidaysStart, holidaysEnd);
+        return DateTimeUtils.countDaysBetweenDates(holidaysStart, holidaysEnd);
     }
 
 }

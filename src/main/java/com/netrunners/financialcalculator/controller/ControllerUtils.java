@@ -7,10 +7,10 @@ import com.netrunners.financialcalculator.ui.LanguageManager;
 import com.netrunners.financialcalculator.ui.ThemeSelector;
 import com.netrunners.financialcalculator.ui.WindowsOpener;
 
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 
 public class ControllerUtils {
+    private static final LanguageManager languageManager = LanguageManager.getInstance();
     public static void initializeMenuItems(MenuItem darkTheme, MenuItem lightTheme, MenuItem aboutUs, MenuItem exitApp, MenuItem depositButtonMenu, MenuItem creditButtonMenu, MenuItem languageButton, MenuItem currency) {
         darkTheme.setOnAction(event -> ThemeSelector.setDarkTheme());
         lightTheme.setOnAction(event -> ThemeSelector.setLightTheme());
@@ -22,24 +22,44 @@ public class ControllerUtils {
         currency.setOnAction(event -> CurrencyManager.handleCurrencySelection());
     }
 
-    public static void initializeTextBindings(Menu settingsButton, LanguageManager languageManager, Menu aboutButton, Menu viewButton, Menu themeButton, MenuItem newButton, Menu fileButton, MenuItem depositButtonMenu, MenuItem creditButtonMenu, MenuItem languageButton, MenuItem darkTheme, MenuItem lightTheme, MenuItem aboutUs, MenuItem exitApp, MenuItem currency, MenuItem openFileButton, MenuItem saveAsButton, MenuItem saveButton) {
-        settingsButton.textProperty().bind(languageManager.getStringBinding("settingsButton"));
-        aboutButton.textProperty().bind(languageManager.getStringBinding("aboutButton"));
-        viewButton.textProperty().bind(languageManager.getStringBinding("viewButton"));
-        themeButton.textProperty().bind(languageManager.getStringBinding("themeButton"));
-        newButton.textProperty().bind(languageManager.getStringBinding("newButton"));
-        fileButton.textProperty().bind(languageManager.getStringBinding("fileButton"));
-        depositButtonMenu.textProperty().bind(languageManager.getStringBinding("DepositButton"));
-        creditButtonMenu.textProperty().bind(languageManager.getStringBinding("CreditButton"));
-        languageButton.textProperty().bind(languageManager.getStringBinding("languageButton"));
-        darkTheme.textProperty().bind(languageManager.getStringBinding("darkTheme"));
-        lightTheme.textProperty().bind(languageManager.getStringBinding("lightTheme"));
-        aboutUs.textProperty().bind(languageManager.getStringBinding("aboutUs"));
-        exitApp.textProperty().bind(languageManager.getStringBinding("exitApp"));
-        currency.textProperty().bind(languageManager.getStringBinding("currency"));
-        openFileButton.textProperty().bind(languageManager.getStringBinding("openFileButton"));
-        saveAsButton.textProperty().bind(languageManager.getStringBinding("saveAsButton"));
-        saveButton.textProperty().bind(languageManager.getStringBinding("saveButton"));
+    public static void initializeTextBindings(Menu settingsButton, Menu aboutButton, Menu viewButton, Menu themeButton, MenuItem newButton, Menu fileButton, MenuItem depositButtonMenu, MenuItem creditButtonMenu, MenuItem languageButton, MenuItem darkTheme, MenuItem lightTheme, MenuItem aboutUs, MenuItem exitApp, MenuItem currency, MenuItem openFileButton, MenuItem saveAsButton, MenuItem saveButton) {
+        provideTranslation(settingsButton, "settingsButton");
+        provideTranslation(aboutButton, "aboutButton");
+        provideTranslation(viewButton, "viewButton");
+        provideTranslation(themeButton, "themeButton");
+        provideTranslation(newButton, "newButton");
+        provideTranslation(fileButton, "fileButton");
+        provideTranslation(depositButtonMenu, "DepositButton");
+        provideTranslation(creditButtonMenu, "CreditButton");
+        provideTranslation(languageButton, "languageButton");
+        provideTranslation(darkTheme, "darkTheme");
+        provideTranslation(lightTheme, "lightTheme");
+        provideTranslation(aboutUs, "aboutUs");
+        provideTranslation(exitApp, "exitApp");
+        provideTranslation(currency, "currency");
+        provideTranslation(openFileButton, "openFileButton");
+        provideTranslation(saveAsButton, "saveAsButton");
+        provideTranslation(saveButton, "saveButton");
     }
+
+    public static void provideTranslation(Labeled labeled, String key) {
+        labeled.textProperty().bind(languageManager.getStringBinding(key));
+    }
+
+    public static void provideTranslation(MenuItem menuItem, String key) {
+        menuItem.textProperty().bind(languageManager.getStringBinding(key));
+    }
+
+    public static void provideTranslation(TextField textField, String key) {
+        textField.promptTextProperty().bind(languageManager.getStringBinding(key));
+    }
+    public static void provideTranslation(DatePicker datePicker, String key) {
+        datePicker.promptTextProperty().bind(languageManager.getStringBinding(key));
+    }
+    public static void provideTranslation(TableColumn<Object[], ?> datePicker, String key) {
+        datePicker.textProperty().bind(languageManager.getStringBinding(key));
+    }
+
+
 
 }

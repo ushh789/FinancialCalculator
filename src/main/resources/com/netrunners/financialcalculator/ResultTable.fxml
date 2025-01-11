@@ -42,7 +42,7 @@
     <TableView fx:id="resultTable" editable="true" layoutX="60.0" layoutY="125.0" prefHeight="400.0" prefWidth="500.0">
         <columns>
             <TableColumn fx:id="periodColumn" prefWidth="75.0" sortable="false"/>
-            <TableColumn fx:id="investmentloanColumn" prefWidth="142.0" sortable="false"/>
+            <TableColumn fx:id="investmentLoanColumn" prefWidth="142.0" sortable="false"/>
             <TableColumn fx:id="periodProfitLoanColumn" editable="false" prefWidth="143.0" sortable="false"/>
             <TableColumn fx:id="totalColumn" editable="false" prefWidth="139.0" sortable="false"/>
             <TableColumn fx:id="periodPercentsColumn" prefWidth="139.0" sortable="false"/>

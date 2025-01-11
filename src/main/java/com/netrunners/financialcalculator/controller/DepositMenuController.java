@@ -22,16 +22,15 @@ import javafx.scene.control.TextField;
 public class DepositMenuController {
 
     @FXML
-    private MenuItem WithdrawalOption1;
+    private MenuItem withdrawalOption1;
 
     @FXML
-    private MenuItem WithdrawalOption2;
+    private MenuItem withdrawalOption2;
 
     @FXML
-    private MenuItem WithdrawalOption3;
-
+    private MenuItem withdrawalOption3;
     @FXML
-    private MenuItem WithdrawalOption4;
+    private MenuItem withdrawalOption4;
 
     @FXML
     private Menu aboutButton;
@@ -120,12 +119,12 @@ public class DepositMenuController {
     @FXML
     private Menu viewButton;
 
-    private final LanguageManager languageManager = LanguageManager.getInstance();
+    private final CurrencyManager currencyManager = CurrencyManager.getInstance();
 
 
     @FXML
     void initialize() {
-        DatePickerRestrictions.setDatePickerRestrictionsWithdrawalHolidays(depositContractBeginning, depositContractEnding, depositWithdrawalDate);
+        DatePickerRestrictions.setDatePickerRestrictions(depositContractBeginning, depositContractEnding, depositWithdrawalDate);
         depositWithdrawalDate.setVisible(false);
         depositWithdrawalDate.setDisable(true);
         saveButton.setDisable(true);
@@ -146,46 +145,45 @@ public class DepositMenuController {
                 depositWithdrawalDate.setDisable(true);
             }
         });
-        WithdrawalOption1.setOnAction(event -> {
+        withdrawalOption1.setOnAction(event -> {
             depositWithdrawalOption.textProperty().unbind();
-            depositWithdrawalOption.setText(WithdrawalOption1.getText());
-            depositWithdrawalOption.textProperty().bind(languageManager.getStringBinding("Option1"));
+            depositWithdrawalOption.setText(withdrawalOption1.getText());
+            ControllerUtils.provideTranslation(depositWithdrawalOption, "Option1");
         });
-        WithdrawalOption2.setOnAction(event -> {
+        withdrawalOption2.setOnAction(event -> {
             depositWithdrawalOption.textProperty().unbind();
-            depositWithdrawalOption.setText(WithdrawalOption2.getText());
-            depositWithdrawalOption.textProperty().bind(languageManager.getStringBinding("Option2"));
+            depositWithdrawalOption.setText(withdrawalOption2.getText());
+            ControllerUtils.provideTranslation(depositWithdrawalOption, "Option2");
         });
-        WithdrawalOption3.setOnAction(event -> {
+        withdrawalOption3.setOnAction(event -> {
             depositWithdrawalOption.textProperty().unbind();
-            depositWithdrawalOption.setText(WithdrawalOption3.getText());
-            depositWithdrawalOption.textProperty().bind(languageManager.getStringBinding("Option3"));
+            depositWithdrawalOption.setText(withdrawalOption3.getText());
+            ControllerUtils.provideTranslation(depositWithdrawalOption, "Option3");
         });
-        WithdrawalOption4.setOnAction(event -> {
+        withdrawalOption4.setOnAction(event -> {
             depositWithdrawalOption.textProperty().unbind();
-            depositWithdrawalOption.setText(WithdrawalOption4.getText());
-            depositWithdrawalOption.textProperty().bind(languageManager.getStringBinding("Option4"));
+            depositWithdrawalOption.setText(withdrawalOption4.getText());
+            ControllerUtils.provideTranslation(depositWithdrawalOption, "Option4");
         });
 
         // Menu text bindings
-        ControllerUtils.initializeTextBindings(settingsButton, languageManager, aboutButton, viewButton, themeButton, newButton, fileButton, depositButtonMenu, creditButtonMenu, languageButton, darkTheme, lightTheme, aboutUs, exitApp, currency, openFileButton, saveAsButton, saveButton);
-        closeWindow.textProperty().bind(languageManager.getStringBinding("closeWindow"));
-        depositLabel.textProperty().bind(languageManager.getStringBinding("DepositButton"));
-        depositCapitalizationCheck.textProperty().bind(languageManager.getStringBinding("DepositCapitalization"));
-        depositEarlyWithdrawalCheck.textProperty().bind(languageManager.getStringBinding("DepositEarlyWithdrawal"));
-        depositWithdrawalOption.textProperty().bind(languageManager.getStringBinding("WithdrawalOption"));
-        depositSaveResult.textProperty().bind(languageManager.getStringBinding("SaveResult"));
-        depositViewResult.textProperty().bind(languageManager.getStringBinding("ViewResult"));
-        depositAnnualPercentInput.promptTextProperty().bind(languageManager.getStringBinding("AnnualPercent"));
-        investInput.promptTextProperty().bind(languageManager.getStringBinding("InvestInput"));
-        depositContractBeginning.promptTextProperty().bind(languageManager.getStringBinding("ContractBeginning"));
-        depositContractEnding.promptTextProperty().bind(languageManager.getStringBinding("ContractEnding"));
-        depositWithdrawalDate.promptTextProperty().bind(languageManager.getStringBinding("DepositEarlyWithdrawalDate"));
-        WithdrawalOption1.textProperty().bind(languageManager.getStringBinding("Option1"));
-        WithdrawalOption2.textProperty().bind(languageManager.getStringBinding("Option2"));
-        WithdrawalOption3.textProperty().bind(languageManager.getStringBinding("Option3"));
-        WithdrawalOption4.textProperty().bind(languageManager.getStringBinding("Option4"));
-
+        ControllerUtils.initializeTextBindings(settingsButton, aboutButton, viewButton, themeButton, newButton, fileButton, depositButtonMenu, creditButtonMenu, languageButton, darkTheme, lightTheme, aboutUs, exitApp, currency, openFileButton, saveAsButton, saveButton);
+        ControllerUtils.provideTranslation(closeWindow, "closeWindow");
+        ControllerUtils.provideTranslation(depositLabel, "DepositButton");
+        ControllerUtils.provideTranslation(depositCapitalizationCheck, "DepositCapitalization");
+        ControllerUtils.provideTranslation(depositEarlyWithdrawalCheck, "DepositEarlyWithdrawal");
+        ControllerUtils.provideTranslation(depositWithdrawalOption, "WithdrawalOption");
+        ControllerUtils.provideTranslation(depositSaveResult, "SaveResult");
+        ControllerUtils.provideTranslation(depositViewResult, "ViewResult");
+        ControllerUtils.provideTranslation(withdrawalOption1, "Option1");
+        ControllerUtils.provideTranslation(withdrawalOption2, "Option2");
+        ControllerUtils.provideTranslation(withdrawalOption3, "Option3");
+        ControllerUtils.provideTranslation(withdrawalOption4, "Option4");
+        ControllerUtils.provideTranslation(investInput, "InvestInput");
+        ControllerUtils.provideTranslation(depositContractBeginning, "ContractBeginning");
+        ControllerUtils.provideTranslation(depositAnnualPercentInput, "AnnualPercent");
+        ControllerUtils.provideTranslation(depositContractEnding, "ContractEnding");
+        ControllerUtils.provideTranslation(depositWithdrawalDate, "DepositEarlyWithdrawalDate");
 
         depositSaveResult.setOnAction(event -> {
             if (ErrorChecker.areFieldsValidInDeposit(investInput, depositAnnualPercentInput, depositWithdrawalOption, depositContractBeginning, depositContractEnding, depositWithdrawalDate, depositEarlyWithdrawalCheck)) {
@@ -193,7 +191,7 @@ public class DepositMenuController {
                     if (depositEarlyWithdrawalCheck.isSelected()) {
                         Deposit deposit = new CapitalisedDeposit(
                                 Float.parseFloat(investInput.getText()),
-                                CurrencyManager.getInstance().getCurrency(),
+                                currencyManager.getCurrency(),
                                 Float.parseFloat(depositAnnualPercentInput.getText()),
                                 depositContractBeginning.getValue(), depositContractEnding.getValue(),
                                 depositEarlyWithdrawalCheck.isSelected(), depositWithdrawalDate.getValue(),
@@ -203,7 +201,7 @@ public class DepositMenuController {
                     } else {
                         Deposit deposit = new CapitalisedDeposit(
                                 Float.parseFloat(investInput.getText()),
-                                CurrencyManager.getInstance().getCurrency(),
+                                currencyManager.getCurrency(),
                                 Float.parseFloat(depositAnnualPercentInput.getText()),
                                 depositContractBeginning.getValue(),
                                 depositContractEnding.getValue(),
@@ -216,7 +214,7 @@ public class DepositMenuController {
                     if (depositEarlyWithdrawalCheck.isSelected()) {
                         Deposit deposit = new UncapitalisedDeposit(
                                 Float.parseFloat(investInput.getText()),
-                                CurrencyManager.getInstance().getCurrency(),
+                                currencyManager.getCurrency(),
                                 Float.parseFloat(depositAnnualPercentInput.getText()),
                                 depositContractBeginning.getValue(),
                                 depositContractEnding.getValue(),
@@ -228,7 +226,7 @@ public class DepositMenuController {
                     } else {
                         Deposit deposit = new UncapitalisedDeposit(Float.parseFloat(
                                 investInput.getText()),
-                                CurrencyManager.getInstance().getCurrency(),
+                                currencyManager.getCurrency(),
                                 Float.parseFloat(depositAnnualPercentInput.getText()),
                                 depositContractBeginning.getValue(),
                                 depositContractEnding.getValue(),
@@ -246,7 +244,7 @@ public class DepositMenuController {
                     if (depositEarlyWithdrawalCheck.isSelected()) {
                         Deposit deposit = new CapitalisedDeposit(
                                 Float.parseFloat(investInput.getText()),
-                                CurrencyManager.getInstance().getCurrency(),
+                                currencyManager.getCurrency(),
                                 Float.parseFloat(depositAnnualPercentInput.getText()),
                                 depositContractBeginning.getValue(),
                                 depositContractEnding.getValue(),
@@ -258,7 +256,7 @@ public class DepositMenuController {
                     } else {
                         Deposit deposit = new CapitalisedDeposit(
                                 Float.parseFloat(investInput.getText()),
-                                CurrencyManager.getInstance().getCurrency(),
+                                currencyManager.getCurrency(),
                                 Float.parseFloat(depositAnnualPercentInput.getText()),
                                 depositContractBeginning.getValue(),
                                 depositContractEnding.getValue(),
@@ -271,7 +269,7 @@ public class DepositMenuController {
                     if (depositEarlyWithdrawalCheck.isSelected()) {
                         Deposit deposit = new UncapitalisedDeposit(
                                 Float.parseFloat(investInput.getText()),
-                                CurrencyManager.getInstance().getCurrency(),
+                                currencyManager.getCurrency(),
                                 Float.parseFloat(depositAnnualPercentInput.getText()),
                                 depositContractBeginning.getValue(),
                                 depositContractEnding.getValue(),
@@ -283,7 +281,7 @@ public class DepositMenuController {
                     } else {
                         Deposit deposit = new UncapitalisedDeposit(
                                 Float.parseFloat(investInput.getText()),
-                                CurrencyManager.getInstance().getCurrency(),
+                                currencyManager.getCurrency(),
                                 Float.parseFloat(depositAnnualPercentInput.getText()),
                                 depositContractBeginning.getValue(),
                                 depositContractEnding.getValue(),

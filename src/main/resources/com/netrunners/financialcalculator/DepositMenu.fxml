@@ -82,13 +82,13 @@
     <MenuButton fx:id="depositWithdrawalOption" layoutX="359.0" layoutY="353.0" mnemonicParsing="false"
                 text="Withdrawal option">
         <items>
-            <MenuItem fx:id="WithdrawalOption1" mnemonicParsing="false" text="Monthly"/>
+            <MenuItem fx:id="withdrawalOption1" mnemonicParsing="false" text="Monthly"/>
             <SeparatorMenuItem mnemonicParsing="false"/>
-            <MenuItem fx:id="WithdrawalOption2" mnemonicParsing="false" text="Quarterly"/>
+            <MenuItem fx:id="withdrawalOption2" mnemonicParsing="false" text="Quarterly"/>
             <SeparatorMenuItem mnemonicParsing="false"/>
-            <MenuItem fx:id="WithdrawalOption3" mnemonicParsing="false" text="Yearly"/>
+            <MenuItem fx:id="withdrawalOption3" mnemonicParsing="false" text="Yearly"/>
             <SeparatorMenuItem mnemonicParsing="false"/>
-            <MenuItem fx:id="WithdrawalOption4" mnemonicParsing="false" text="At the end"/>
+            <MenuItem fx:id="withdrawalOption4" mnemonicParsing="false" text="At the end"/>
             <SeparatorMenuItem mnemonicParsing="false"/>
         </items>
     </MenuButton>

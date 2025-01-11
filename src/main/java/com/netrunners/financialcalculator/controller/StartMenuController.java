@@ -1,14 +1,14 @@
 package com.netrunners.financialcalculator.controller;
 
-import com.netrunners.financialcalculator.ui.LanguageManager;
 import com.netrunners.financialcalculator.logic.files.OpenFile;
 import com.netrunners.financialcalculator.ui.WindowsOpener;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.Menu;
 
-public class StartMenuController implements LanguageUpdater {
+public class StartMenuController {
 
     @FXML
     private Button CreditButton;
@@ -70,9 +70,6 @@ public class StartMenuController implements LanguageUpdater {
     @FXML
     private Label financialCalculatorLabel;
 
-    private final LanguageManager languageManager = LanguageManager.getInstance();
-
-
     @FXML
     void initialize() {
         saveButton.setDisable(true);
@@ -86,10 +83,10 @@ public class StartMenuController implements LanguageUpdater {
 
 
         // Menu text bindings
-        ControllerUtils.initializeTextBindings(settingsButton, languageManager, aboutButton, viewButton, themeButton, newButton, fileButton, depositButtonMenu, creditButtonMenu, languageButton, darkTheme, lightTheme, aboutUs, exitApp, currency, openFileButton, saveAsButton, saveButton);
-        financialCalculatorLabel.textProperty().bind(languageManager.getStringBinding("financialCalculatorLabel"));
-        DepositButton.textProperty().bind(languageManager.getStringBinding("DepositButton"));
-        CreditButton.textProperty().bind(languageManager.getStringBinding("CreditButton"));
+        ControllerUtils.initializeTextBindings(settingsButton, aboutButton, viewButton, themeButton, newButton, fileButton, depositButtonMenu, creditButtonMenu, languageButton, darkTheme, lightTheme, aboutUs, exitApp, currency, openFileButton, saveAsButton, saveButton);
+        ControllerUtils.provideTranslation(financialCalculatorLabel, "financialCalculatorLabel");
+        ControllerUtils.provideTranslation(DepositButton, "DepositButton");
+        ControllerUtils.provideTranslation(CreditButton, "CreditButton");
     }
 }
 

@@ -1,7 +1,5 @@
 package com.netrunners.financialcalculator.controller;
 
-import java.time.LocalDate;
-
 import com.netrunners.financialcalculator.errorhandling.ErrorChecker;
 import com.netrunners.financialcalculator.logic.files.OpenFile;
 import com.netrunners.financialcalculator.logic.time.DatePickerRestrictions;
@@ -120,12 +118,12 @@ public class CreditMenuController {
 
     @FXML
     private MenuItem newButton;
-    private final LanguageManager languageManager = LanguageManager.getInstance();
 
+    private final CurrencyManager currencyManager = CurrencyManager.getInstance();
 
     @FXML
     void initialize() {
-        DatePickerRestrictions.setDatePickerRestrictionsHolidays(contractBeginning, contractEnding, holidaysBeginning, holidaysEnding);
+        DatePickerRestrictions.setDatePickerRestrictions(contractBeginning, contractEnding, holidaysBeginning, holidaysEnding);
         holidaysBeginning.setVisible(false);
         holidaysBeginning.setDisable(true);
         holidaysEnding.setVisible(false);
@@ -148,22 +146,22 @@ public class CreditMenuController {
         PaymentOption1.setOnAction(event -> {
             paymentOption.textProperty().unbind();
             paymentOption.setText(PaymentOption1.getText());
-            paymentOption.textProperty().bind(languageManager.getStringBinding("Option1"));
+            ControllerUtils.provideTranslation(paymentOption, "Option1");
         });
         PaymentOption2.setOnAction(event -> {
             paymentOption.textProperty().unbind();
             paymentOption.setText(PaymentOption2.getText());
-            paymentOption.textProperty().bind(languageManager.getStringBinding("Option2"));
+            ControllerUtils.provideTranslation(paymentOption, "Option2");
         });
         PaymentOption3.setOnAction(event -> {
             paymentOption.textProperty().unbind();
             paymentOption.setText(PaymentOption3.getText());
-            paymentOption.textProperty().bind(languageManager.getStringBinding("Option3"));
+            ControllerUtils.provideTranslation(paymentOption, "Option3");
         });
         PaymentOption4.setOnAction(event -> {
             paymentOption.textProperty().unbind();
             paymentOption.setText(PaymentOption4.getText());
-            paymentOption.textProperty().bind(languageManager.getStringBinding("Option4"));
+            ControllerUtils.provideTranslation(paymentOption, "Option4");
         });
 
         // Menu items
@@ -172,53 +170,47 @@ public class CreditMenuController {
         closeWindow.setOnAction(event -> ExitApp.closeCurrentWindow(closeWindow.getScene()));
 
         // Menu text bindings
-        ControllerUtils.initializeTextBindings(settingsButton, languageManager, aboutButton, viewButton, themeButton, newButton, fileButton, depositButtonMenu, creditButtonMenu, languageButton, darkTheme, lightTheme, aboutUs, exitApp, currency, openFileButton, saveAsButton, saveButton);
-        closeWindow.textProperty().bind(languageManager.getStringBinding("closeWindow"));
-        creditLabel.textProperty().bind(languageManager.getStringBinding("CreditButton"));
-        loanInput.promptTextProperty().bind(languageManager.getStringBinding("LoanInput"));
-        annualPercentInput.promptTextProperty().bind(languageManager.getStringBinding("AnnualPercent"));
-        contractBeginning.promptTextProperty().bind(languageManager.getStringBinding("ContractBeginning"));
-        contractEnding.promptTextProperty().bind(languageManager.getStringBinding("ContractEnding"));
-        paymentOption.textProperty().bind(languageManager.getStringBinding("PaymentOption"));
-        checkPaymentHolidays.textProperty().bind(languageManager.getStringBinding("CreditHolidaysCheck"));
-        holidaysBeginning.promptTextProperty().bind(languageManager.getStringBinding("HolidaysBeginning"));
-        holidaysEnding.promptTextProperty().bind(languageManager.getStringBinding("HolidaysEnding"));
-        creditSaveResult.textProperty().bind(languageManager.getStringBinding("SaveResult"));
-        creditViewResult.textProperty().bind(languageManager.getStringBinding("ViewResult"));
-        PaymentOption1.textProperty().bind(languageManager.getStringBinding("Option1"));
-        PaymentOption2.textProperty().bind(languageManager.getStringBinding("Option2"));
-        PaymentOption3.textProperty().bind(languageManager.getStringBinding("Option3"));
-        PaymentOption4.textProperty().bind(languageManager.getStringBinding("Option4"));
-
+        ControllerUtils.initializeTextBindings(settingsButton, aboutButton, viewButton, themeButton, newButton, fileButton, depositButtonMenu, creditButtonMenu, languageButton, darkTheme, lightTheme, aboutUs, exitApp, currency, openFileButton, saveAsButton, saveButton);
+        ControllerUtils.provideTranslation(loanInput, "LoanInput");
+        ControllerUtils.provideTranslation(annualPercentInput, "AnnualPercent");
+        ControllerUtils.provideTranslation(contractBeginning, "ContractBeginning");
+        ControllerUtils.provideTranslation(contractEnding, "ContractEnding");
+        ControllerUtils.provideTranslation(paymentOption, "PaymentOption");
+        ControllerUtils.provideTranslation(checkPaymentHolidays, "CreditHolidaysCheck");
+        ControllerUtils.provideTranslation(holidaysBeginning, "HolidaysBeginning");
+        ControllerUtils.provideTranslation(holidaysEnding, "HolidaysEnding");
+        ControllerUtils.provideTranslation(creditSaveResult, "SaveResult");
+        ControllerUtils.provideTranslation(creditViewResult, "ViewResult");
+        ControllerUtils.provideTranslation(PaymentOption1, "Option1");
+        ControllerUtils.provideTranslation(PaymentOption2, "Option2");
+        ControllerUtils.provideTranslation(PaymentOption3, "Option3");
+        ControllerUtils.provideTranslation(PaymentOption4, "Option4");
+        ControllerUtils.provideTranslation(closeWindow, "closeWindow");
+        ControllerUtils.provideTranslation(creditLabel, "CreditButton");
 
         creditSaveResult.setOnAction(event -> {
             if (ErrorChecker.areFieldsValidInCredit(loanInput, annualPercentInput, paymentOption, contractBeginning, contractEnding, checkPaymentHolidays, holidaysBeginning, holidaysEnding)) {
                 if (checkPaymentHolidays.isSelected()) {
-                    LocalDate holidaysStartDate = holidaysBeginning.getValue();
-                    LocalDate holidaysEndDate = holidaysEnding.getValue();
-
                     Credit credit = new CreditWithHolidays(
                             Float.parseFloat(loanInput.getText()),
-                            CurrencyManager.getInstance().getCurrency(),
+                            currencyManager.getCurrency(),
                             Float.parseFloat(annualPercentInput.getText()),
                             contractBeginning.getValue(),
                             contractEnding.getValue(),
                             LanguageManager.checkOption(paymentOption.getText()),
-                            holidaysStartDate,
-                            holidaysEndDate
+                            holidaysBeginning.getValue(),
+                            holidaysEnding.getValue()
                     );
-
                     credit.save();
                 } else {
                     Credit credit = new CreditWithoutHolidays(
                             Float.parseFloat(loanInput.getText()),
-                            CurrencyManager.getInstance().getCurrency(),
+                            currencyManager.getCurrency(),
                             Float.parseFloat(annualPercentInput.getText()),
                             contractBeginning.getValue(),
                             contractEnding.getValue(),
                             LanguageManager.checkOption(paymentOption.getText())
                     );
-
                     credit.save();
                 }
             }
@@ -226,29 +218,24 @@ public class CreditMenuController {
         creditViewResult.setOnAction(event -> {
             if (ErrorChecker.areFieldsValidInCredit(loanInput, annualPercentInput, paymentOption, contractBeginning, contractEnding, checkPaymentHolidays, holidaysBeginning, holidaysEnding)) {
                 if (checkPaymentHolidays.isSelected()) {
-                    LocalDate holidaysStartDate = holidaysBeginning.getValue();
-                    LocalDate holidaysEndDate = holidaysEnding.getValue();
-
                     Credit credit = new CreditWithHolidays(
                             Float.parseFloat(loanInput.getText()),
-                            CurrencyManager.getInstance().getCurrency(),
+                            currencyManager.getCurrency(),
                             Float.parseFloat(annualPercentInput.getText()), contractBeginning.getValue(),
                             contractEnding.getValue(), LanguageManager.checkOption(paymentOption.getText()),
-                            holidaysStartDate,
-                            holidaysEndDate
+                            holidaysBeginning.getValue(),
+                            holidaysEnding.getValue()
                     );
-
                     credit.sendToResultTable();
                 } else {
                     Credit credit = new CreditWithoutHolidays(
                             Float.parseFloat(loanInput.getText()),
-                            CurrencyManager.getInstance().getCurrency(),
+                            currencyManager.getCurrency(),
                             Float.parseFloat(annualPercentInput.getText()),
                             contractBeginning.getValue(),
                             contractEnding.getValue(),
                             LanguageManager.checkOption(paymentOption.getText())
                     );
-
                     credit.sendToResultTable();
                 }
             }

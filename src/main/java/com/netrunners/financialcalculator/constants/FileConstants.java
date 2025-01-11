@@ -11,9 +11,12 @@ public class FileConstants {
     public final static String RESULT_TABLE = "/com/netrunners/financialcalculator/ResultTable.fxml";
     public final static String SAVES_PATH = "saves/";
 
+    // File picker labels
     public final static String CSV_FILE = "CSV Files";
     public final static String EXCEL_FILE = "Excel Files";
     public final static String JSON_FILE = "JSON files (*.json)";
+
+    // File extensions
     public final static String CSV_EXTENSION = "*.csv";
     public final static String EXCEL_EXTENSION = "*.xlsx";
     public final static String JSON_EXTENSION = "*.json";

@@ -2,7 +2,7 @@ package com.netrunners.financialcalculator.logic.entity.credit;
 
 import com.google.gson.JsonObject;
 import com.netrunners.financialcalculator.logic.files.Savable;
-import com.netrunners.financialcalculator.logic.time.DateTimeFunctions;
+import com.netrunners.financialcalculator.logic.time.DateTimeUtils;
 import com.netrunners.financialcalculator.logic.entity.OperationPeriodType;
 import com.netrunners.financialcalculator.logic.entity.ResultTableSender;
 import com.netrunners.financialcalculator.ui.FilesActions;
@@ -26,7 +26,7 @@ public class Credit implements Savable, ResultTableSender {
         this.startDate = startDate;
         this.endDate = endDate;
         this.paymentType = paymentType;
-        this.contractDuration = DateTimeFunctions.countDaysBetweenDates(startDate, endDate);
+        this.contractDuration = DateTimeUtils.countDaysBetweenDates(startDate, endDate);
     }
 
     public Credit(JsonObject jsonObject) {
