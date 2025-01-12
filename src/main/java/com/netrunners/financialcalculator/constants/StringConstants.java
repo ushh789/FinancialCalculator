@@ -6,6 +6,10 @@ import java.time.format.DateTimeFormatter;
 public class StringConstants {
 
     public static final String EMPTY_STRING = "";
+    public static final String ASTERISK = "*";
+    public static final String COMMA = ",";
+    public static final String DOT = ".";
+    public static final String SEMI_COLON = ";";
 
     // Styles
     public static final String ERROR_STYLE = "-fx-border-color:red;-fx-border-radius:3px";

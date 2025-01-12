@@ -1,6 +1,7 @@
 package com.netrunners.financialcalculator.ui;
 
 import com.netrunners.financialcalculator.logic.currecnyconverter.Converter;
+import com.netrunners.financialcalculator.logic.entity.ResultTableSender;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.TableColumn;
@@ -13,6 +14,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.netrunners.financialcalculator.constants.FileConstants.LOGO;
+import static com.netrunners.financialcalculator.constants.StringConstants.COMMA;
+import static com.netrunners.financialcalculator.constants.StringConstants.DOT;
 
 public class CurrencyManager {
     private static CurrencyManager instance;
@@ -45,11 +48,11 @@ public class CurrencyManager {
         }
     }
 
-    public static void updateResultTable(String userSelectedCurrency, float loan, TableColumn<Object[], String> investmentLoanColumn, TableColumn<Object[], String> periodProfitLoanColumn, TableColumn<Object[], String> totalColumn, TableColumn<Object[], String> periodPercentsColumn, TableView<Object[]> resultTable) {
+    public static void updateResultTable(ResultTableSender resultTableSender, TableColumn<Object[], String> investmentLoanColumn, TableColumn<Object[], String> periodProfitLoanColumn, TableColumn<Object[], String> totalColumn, TableColumn<Object[], String> periodPercentsColumn, TableView<Object[]> resultTable) {
         Optional<String> result = openCurrencySelector();
         if (result.isPresent()) {
             String selectedConvertCurrency = result.get();
-            float rate = Converter.getRateByCC(Converter.getCC(userSelectedCurrency)) / Converter.getRateByCC(Converter.getCC(selectedConvertCurrency));
+            float rate = Converter.getRateByCC(Converter.getCC(resultTableSender.getCurrency())) / Converter.getRateByCC(Converter.getCC(selectedConvertCurrency));
             ObservableList<Object[]> investmentLoanColumnItems = investmentLoanColumn.getTableView().getItems();
             ObservableList<Object[]> periodProfitLoanColumnItems = periodProfitLoanColumn.getTableView().getItems();
             ObservableList<Object[]> totalColumnItems = totalColumn.getTableView().getItems();
@@ -58,14 +61,18 @@ public class CurrencyManager {
                 item[1] = extractFloatValue((String) item[1]) * rate;
                 String newValue = String.format("%.2f", item[1]) + selectedConvertCurrency;
                 item[1] = newValue;
+
+                //TODO: check this
+                /*
                 if (!investmentLoanColumnItems.isEmpty()) {
-                    if (loan == 0) {
+                    float loan = extractFloatValue((String) investmentLoanColumnItems.get(0)[1]);
+                    if (loan != 0) {
                         float tempInvest = extractFloatValue((String) investmentLoanColumnItems.get(0)[1]);
                     } else {
                         loan = extractFloatValue((String) investmentLoanColumnItems.get(0)[1]);
                     }
-
                 }
+                 */
             }
             for (Object[] item : periodProfitLoanColumnItems) {
                 item[2] = extractFloatValue((String) item[2]) * rate;
@@ -111,7 +118,7 @@ public class CurrencyManager {
     }
 
     private static float extractFloatValue(String cellValue) {
-        String numericValue = cellValue.replace(',', '.');
+        String numericValue = cellValue.replace(COMMA, DOT);
         numericValue = numericValue.substring(0, numericValue.length() - 1);
         return Float.parseFloat(numericValue);
     }

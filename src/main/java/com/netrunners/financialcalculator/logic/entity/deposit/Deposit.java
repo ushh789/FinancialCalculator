@@ -88,12 +88,6 @@ public abstract class Deposit implements Savable, ResultTableSender {
         }
     }
 
-    @Override
-    public void sendToResultTable() {
-        WindowsOpener.openResultTable(this);
-    }
-
-
     public float getInvestment() {
         return investment;
     }
@@ -106,18 +100,6 @@ public abstract class Deposit implements Savable, ResultTableSender {
         return annualPercent;
     }
 
-    public String getCurrency() {
-        return currency;
-    }
-
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
     public OperationPeriodType getWithdrawalOption() {
         return withdrawalOption;
     }
@@ -128,5 +110,30 @@ public abstract class Deposit implements Savable, ResultTableSender {
 
     public LocalDate getEarlyWithdrawalDate() {
         return earlyWithdrawalDate;
+    }
+
+    @Override
+    public void sendToResultTable() {
+        WindowsOpener.openResultTable(this);
+    }
+
+    @Override
+    public String getCurrency() {
+        return currency;
+    }
+
+    @Override
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    @Override
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    @Override
+    public float getBody() {
+        return investment;
     }
 }

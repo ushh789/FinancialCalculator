@@ -18,8 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
-import static com.netrunners.financialcalculator.constants.FileConstants.*;
 import static com.netrunners.financialcalculator.constants.FileConstants.JSON_EXTENSION;
+import static com.netrunners.financialcalculator.constants.StringConstants.ASTERISK;
+import static com.netrunners.financialcalculator.constants.FileConstants.JSON_FILE;
+import static com.netrunners.financialcalculator.constants.FileConstants.LOGO;
+import static com.netrunners.financialcalculator.constants.FileConstants.SAVES_PATH;
 
 public class FilesActions {
     public static File showFileChooser(String bindingKey, List<String> fileTypes, List<String> extensions) {
@@ -64,7 +67,7 @@ public class FilesActions {
         fileTypes.add(JSON_FILE);
 
         List<String> extensions = new ArrayList<>();
-        extensions.add(JSON_EXTENSION);
+        extensions.add(ASTERISK + JSON_EXTENSION);
         File file = FilesActions.showFileChooserSaver("saveButton", fileTypes, extensions);
 
         if (file != null) {

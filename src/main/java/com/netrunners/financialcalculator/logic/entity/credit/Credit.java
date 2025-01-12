@@ -67,20 +67,8 @@ public class Credit implements Savable, ResultTableSender {
         return loan;
     }
 
-    public String getCurrency() {
-        return currency;
-    }
-
     public float getAnnualPercent() {
         return annualPercent;
-    }
-
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
     }
 
     public OperationPeriodType getPaymentType() {
@@ -103,4 +91,25 @@ public class Credit implements Savable, ResultTableSender {
     public void sendToResultTable() {
         WindowsOpener.openResultTable(this);
     }
+
+    @Override
+    public String getCurrency() {
+        return currency;
+    }
+
+    @Override
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    @Override
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    @Override
+    public float getBody() {
+        return loan;
+    }
+
 }

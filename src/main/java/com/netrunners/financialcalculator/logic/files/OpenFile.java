@@ -21,6 +21,7 @@ import java.util.logging.Level;
 
 import static com.netrunners.financialcalculator.constants.FileConstants.JSON_EXTENSION;
 import static com.netrunners.financialcalculator.constants.FileConstants.JSON_FILE;
+import static com.netrunners.financialcalculator.constants.StringConstants.ASTERISK;
 
 public class OpenFile {
 
@@ -29,7 +30,7 @@ public class OpenFile {
         fileTypes.add(JSON_FILE);
 
         List<String> extensions = new ArrayList<>();
-        extensions.add(JSON_EXTENSION);
+        extensions.add(ASTERISK + JSON_EXTENSION);
 
         File selectedFile = FilesActions.showFileChooser("ChooseOpenFile", fileTypes, extensions);
         if (selectedFile != null) {
