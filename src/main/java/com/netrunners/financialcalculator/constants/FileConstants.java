@@ -18,7 +18,7 @@ public class FileConstants {
 
     // File extensions
     public final static String CSV_EXTENSION = ".csv";
-    public final static String EXCEL_EXTENSION = ".xlsx";
+    public final static String EXCEL_EXTENSION = ".xls";
     public final static String JSON_EXTENSION = ".json";
 
 }

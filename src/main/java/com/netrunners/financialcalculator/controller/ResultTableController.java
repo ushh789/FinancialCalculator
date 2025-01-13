@@ -172,7 +172,7 @@ public class ResultTableController {
             File selectedFile = FilesActions.showFileChooserSaver("Export", saveFileTypes(), saveExtensions());
 
             if (selectedFile != null && selectedFile.getName().endsWith(EXCEL_EXTENSION)) {
-                SaveFile.writeDataToXSLS(finalData, resultTableDataCounter.getFinancialOperation(), selectedFile, investmentLoanColumn, periodProfitLoanColumn, totalColumn, periodColumn, periodPercentsColumn, resultTableDataCounter.getDaysToNextPeriod(), resultTableDataCounter.getDaysToNextPeriodWithHolidays());
+                SaveFile.writeDataToXLS(finalData, resultTableDataCounter.getFinancialOperation(), selectedFile, investmentLoanColumn, periodProfitLoanColumn, totalColumn, periodColumn, periodPercentsColumn, resultTableDataCounter.getDaysToNextPeriod(), resultTableDataCounter.getDaysToNextPeriodWithHolidays());
             } else {
                 SaveFile.writeDataToCSV(finalData, selectedFile, credit, investmentLoanColumn, periodProfitLoanColumn, totalColumn, periodPercentsColumn);
             }
@@ -188,7 +188,7 @@ public class ResultTableController {
             File selectedFile = FilesActions.showFileChooserSaver("saveAsButton", saveFileTypes(), saveExtensions());
 
             if (selectedFile != null && selectedFile.getName().endsWith(EXCEL_EXTENSION)) {
-                SaveFile.writeDataToXSLS(finalData, resultTableDataCounter.getFinancialOperation(), selectedFile, investmentLoanColumn, periodProfitLoanColumn, totalColumn, periodColumn, periodPercentsColumn, resultTableDataCounter.getDaysToNextPeriod(), resultTableDataCounter.getDaysToNextPeriodWithHolidays());
+                SaveFile.writeDataToXLS(finalData, resultTableDataCounter.getFinancialOperation(), selectedFile, investmentLoanColumn, periodProfitLoanColumn, totalColumn, periodColumn, periodPercentsColumn, resultTableDataCounter.getDaysToNextPeriod(), resultTableDataCounter.getDaysToNextPeriodWithHolidays());
             } else {
                 SaveFile.writeDataToCSV(finalData, selectedFile, credit, investmentLoanColumn, periodProfitLoanColumn, totalColumn, periodPercentsColumn);
             }
@@ -209,7 +209,7 @@ public class ResultTableController {
             File selectedFile = FilesActions.showFileChooserSaver("Export", saveFileTypes(), saveExtensions());
 
             if (selectedFile != null && selectedFile.getName().endsWith(EXCEL_EXTENSION)) {
-                SaveFile.writeDataToXSLS(data, resultTableDataCounter.getFinancialOperation(), selectedFile, investmentLoanColumn, periodProfitLoanColumn, totalColumn, periodColumn, periodPercentsColumn, resultTableDataCounter.getDaysToNextPeriod(), resultTableDataCounter.getDaysToNextPeriodWithHolidays());
+                SaveFile.writeDataToXLS(data, resultTableDataCounter.getFinancialOperation(), selectedFile, investmentLoanColumn, periodProfitLoanColumn, totalColumn, periodColumn, periodPercentsColumn, resultTableDataCounter.getDaysToNextPeriod(), resultTableDataCounter.getDaysToNextPeriodWithHolidays());
             } else {
                 SaveFile.writeDataToCSV(data, selectedFile, deposit, investmentLoanColumn, periodProfitLoanColumn, totalColumn, periodPercentsColumn);
             }
@@ -223,7 +223,7 @@ public class ResultTableController {
             File selectedFile = FilesActions.showFileChooserSaver("saveAsButton", saveFileTypes(), saveExtensions());
 
             if (selectedFile != null && selectedFile.getName().endsWith(EXCEL_EXTENSION)) {
-                SaveFile.writeDataToXSLS(data, resultTableDataCounter.getFinancialOperation(), selectedFile, investmentLoanColumn, periodProfitLoanColumn, totalColumn, periodColumn, periodPercentsColumn, resultTableDataCounter.getDaysToNextPeriod(), resultTableDataCounter.getDaysToNextPeriodWithHolidays());
+                SaveFile.writeDataToXLS(data, resultTableDataCounter.getFinancialOperation(), selectedFile, investmentLoanColumn, periodProfitLoanColumn, totalColumn, periodColumn, periodPercentsColumn, resultTableDataCounter.getDaysToNextPeriod(), resultTableDataCounter.getDaysToNextPeriodWithHolidays());
             } else {
                 SaveFile.writeDataToCSV(data, selectedFile, deposit, investmentLoanColumn, periodProfitLoanColumn, totalColumn, periodPercentsColumn);
             }

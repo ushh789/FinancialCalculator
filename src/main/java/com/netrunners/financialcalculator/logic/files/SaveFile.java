@@ -65,7 +65,7 @@ public class SaveFile {
     }
 
     //TODO: fix Excel saving issues
-    public static void writeDataToXSLS(List<Object[]> data, ResultTableSender financialOperation, File file, TableColumn<Object[], String> investmentLoanColumn, TableColumn<Object[], String> periodProfitLoanColumn, TableColumn<Object[], String> totalColumn, TableColumn<Object[], Integer> periodColumn, TableColumn<Object[], String> periodPercentsColumn, List<Integer> daysToNextPeriod, List<Integer> daysToNextPeriodWithHolidays){
+    public static void writeDataToXLS(List<Object[]> data, ResultTableSender financialOperation, File file, TableColumn<Object[], String> investmentLoanColumn, TableColumn<Object[], String> periodProfitLoanColumn, TableColumn<Object[], String> totalColumn, TableColumn<Object[], Integer> periodColumn, TableColumn<Object[], String> periodPercentsColumn, List<Integer> daysToNextPeriod, List<Integer> daysToNextPeriodWithHolidays){
         String userSelectedCurrency = financialOperation.getCurrency();
         try (Workbook workbook = new XSSFWorkbook(); FileOutputStream fileOut = new FileOutputStream(file)) {
             int infoStartRow = data.size() + 2;
@@ -86,7 +86,7 @@ public class SaveFile {
 
                 boolean capitalize = deposit instanceof CapitalisedDeposit;
 
-                writeDataToXSLS(data, sheet, infoStartRow, deposit.getInvestment(), daysToNextPeriod, capitalize);
+                writeDataToXLS(data, sheet, infoStartRow, deposit.getInvestment(), daysToNextPeriod, capitalize);
 
                 Row row = sheet.createRow(infoStartRow);
                 row.createCell(0).setCellValue("Annual percent of deposit: ");
@@ -123,7 +123,7 @@ public class SaveFile {
                 headerRow.createCell(5).setCellValue("Payment days");
                 headerRow.createCell(6).setCellValue("Days in period");
 
-                writeDataToXSLS(data, sheet, infoStartRow, credit.getLoan(), daysToNextPeriod, daysToNextPeriodWithHolidays);
+                writeDataToXLS(data, sheet, infoStartRow, credit.getLoan(), daysToNextPeriod, daysToNextPeriodWithHolidays);
 
                 Row row = sheet.createRow(infoStartRow);
                 row.createCell(0).setCellValue("Annual percent of credit: ");
@@ -151,7 +151,7 @@ public class SaveFile {
     }
 
     // TODO: ensure everything is correct
-    public static void writeDataToXSLS(List<Object[]> data, Sheet sheet, int infoStartRow, float tempInvest, List<Integer> daysToNextPeriod, boolean capitalize) {
+    public static void writeDataToXLS(List<Object[]> data, Sheet sheet, int infoStartRow, float tempInvest, List<Integer> daysToNextPeriod, boolean capitalize) {
         for (int i = 0; i < data.size(); i++) {
             Row row = sheet.createRow(i + 1);
             row.createCell(0).setCellValue((int) data.get(i)[0]);
@@ -179,7 +179,7 @@ public class SaveFile {
     }
 
     // TODO: ensure everything is correct
-    public static void writeDataToXSLS(List<Object[]> data, Sheet sheet, int infoStartRow, float loan, List<Integer> daysToNextPeriod, List<Integer> daysToNextPeriodWithHolidays) {
+    public static void writeDataToXLS(List<Object[]> data, Sheet sheet, int infoStartRow, float loan, List<Integer> daysToNextPeriod, List<Integer> daysToNextPeriodWithHolidays) {
         for (int i = 0; i < data.size(); i++) {
             Row row = sheet.createRow(i + 1);
             row.createCell(0).setCellValue((int) data.get(i)[0]);
