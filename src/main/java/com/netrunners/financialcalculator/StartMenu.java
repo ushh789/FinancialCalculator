@@ -1,7 +1,7 @@
 package com.netrunners.financialcalculator;
 
-import com.netrunners.financialcalculator.LogicalInstrumnts.FileInstruments.LogHelper;
-import com.netrunners.financialcalculator.VisualInstruments.MenuActions.LanguageManager;
+import com.netrunners.financialcalculator.logic.files.LogHelper;
+import com.netrunners.financialcalculator.ui.LanguageManager;
 import javafx.application.Application;
 
 import javafx.scene.Scene;
@@ -9,36 +9,46 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-import java.awt.*;
+import java.awt.Taskbar;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 
+import static com.netrunners.financialcalculator.constants.FileConstants.LOGO;
+import static com.netrunners.financialcalculator.constants.FileConstants.LOGO_PATH;
+import static com.netrunners.financialcalculator.constants.FileConstants.LIGHT_THEME;
+
 public class StartMenu extends Application {
     public static Scene startMenuScene;
     public static List<Scene> openScenes = new ArrayList<>();
-    public static String currentTheme = "file:src/main/resources/com/netrunners/financialcalculator/assets/lightTheme.css";
+    private static String currentTheme = LIGHT_THEME;
+    private static final int WINDOW_SIZE = 600;
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     @Override
     public void start(Stage primaryStage) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(StartMenu.class.getResource("StartMenu.fxml"));
             primaryStage.titleProperty().bind(LanguageManager.getInstance().getStringBinding("CalcLabel"));
-            primaryStage.getIcons().add(new Image("file:src/main/resources/com/netrunners/financialcalculator/assets/Logo.png"));
+            primaryStage.getIcons().add(new Image(LOGO));
             if (Taskbar.isTaskbarSupported()) {
                 var taskbar = Taskbar.getTaskbar();
                 if (taskbar.isSupported(Taskbar.Feature.ICON_IMAGE)) {
                     final Toolkit defaultToolkit = Toolkit.getDefaultToolkit();
-                    var dockIcon = defaultToolkit.getImage("src/main/resources/com/netrunners/financialcalculator/assets/Logo.png");
+                    var dockIcon = defaultToolkit.getImage(LOGO_PATH);
                     taskbar.setIconImage(dockIcon);
                 }
-
             }
 
-            primaryStage.setScene(new Scene(fxmlLoader.load(), 600, 600));
-            primaryStage.maxHeightProperty().setValue(600);
-            primaryStage.maxWidthProperty().setValue(600);
-            primaryStage.minHeightProperty().setValue(620);
-            primaryStage.minWidthProperty().setValue(620);
+            primaryStage.setScene(new Scene(fxmlLoader.load(), WINDOW_SIZE, WINDOW_SIZE));
+            primaryStage.maxHeightProperty().setValue(WINDOW_SIZE);
+            primaryStage.maxWidthProperty().setValue(WINDOW_SIZE);
+            primaryStage.minHeightProperty().setValue(WINDOW_SIZE + 20);
+            primaryStage.minWidthProperty().setValue(WINDOW_SIZE + 20);
             primaryStage.getScene().getStylesheets().add(currentTheme);
             startMenuScene = primaryStage.getScene();
             StartMenu.openScenes.add(startMenuScene);
@@ -49,12 +59,16 @@ public class StartMenu extends Application {
         }
     }
 
-    public static void main(String[] args) {
-        launch(args);
-    }
-
     @Override
     public void stop() {
         LanguageManager.getInstance().saveLanguage();
+    }
+
+    public static void setCurrentTheme(String currentTheme) {
+        StartMenu.currentTheme = currentTheme;
+    }
+
+    public static String getCurrentTheme() {
+        return currentTheme;
     }
 }
