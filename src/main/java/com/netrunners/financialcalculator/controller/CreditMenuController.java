@@ -1,6 +1,7 @@
 package com.netrunners.financialcalculator.controller;
 
 import com.netrunners.financialcalculator.errorhandling.ErrorChecker;
+import com.netrunners.financialcalculator.errorhandling.exceptions.LoadSaveException;
 import com.netrunners.financialcalculator.logic.files.OpenFile;
 import com.netrunners.financialcalculator.logic.time.DatePickerRestrictions;
 import com.netrunners.financialcalculator.logic.entity.credit.Credit;
@@ -18,6 +19,8 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CreditMenuController {
     @FXML
@@ -120,6 +123,7 @@ public class CreditMenuController {
     private MenuItem newButton;
 
     private final CurrencyManager currencyManager = CurrencyManager.getInstance();
+    private static final Logger logger = LoggerFactory.getLogger(CreditMenuController.class);
 
     @FXML
     void initialize() {
@@ -166,7 +170,13 @@ public class CreditMenuController {
 
         // Menu items
         ControllerUtils.initializeMenuItems(darkTheme, lightTheme, aboutUs, exitApp, depositButtonMenu, creditButtonMenu, languageButton, currency);
-        openFileButton.setOnAction(event -> OpenFile.openFromSave());
+        openFileButton.setOnAction(event -> {
+            try {
+                OpenFile.openFromSave();
+            } catch (LoadSaveException e) {
+                logger.error(e.getMessage(), e);
+            }
+        });
         closeWindow.setOnAction(event -> ExitApp.closeCurrentWindow(closeWindow.getScene()));
 
         // Menu text bindings
@@ -240,6 +250,7 @@ public class CreditMenuController {
                 }
             }
         });
+        logger.info("Credit menu successfully initialized");
     }
 }
 

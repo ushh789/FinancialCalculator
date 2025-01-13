@@ -1,5 +1,6 @@
 package com.netrunners.financialcalculator.controller;
 
+import com.netrunners.financialcalculator.errorhandling.exceptions.LoadSaveException;
 import com.netrunners.financialcalculator.logic.files.OpenFile;
 import com.netrunners.financialcalculator.ui.WindowsOpener;
 import javafx.fxml.FXML;
@@ -7,6 +8,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Menu;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class StartMenuController {
 
@@ -69,6 +72,7 @@ public class StartMenuController {
 
     @FXML
     private Label financialCalculatorLabel;
+    private static final Logger logger = LoggerFactory.getLogger(StartMenuController.class);
 
     @FXML
     void initialize() {
@@ -79,7 +83,13 @@ public class StartMenuController {
         ControllerUtils.initializeMenuItems(darkTheme, lightTheme, aboutUs, exitApp, depositButtonMenu, creditButtonMenu, languageButton, currency);
         DepositButton.setOnAction(event -> WindowsOpener.depositOpener());
         CreditButton.setOnAction(event -> WindowsOpener.creditOpener());
-        openFileButton.setOnAction(event -> OpenFile.openFromSave());
+        openFileButton.setOnAction(event -> {
+            try {
+                OpenFile.openFromSave();
+            } catch (LoadSaveException e) {
+                logger.error(e.getMessage(), e);
+            }
+        });
 
 
         // Menu text bindings
@@ -87,6 +97,8 @@ public class StartMenuController {
         ControllerUtils.provideTranslation(financialCalculatorLabel, "financialCalculatorLabel");
         ControllerUtils.provideTranslation(DepositButton, "DepositButton");
         ControllerUtils.provideTranslation(CreditButton, "CreditButton");
+
+        logger.info("Start menu successfully initialized");
     }
 }
 

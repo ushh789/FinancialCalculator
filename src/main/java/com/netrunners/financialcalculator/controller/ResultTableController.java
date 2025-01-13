@@ -1,5 +1,6 @@
 package com.netrunners.financialcalculator.controller;
 
+import com.netrunners.financialcalculator.errorhandling.exceptions.SavingFileException;
 import com.netrunners.financialcalculator.logic.ResultTableDataCounter;
 import com.netrunners.financialcalculator.logic.files.SaveFile;
 import com.netrunners.financialcalculator.logic.entity.deposit.Deposit;
@@ -20,6 +21,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -107,14 +110,15 @@ public class ResultTableController {
 
     @FXML
     private Menu newButton;
-    
+
     @FXML
     private Label financialCalculatorLabel;
-    
+
     @FXML
     private Button convertButton;
-    
+
     private ResultTableDataCounter resultTableDataCounter;
+    private static final Logger logger = LoggerFactory.getLogger(ResultTableController.class);
 
     @FXML
     void initialize() {
@@ -155,42 +159,51 @@ public class ResultTableController {
         periodPercentsColumn.setCellValueFactory(cellData -> cellData.getValue()[4] == null ? null : new SimpleObjectProperty<>((String) cellData.getValue()[4]));
 
         List<Object[]> data = new ArrayList<>();
-        
         resultTable.getColumns().addAll(periodColumn, investmentLoanColumn, periodProfitLoanColumn, totalColumn, periodPercentsColumn);
-        
+
         if (credit instanceof CreditWithoutHolidays) {
             data = resultTableDataCounter.countData();
         } else if (credit instanceof CreditWithHolidays) {
             data = resultTableDataCounter.countData();
         }
-        
+
         ObservableList<Object[]> observableData = FXCollections.observableArrayList(data);
         resultTable.setItems(observableData);
 
         List<Object[]> finalData = data;
         exportButton.setOnAction(event -> {
             File selectedFile = FilesActions.showFileChooserSaver("Export", saveFileTypes(), saveExtensions());
-
-            if (selectedFile != null && selectedFile.getName().endsWith(EXCEL_EXTENSION)) {
-                SaveFile.writeDataToXLS(finalData, resultTableDataCounter.getFinancialOperation(), selectedFile, investmentLoanColumn, periodProfitLoanColumn, totalColumn, periodColumn, periodPercentsColumn, resultTableDataCounter.getDaysToNextPeriod(), resultTableDataCounter.getDaysToNextPeriodWithHolidays());
-            } else {
-                SaveFile.writeDataToCSV(finalData, selectedFile, credit, investmentLoanColumn, periodProfitLoanColumn, totalColumn, periodPercentsColumn);
+            try {
+                if (selectedFile != null && selectedFile.getName().endsWith(EXCEL_EXTENSION)) {
+                    SaveFile.writeDataToXLS(finalData, resultTableDataCounter.getFinancialOperation(), selectedFile, investmentLoanColumn, periodProfitLoanColumn, totalColumn, periodColumn, periodPercentsColumn, resultTableDataCounter.getDaysToNextPeriod(), resultTableDataCounter.getDaysToNextPeriodWithHolidays());
+                } else {
+                    SaveFile.writeDataToCSV(finalData, selectedFile, credit, investmentLoanColumn, periodProfitLoanColumn, totalColumn, periodPercentsColumn);
+                }
+            } catch (SavingFileException e) {
+                logger.error(e.getMessage(), e);
             }
         });
-        
+
         saveButton.setOnAction(event -> {
             File file = new File(SAVES_PATH + "/Credit_result_" + FORMATTED_TIME_NOW + CSV_EXTENSION);
-            SaveFile.writeDataToCSV(finalData, file, credit, investmentLoanColumn, periodProfitLoanColumn, totalColumn, periodPercentsColumn);
-            FilesActions.showSavingAlert();
+            try {
+                SaveFile.writeDataToCSV(finalData, file, credit, investmentLoanColumn, periodProfitLoanColumn, totalColumn, periodPercentsColumn);
+                FilesActions.showSavingAlert();
+            } catch (SavingFileException e) {
+                logger.error(e.getMessage(), e);
+            }
         });
-        
+
         saveAsButton.setOnAction(event -> {
             File selectedFile = FilesActions.showFileChooserSaver("saveAsButton", saveFileTypes(), saveExtensions());
-
-            if (selectedFile != null && selectedFile.getName().endsWith(EXCEL_EXTENSION)) {
-                SaveFile.writeDataToXLS(finalData, resultTableDataCounter.getFinancialOperation(), selectedFile, investmentLoanColumn, periodProfitLoanColumn, totalColumn, periodColumn, periodPercentsColumn, resultTableDataCounter.getDaysToNextPeriod(), resultTableDataCounter.getDaysToNextPeriodWithHolidays());
-            } else {
-                SaveFile.writeDataToCSV(finalData, selectedFile, credit, investmentLoanColumn, periodProfitLoanColumn, totalColumn, periodPercentsColumn);
+            try {
+                if (selectedFile != null && selectedFile.getName().endsWith(EXCEL_EXTENSION)) {
+                    SaveFile.writeDataToXLS(finalData, resultTableDataCounter.getFinancialOperation(), selectedFile, investmentLoanColumn, periodProfitLoanColumn, totalColumn, periodColumn, periodPercentsColumn, resultTableDataCounter.getDaysToNextPeriod(), resultTableDataCounter.getDaysToNextPeriodWithHolidays());
+                } else {
+                    SaveFile.writeDataToCSV(finalData, selectedFile, credit, investmentLoanColumn, periodProfitLoanColumn, totalColumn, periodPercentsColumn);
+                }
+            } catch (SavingFileException e) {
+                logger.error(e.getMessage(), e);
             }
         });
     }
@@ -204,30 +217,41 @@ public class ResultTableController {
         resultTable.getColumns().addAll(periodColumn, investmentLoanColumn, periodProfitLoanColumn, totalColumn);
         ObservableList<Object[]> observableData = FXCollections.observableArrayList(data);
         resultTable.setItems(observableData);
-        
+
         exportButton.setOnAction(event -> {
             File selectedFile = FilesActions.showFileChooserSaver("Export", saveFileTypes(), saveExtensions());
-
-            if (selectedFile != null && selectedFile.getName().endsWith(EXCEL_EXTENSION)) {
-                SaveFile.writeDataToXLS(data, resultTableDataCounter.getFinancialOperation(), selectedFile, investmentLoanColumn, periodProfitLoanColumn, totalColumn, periodColumn, periodPercentsColumn, resultTableDataCounter.getDaysToNextPeriod(), resultTableDataCounter.getDaysToNextPeriodWithHolidays());
-            } else {
-                SaveFile.writeDataToCSV(data, selectedFile, deposit, investmentLoanColumn, periodProfitLoanColumn, totalColumn, periodPercentsColumn);
+            try {
+                if (selectedFile != null && selectedFile.getName().endsWith(EXCEL_EXTENSION)) {
+                    SaveFile.writeDataToXLS(data, resultTableDataCounter.getFinancialOperation(), selectedFile, investmentLoanColumn, periodProfitLoanColumn, totalColumn, periodColumn, periodPercentsColumn, resultTableDataCounter.getDaysToNextPeriod(), resultTableDataCounter.getDaysToNextPeriodWithHolidays());
+                } else {
+                    SaveFile.writeDataToCSV(data, selectedFile, deposit, investmentLoanColumn, periodProfitLoanColumn, totalColumn, periodPercentsColumn);
+                }
+            } catch (SavingFileException e) {
+                logger.error(e.getMessage(), e);
             }
         });
         saveButton.setOnAction(event -> {
             File file = new File(SAVES_PATH + "/Deposit_result_" + FORMATTED_TIME_NOW + CSV_EXTENSION);
-            SaveFile.writeDataToCSV(data, file, deposit, investmentLoanColumn, periodProfitLoanColumn, totalColumn, periodPercentsColumn);
-            FilesActions.showSavingAlert();
+            try {
+                SaveFile.writeDataToCSV(data, file, deposit, investmentLoanColumn, periodProfitLoanColumn, totalColumn, periodPercentsColumn);
+                FilesActions.showSavingAlert();
+            } catch (SavingFileException e) {
+                logger.error(e.getMessage(), e);
+            }
         });
         saveAsButton.setOnAction(event -> {
             File selectedFile = FilesActions.showFileChooserSaver("saveAsButton", saveFileTypes(), saveExtensions());
-
-            if (selectedFile != null && selectedFile.getName().endsWith(EXCEL_EXTENSION)) {
-                SaveFile.writeDataToXLS(data, resultTableDataCounter.getFinancialOperation(), selectedFile, investmentLoanColumn, periodProfitLoanColumn, totalColumn, periodColumn, periodPercentsColumn, resultTableDataCounter.getDaysToNextPeriod(), resultTableDataCounter.getDaysToNextPeriodWithHolidays());
-            } else {
-                SaveFile.writeDataToCSV(data, selectedFile, deposit, investmentLoanColumn, periodProfitLoanColumn, totalColumn, periodPercentsColumn);
+            try {
+                if (selectedFile != null && selectedFile.getName().endsWith(EXCEL_EXTENSION)) {
+                    SaveFile.writeDataToXLS(data, resultTableDataCounter.getFinancialOperation(), selectedFile, investmentLoanColumn, periodProfitLoanColumn, totalColumn, periodColumn, periodPercentsColumn, resultTableDataCounter.getDaysToNextPeriod(), resultTableDataCounter.getDaysToNextPeriodWithHolidays());
+                } else {
+                    SaveFile.writeDataToCSV(data, selectedFile, deposit, investmentLoanColumn, periodProfitLoanColumn, totalColumn, periodPercentsColumn);
+                }
+            } catch (SavingFileException e) {
+                logger.error(e.getMessage(), e);
             }
         });
+        logger.info("Result table successfully initialized");
     }
 
     private static void initializeTableColumns(TableColumn<Object[], Integer> periodColumn, TableColumn<Object[], String> investmentLoanColumn, TableColumn<Object[], String> periodProfitLoanColumn, TableColumn<Object[], String> totalColumn) {

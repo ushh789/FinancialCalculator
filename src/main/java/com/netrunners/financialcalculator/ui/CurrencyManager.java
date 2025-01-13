@@ -53,6 +53,9 @@ public class CurrencyManager {
         if (result.isPresent()) {
             String selectedConvertCurrency = result.get();
             float rate = Converter.getRateByCC(Converter.getCC(resultTableSender.getCurrency())) / Converter.getRateByCC(Converter.getCC(selectedConvertCurrency));
+            if (rate <= 0){
+                return;
+            }
             ObservableList<Object[]> investmentLoanColumnItems = investmentLoanColumn.getTableView().getItems();
             ObservableList<Object[]> periodProfitLoanColumnItems = periodProfitLoanColumn.getTableView().getItems();
             ObservableList<Object[]> totalColumnItems = totalColumn.getTableView().getItems();
@@ -61,18 +64,6 @@ public class CurrencyManager {
                 item[1] = extractFloatValue((String) item[1]) * rate;
                 String newValue = String.format("%.2f", item[1]) + selectedConvertCurrency;
                 item[1] = newValue;
-
-                //TODO: check this
-                /*
-                if (!investmentLoanColumnItems.isEmpty()) {
-                    float loan = extractFloatValue((String) investmentLoanColumnItems.get(0)[1]);
-                    if (loan != 0) {
-                        float tempInvest = extractFloatValue((String) investmentLoanColumnItems.get(0)[1]);
-                    } else {
-                        loan = extractFloatValue((String) investmentLoanColumnItems.get(0)[1]);
-                    }
-                }
-                 */
             }
             for (Object[] item : periodProfitLoanColumnItems) {
                 item[2] = extractFloatValue((String) item[2]) * rate;

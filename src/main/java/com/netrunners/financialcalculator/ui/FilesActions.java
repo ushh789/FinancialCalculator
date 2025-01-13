@@ -2,13 +2,14 @@ package com.netrunners.financialcalculator.ui;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.netrunners.financialcalculator.logic.files.LogHelper;
 import com.netrunners.financialcalculator.logic.files.Savable;
 import com.netrunners.financialcalculator.logic.time.LocalDateAdapter;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -16,15 +17,16 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
 import static com.netrunners.financialcalculator.constants.FileConstants.JSON_EXTENSION;
 import static com.netrunners.financialcalculator.constants.StringConstants.ASTERISK;
 import static com.netrunners.financialcalculator.constants.FileConstants.JSON_FILE;
 import static com.netrunners.financialcalculator.constants.FileConstants.LOGO;
 import static com.netrunners.financialcalculator.constants.FileConstants.SAVES_PATH;
+import static com.netrunners.financialcalculator.constants.StringConstants.ERROR_SAVING_FILE;
 
 public class FilesActions {
+    private static final Logger logger = LoggerFactory.getLogger(FilesActions.class);
     public static File showFileChooser(String bindingKey, List<String> fileTypes, List<String> extensions) {
         FileChooser fileChooser = defineChooserProperties(bindingKey, fileTypes, extensions);
         return fileChooser.showOpenDialog(null);
@@ -76,7 +78,7 @@ public class FilesActions {
                 fileWriter.write(json);
                 fileWriter.close();
             } catch (IOException e) {
-                LogHelper.log(Level.SEVERE, "Error while saving file", e);
+                logger.error(ERROR_SAVING_FILE, file.getName(), e);
             }
         }
     }

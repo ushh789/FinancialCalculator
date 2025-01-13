@@ -12,18 +12,25 @@ import java.util.Optional;
 import java.util.List;
 import java.util.ArrayList;
 
+import com.netrunners.financialcalculator.StartMenu;
 import com.netrunners.financialcalculator.logic.entity.OperationPeriodType;
 import javafx.beans.binding.StringBinding;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import static com.netrunners.financialcalculator.constants.FileConstants.*;
+import static com.netrunners.financialcalculator.constants.FileConstants.PROPERTIES_FILE;
+import static com.netrunners.financialcalculator.constants.FileConstants.MESSAGES_PATH;
+import static com.netrunners.financialcalculator.constants.FileConstants.LOGO;
+import static com.netrunners.financialcalculator.constants.StringConstants.*;
 
 public class LanguageManager {
     private static LanguageManager instance;
     private final ObservableResourceFactory resourceFactory;
     private final Properties properties;
+    private static final Logger logger = LoggerFactory.getLogger(StartMenu.class);
 
 
     private LanguageManager() {
@@ -48,7 +55,7 @@ public class LanguageManager {
                 resourceFactory.setResources(ResourceBundle.getBundle(MESSAGES_PATH, new Locale("en")));
             }
         } catch (IOException ex) {
-            ex.printStackTrace();
+            logger.error(ERROR_OPENING_FILE, PROPERTIES_FILE, ex);
         }
     }
 
@@ -57,12 +64,13 @@ public class LanguageManager {
             properties.setProperty("language", resourceFactory.getResources().getLocale().getLanguage());
             properties.store(output, null);
         } catch (IOException ex) {
-            ex.printStackTrace();
+            logger.error(ERROR_SAVING_FILE, PROPERTIES_FILE, ex);
         }
     }
 
     public void changeLanguage(Locale locale) {
         resourceFactory.setResources(ResourceBundle.getBundle(MESSAGES_PATH, locale));
+        logger.info(LANGUAGE_CHANGED, locale.getDisplayLanguage());
     }
 
     public StringBinding getStringBinding(String key) {
