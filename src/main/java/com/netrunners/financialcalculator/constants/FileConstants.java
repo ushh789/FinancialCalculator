@@ -10,6 +10,7 @@ public class FileConstants {
     public final static String MESSAGES_PATH = "com/netrunners/financialcalculator/assets/messages";
     public final static String RESULT_TABLE = "/com/netrunners/financialcalculator/ResultTable.fxml";
     public final static String SAVES_PATH = "saves/";
+    public final static String NBU_EXCHANGE_CURRENCIES_URL = "https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json";
 
     // File picker labels
     public final static String CSV_FILE = "CSV Files";
@@ -20,5 +21,4 @@ public class FileConstants {
     public final static String CSV_EXTENSION = ".csv";
     public final static String EXCEL_EXTENSION = ".xls";
     public final static String JSON_EXTENSION = ".json";
-
 }

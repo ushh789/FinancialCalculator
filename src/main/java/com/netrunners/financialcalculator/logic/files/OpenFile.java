@@ -3,6 +3,7 @@ package com.netrunners.financialcalculator.logic.files;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.netrunners.financialcalculator.errorhandling.exceptions.LoadSaveException;
 import com.netrunners.financialcalculator.logic.entity.credit.Credit;
 import com.netrunners.financialcalculator.logic.entity.credit.CreditWithHolidays;
 import com.netrunners.financialcalculator.logic.entity.credit.CreditWithoutHolidays;
@@ -10,22 +11,23 @@ import com.netrunners.financialcalculator.logic.entity.deposit.CapitalisedDeposi
 import com.netrunners.financialcalculator.logic.entity.deposit.Deposit;
 import com.netrunners.financialcalculator.logic.entity.deposit.UncapitalisedDeposit;
 import com.netrunners.financialcalculator.ui.FilesActions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
 import static com.netrunners.financialcalculator.constants.FileConstants.JSON_EXTENSION;
 import static com.netrunners.financialcalculator.constants.FileConstants.JSON_FILE;
-import static com.netrunners.financialcalculator.constants.StringConstants.ASTERISK;
+import static com.netrunners.financialcalculator.constants.StringConstants.*;
 
 public class OpenFile {
+    private static final Logger logger = LoggerFactory.getLogger(OpenFile.class);
 
-    public static void openFromSave() {
+    public static void openFromSave() throws LoadSaveException {
         List<String> fileTypes = new ArrayList<>();
         fileTypes.add(JSON_FILE);
 
@@ -34,6 +36,7 @@ public class OpenFile {
 
         File selectedFile = FilesActions.showFileChooser("ChooseOpenFile", fileTypes, extensions);
         if (selectedFile != null) {
+            logger.info(INFO_FILE_CHOSEN, selectedFile.getName());
             try (FileReader reader = new FileReader(selectedFile)) {
                 Gson gson = new Gson();
                 JsonObject jsonObject = gson.fromJson(reader, JsonObject.class);
@@ -41,49 +44,39 @@ public class OpenFile {
                 switch (jsonObject.get("operation").getAsString()) {
                     case "Credit" -> {
                         Credit credit = openCreditSave(jsonObject);
-                        if (credit == null) {
-                            throw new Exception(MessageFormat.format("Error while opening credit save-file: {0}", selectedFile.getName()));
-                        } else {
-                            credit.sendToResultTable();
-                        }
+                        credit.sendToResultTable();
                     }
                     case "Deposit" -> {
                         Deposit deposit = openDepositSave(jsonObject);
-                        if (deposit == null) {
-                            throw new Exception(MessageFormat.format("Error while opening deposit save-file: {0}", selectedFile.getName()));
-                        } else {
-                            deposit.sendToResultTable();
-                        }
+                        deposit.sendToResultTable();
                     }
-                    default ->
-                            throw new Exception(MessageFormat.format("Error while opening file: {0}", selectedFile.getName()));
+                    default -> throw new LoadSaveException(ERROR_LOADING_SAVE + selectedFile.getName());
                 }
-            } catch (IOException | JsonParseException e) {
-                LogHelper.log(Level.SEVERE, "Error while opening file", e);
-            } catch (Exception e) {
-                LogHelper.log(Level.SEVERE, e.getMessage(), e);
+            } catch (IOException | JsonParseException | LoadSaveException e) {
+                logger.error(ERROR_OPENING_FILE, selectedFile.getName(), e);
             }
+            logger.info(INFO_FILE_OPENED, selectedFile.getName());
         }
     }
 
-    private static Credit openCreditSave(JsonObject jsonObject) {
+    private static Credit openCreditSave(JsonObject jsonObject) throws LoadSaveException {
         if (jsonObject.get("type").getAsString().equals("WithHolidays")) {
             return new CreditWithHolidays(jsonObject);
         } else if (jsonObject.get("type").getAsString().equals("WithoutHolidays")) {
             return new CreditWithoutHolidays(jsonObject);
         } else {
-            return null;
+            throw new LoadSaveException(ERROR_LOADING_SAVE);
         }
     }
 
-    private static Deposit openDepositSave(JsonObject jsonObject) {
+    private static Deposit openDepositSave(JsonObject jsonObject) throws LoadSaveException {
         String type = jsonObject.get("type").getAsString();
         if (type.equals("Capitalized")) {
             return new CapitalisedDeposit(jsonObject);
         } else if (type.equals("Uncapitalized")) {
             return new UncapitalisedDeposit(jsonObject);
         } else {
-            return null;
+            throw new LoadSaveException(ERROR_LOADING_SAVE);
         }
     }
 

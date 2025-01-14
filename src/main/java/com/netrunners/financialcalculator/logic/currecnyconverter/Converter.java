@@ -4,7 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.netrunners.financialcalculator.logic.files.LogHelper;
+import com.netrunners.financialcalculator.errorhandling.exceptions.CurrencyConverterException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,44 +14,53 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.logging.Level;
+
+import static com.netrunners.financialcalculator.constants.FileConstants.NBU_EXCHANGE_CURRENCIES_URL;
 
 public class Converter {
-    public static JsonArray getRates() throws IOException {
-        URL url = new URL("https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json");
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+    private static final Logger logger = LoggerFactory.getLogger(Converter.class);
 
-        connection.setRequestMethod("GET");
+    public static JsonArray getRates() {
+        try {
+            URL url = new URL(NBU_EXCHANGE_CURRENCIES_URL);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
-        int responseCode = connection.getResponseCode();
-        if (responseCode != 200) {
-            LogHelper.log(Level.WARNING, "Failed to get json from National Bank of Ukraine, response code: " + responseCode, null);
+            connection.setRequestMethod("GET");
+
+            int responseCode = connection.getResponseCode();
+
+            if (responseCode != 200) {
+                throw new CurrencyConverterException("Failed retrieve data from National Bank of Ukraine, response code: {}" + responseCode);
+            }
+            logger.info("Successfully retrieved exchange rates from NBU");
+
+            InputStream inputStream = connection.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+            StringBuilder json = new StringBuilder();
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                json.append(line);
+            }
+            reader.close();
+            inputStream.close();
+            Gson gson = new Gson();
+
+            return gson.fromJson(json.toString(), JsonArray.class).getAsJsonArray();
+
+        } catch (CurrencyConverterException | IOException e) {
+            logger.error("Failed to retrieve exchange rates:", e);
             return null;
         }
-
-        InputStream inputStream = connection.getInputStream();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-        StringBuilder json = new StringBuilder();
-        String line;
-
-        while ((line = reader.readLine()) != null) {
-            json.append(line);
-        }
-        reader.close();
-        inputStream.close();
-        Gson gson = new Gson();
-
-        return gson.fromJson(json.toString(), JsonArray.class).getAsJsonArray();
     }
 
     public static float getRateByCC(String cc) {
         try {
             JsonArray rates = getRates();
             if (rates == null) {
-                LogHelper.log(Level.WARNING, "Failed to retrieve exchange rates", null);
-                throw new RuntimeException("Failed to retrieve exchange rates");
+                throw new CurrencyConverterException("Failed to retrieve exchange rates");
             }
-            if (cc.equals("UAH")){
+            if (cc.equals("UAH")) {
                 return 1;
             }
             for (JsonElement element : rates) {
@@ -58,11 +69,10 @@ public class Converter {
                     return obj.get("rate").getAsFloat();
                 }
             }
-            LogHelper.log(Level.WARNING, "Currency code " + cc + " not found", null);
-            throw new IllegalArgumentException("Currency code " + cc + " not found");
-        } catch (IOException e) {
-            LogHelper.log(Level.WARNING, "IOException in Converter.getRateByCC, caused by input: " + cc, null);
-            throw new RuntimeException(e);
+            throw new CurrencyConverterException("Currency code " + cc + " not found");
+        } catch (CurrencyConverterException e) {
+            logger.error(e.getMessage(), e);
+            return -1;
         }
     }
 
@@ -77,10 +87,10 @@ public class Converter {
             case "€" -> {
                 return "EUR";
             }
-            case "zł" ->{
+            case "zł" -> {
                 return "PLN";
             }
-            case "₴" ->{
+            case "₴" -> {
                 return "UAH";
             }
             default -> {

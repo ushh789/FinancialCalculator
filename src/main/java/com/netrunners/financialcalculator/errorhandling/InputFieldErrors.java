@@ -2,25 +2,27 @@ package com.netrunners.financialcalculator.errorhandling;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.netrunners.financialcalculator.logic.files.LogHelper;
-import javafx.scene.control.*;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.TextField;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.netrunners.financialcalculator.constants.FileConstants.LANGUAGES;
+import static com.netrunners.financialcalculator.constants.StringConstants.ERROR_OPENING_FILE;
 
 public class InputFieldErrors {
     private static List<String> paymentOptions;
     private static List<String> withdrawalOptions;
 
-    private static final Logger logger = Logger.getLogger(LogHelper.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(InputFieldErrors.class);
 
     static {
         Gson gson = new Gson();
@@ -31,8 +33,8 @@ public class InputFieldErrors {
             Map<String, List<String>> map = gson.fromJson(reader, type);
             paymentOptions = map.get("paymentOption");
             withdrawalOptions = map.get("depositWithdrawalOption");
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, "Error while reading languages.json", e);
+        } catch (IOException e) {
+            logger.error(ERROR_OPENING_FILE, LANGUAGES, e);
         }
     }
 

@@ -1,5 +1,6 @@
 package com.netrunners.financialcalculator.logic.files;
 
+import com.netrunners.financialcalculator.errorhandling.exceptions.SavingFileException;
 import com.netrunners.financialcalculator.logic.entity.ResultTableSender;
 import com.netrunners.financialcalculator.logic.entity.credit.Credit;
 import com.netrunners.financialcalculator.logic.entity.credit.CreditWithHolidays;
@@ -10,17 +11,25 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.File;
+import java.io.PrintWriter;
+import java.io.FileWriter;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
-import java.util.logging.Level;
 
 import static com.netrunners.financialcalculator.constants.StringConstants.ASTERISK;
 import static com.netrunners.financialcalculator.constants.StringConstants.SEMI_COLON;
+import static com.netrunners.financialcalculator.constants.StringConstants.ERROR_SAVING_FILE;
+import static com.netrunners.financialcalculator.constants.StringConstants.ERROR_SELECTED_FILE_IS_NULL;
+import static com.netrunners.financialcalculator.constants.StringConstants.INFO_FILE_SAVED;
 
 public class SaveFile {
-
-    public static void writeDataToCSV(List<Object[]> data, File file, ResultTableSender financialOperation, TableColumn<Object[], String> investmentLoanColumn, TableColumn<Object[], String> periodProfitLoanColumn, TableColumn<Object[], String> totalColumn, TableColumn<Object[], String> periodPercentsColumn) {
+    private static final Logger logger = LoggerFactory.getLogger(SaveFile.class);
+    public static void writeDataToCSV(List<Object[]> data, File file, ResultTableSender financialOperation, TableColumn<Object[], String> investmentLoanColumn, TableColumn<Object[], String> periodProfitLoanColumn, TableColumn<Object[], String> totalColumn, TableColumn<Object[], String> periodPercentsColumn) throws SavingFileException {
         if (file != null) {
             try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
                 if (financialOperation instanceof Deposit deposit) {
@@ -41,11 +50,12 @@ public class SaveFile {
                 writer.println("Currency: " + financialOperation.getCurrency());
                 writer.println("Start date: " + financialOperation.getStartDate());
                 writer.println("End date: " + financialOperation.getEndDate());
+                logger.info(INFO_FILE_SAVED, file.getName());
             } catch (IOException e) {
-                LogHelper.log(Level.SEVERE, "Error while writing Deposit to CSV", e);
+                throw new SavingFileException(ERROR_SAVING_FILE + file.getName());
             }
         } else {
-            LogHelper.log(Level.SEVERE, "Error while writing Deposit to CSV", null);
+            throw new SavingFileException(ERROR_SELECTED_FILE_IS_NULL);
         }
     }
 
@@ -65,88 +75,92 @@ public class SaveFile {
     }
 
     //TODO: fix Excel saving issues
-    public static void writeDataToXLS(List<Object[]> data, ResultTableSender financialOperation, File file, TableColumn<Object[], String> investmentLoanColumn, TableColumn<Object[], String> periodProfitLoanColumn, TableColumn<Object[], String> totalColumn, TableColumn<Object[], Integer> periodColumn, TableColumn<Object[], String> periodPercentsColumn, List<Integer> daysToNextPeriod, List<Integer> daysToNextPeriodWithHolidays){
-        String userSelectedCurrency = financialOperation.getCurrency();
-        try (Workbook workbook = new XSSFWorkbook(); FileOutputStream fileOut = new FileOutputStream(file)) {
-            int infoStartRow = data.size() + 2;
-            if (financialOperation instanceof Deposit deposit) {
-                Sheet sheet = workbook.createSheet("Deposit Data");
+    public static void writeDataToXLS(List<Object[]> data, ResultTableSender financialOperation, File file, TableColumn<Object[], String> investmentLoanColumn, TableColumn<Object[], String> periodProfitLoanColumn, TableColumn<Object[], String> totalColumn, TableColumn<Object[], Integer> periodColumn, TableColumn<Object[], String> periodPercentsColumn, List<Integer> daysToNextPeriod, List<Integer> daysToNextPeriodWithHolidays) throws SavingFileException {
+        if (file != null) {
+            String userSelectedCurrency = financialOperation.getCurrency();
+            try (Workbook workbook = new XSSFWorkbook(); FileOutputStream fileOut = new FileOutputStream(file)) {
+                int infoStartRow = data.size() + 2;
+                if (financialOperation instanceof Deposit deposit) {
+                    Sheet sheet = workbook.createSheet("Deposit Data");
 
-                Row headerRow = sheet.createRow(0);
-                headerRow.createCell(0).setCellValue(periodColumn.getText());
-                headerRow.createCell(1).setCellValue(investmentLoanColumn.getText());
-                headerRow.createCell(2).setCellValue(periodProfitLoanColumn.getText());
-                headerRow.createCell(3).setCellValue(totalColumn.getText());
-                headerRow.createCell(4).setCellValue("Days in period");
+                    Row headerRow = sheet.createRow(0);
+                    headerRow.createCell(0).setCellValue(periodColumn.getText());
+                    headerRow.createCell(1).setCellValue(investmentLoanColumn.getText());
+                    headerRow.createCell(2).setCellValue(periodProfitLoanColumn.getText());
+                    headerRow.createCell(3).setCellValue(totalColumn.getText());
+                    headerRow.createCell(4).setCellValue("Days in period");
 
-                for (int f = 0; f < 5; f++) {
-                    int width = sheet.getColumnWidth(f);
-                    sheet.setColumnWidth(f, width * 2);
-                }
+                    for (int f = 0; f < 5; f++) {
+                        int width = sheet.getColumnWidth(f);
+                        sheet.setColumnWidth(f, width * 2);
+                    }
 
-                boolean capitalize = deposit instanceof CapitalisedDeposit;
+                    boolean capitalize = deposit instanceof CapitalisedDeposit;
 
-                writeDataToXLS(data, sheet, infoStartRow, deposit.getInvestment(), daysToNextPeriod, capitalize);
+                    writeDataToXLS(data, sheet, infoStartRow, deposit.getInvestment(), daysToNextPeriod, capitalize);
 
-                Row row = sheet.createRow(infoStartRow);
-                row.createCell(0).setCellValue("Annual percent of deposit: ");
-                row.createCell(1).setCellValue(deposit.getAnnualPercent());
+                    Row row = sheet.createRow(infoStartRow);
+                    row.createCell(0).setCellValue("Annual percent of deposit: ");
+                    row.createCell(1).setCellValue(deposit.getAnnualPercent());
 
-                row = sheet.createRow(infoStartRow + 1);
-                row.createCell(0).setCellValue("Currency: ");
-                row.createCell(1).setCellValue(userSelectedCurrency);
+                    row = sheet.createRow(infoStartRow + 1);
+                    row.createCell(0).setCellValue("Currency: ");
+                    row.createCell(1).setCellValue(userSelectedCurrency);
 
-                row = sheet.createRow(infoStartRow + 2);
-                row.createCell(0).setCellValue("Start date: ");
-                row.createCell(1).setCellValue(deposit.getStartDate().toString());
+                    row = sheet.createRow(infoStartRow + 2);
+                    row.createCell(0).setCellValue("Start date: ");
+                    row.createCell(1).setCellValue(deposit.getStartDate().toString());
 
-                row = sheet.createRow(infoStartRow + 3);
-                row.createCell(0).setCellValue("End date: ");
-                row.createCell(1).setCellValue(deposit.getEndDate().toString());
+                    row = sheet.createRow(infoStartRow + 3);
+                    row.createCell(0).setCellValue("End date: ");
+                    row.createCell(1).setCellValue(deposit.getEndDate().toString());
 
-                if (deposit.isEarlyWithdrawal()) {
+                    if (deposit.isEarlyWithdrawal()) {
+                        row = sheet.createRow(infoStartRow + 4);
+                        row.createCell(0).setCellValue("Early withdrawal date: ");
+                        row.createCell(1).setCellValue(deposit.getEarlyWithdrawalDate().toString());
+                    }
+
+                } else if (financialOperation instanceof Credit credit) {
+                    float dailyPart = credit.countCreditBodyPerDay();
+
+                    Sheet sheet = workbook.createSheet("Credit Data");
+                    Row headerRow = sheet.createRow(0);
+                    headerRow.createCell(0).setCellValue(credit.getNameOfPaymentType());
+                    headerRow.createCell(1).setCellValue(investmentLoanColumn.getText());
+                    headerRow.createCell(2).setCellValue(periodProfitLoanColumn.getText());
+                    headerRow.createCell(3).setCellValue(totalColumn.getText());
+                    headerRow.createCell(4).setCellValue(periodPercentsColumn.getText());
+                    headerRow.createCell(5).setCellValue("Payment days");
+                    headerRow.createCell(6).setCellValue("Days in period");
+
+                    writeDataToXLS(data, sheet, infoStartRow, credit.getLoan(), daysToNextPeriod, daysToNextPeriodWithHolidays);
+
+                    Row row = sheet.createRow(infoStartRow);
+                    row.createCell(0).setCellValue("Annual percent of credit: ");
+
                     row = sheet.createRow(infoStartRow + 4);
-                    row.createCell(0).setCellValue("Early withdrawal date: ");
-                    row.createCell(1).setCellValue(deposit.getEarlyWithdrawalDate().toString());
+                    row.createCell(0).setCellValue("Daily credit body part: ");
+                    row.createCell(1).setCellValue(dailyPart);
+
+                    if (credit instanceof CreditWithHolidays) {
+                        row = sheet.createRow(infoStartRow + 5);
+                        row.createCell(0).setCellValue("Holidays start date: ");
+                        row.createCell(1).setCellValue(((CreditWithHolidays) credit).getHolidaysStart().toString());
+
+                        row = sheet.createRow(infoStartRow + 6);
+                        row.createCell(0).setCellValue("Holidays end date: ");
+                        row.createCell(1).setCellValue(((CreditWithHolidays) credit).getHolidaysEnd().toString());
+                    }
                 }
 
-            } else if (financialOperation instanceof Credit credit) {
-                float dailyPart = credit.countCreditBodyPerDay();
-
-                Sheet sheet = workbook.createSheet("Credit Data");
-                Row headerRow = sheet.createRow(0);
-                headerRow.createCell(0).setCellValue(credit.getNameOfPaymentType());
-                headerRow.createCell(1).setCellValue(investmentLoanColumn.getText());
-                headerRow.createCell(2).setCellValue(periodProfitLoanColumn.getText());
-                headerRow.createCell(3).setCellValue(totalColumn.getText());
-                headerRow.createCell(4).setCellValue(periodPercentsColumn.getText());
-                headerRow.createCell(5).setCellValue("Payment days");
-                headerRow.createCell(6).setCellValue("Days in period");
-
-                writeDataToXLS(data, sheet, infoStartRow, credit.getLoan(), daysToNextPeriod, daysToNextPeriodWithHolidays);
-
-                Row row = sheet.createRow(infoStartRow);
-                row.createCell(0).setCellValue("Annual percent of credit: ");
-
-                row = sheet.createRow(infoStartRow + 4);
-                row.createCell(0).setCellValue("Daily credit body part: ");
-                row.createCell(1).setCellValue(dailyPart);
-
-                if (credit instanceof CreditWithHolidays) {
-                    row = sheet.createRow(infoStartRow + 5);
-                    row.createCell(0).setCellValue("Holidays start date: ");
-                    row.createCell(1).setCellValue(((CreditWithHolidays) credit).getHolidaysStart().toString());
-
-                    row = sheet.createRow(infoStartRow + 6);
-                    row.createCell(0).setCellValue("Holidays end date: ");
-                    row.createCell(1).setCellValue(((CreditWithHolidays) credit).getHolidaysEnd().toString());
-                }
+                workbook.write(fileOut);
+                logger.info(INFO_FILE_SAVED, file.getName());
+            } catch (IOException e) {
+                throw new SavingFileException(ERROR_SAVING_FILE + file.getName());
             }
-
-            workbook.write(fileOut);
-
-        } catch (IOException e) {
-            LogHelper.log(Level.SEVERE, "Error while writing Deposit to Excel", e);
+        } else {
+            throw new SavingFileException(ERROR_SELECTED_FILE_IS_NULL);
         }
     }
 
