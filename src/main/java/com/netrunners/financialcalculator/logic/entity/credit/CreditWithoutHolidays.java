@@ -18,11 +18,6 @@ public class CreditWithoutHolidays extends Credit{
     }
 
     @Override
-    public void save() {
-        super.save();
-    }
-
-    @Override
     public JsonObject getJsonObject() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("operation", "Credit");

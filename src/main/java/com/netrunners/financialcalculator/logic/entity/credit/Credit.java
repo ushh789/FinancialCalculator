@@ -19,7 +19,7 @@ public class Credit implements Savable, ResultTableSender {
     protected OperationPeriodType paymentType;
     protected int contractDuration;
 
-    public Credit(float loan, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, OperationPeriodType paymentType) {
+    protected Credit(float loan, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, OperationPeriodType paymentType) {
         this.loan = loan;
         this.currency = currency;
         this.annualPercent = annualPercent;
@@ -29,7 +29,7 @@ public class Credit implements Savable, ResultTableSender {
         this.contractDuration = DateTimeUtils.countDaysBetweenDates(startDate, endDate);
     }
 
-    public Credit(JsonObject jsonObject) {
+    protected Credit(JsonObject jsonObject) {
         this.loan = jsonObject.get("loan").getAsFloat();
         this.annualPercent = jsonObject.get("annualPercent").getAsFloat();
         this.paymentType = OperationPeriodType.valueOf(jsonObject.get("paymentType").getAsString());

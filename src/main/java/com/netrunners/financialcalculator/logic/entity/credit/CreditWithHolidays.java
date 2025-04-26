@@ -25,19 +25,10 @@ public class CreditWithHolidays extends Credit{
     }
 
     @Override
-    public float countLoan() {
-        return super.countLoan();
-    }
-
-    @Override
     public float countCreditBodyPerDay() {
         return loan / (this.contractDuration - this.countHolidaysDuration());
     }
 
-    @Override
-    public void save() {
-        super.save();
-    }
 
     @Override
     public JsonObject getJsonObject() {
