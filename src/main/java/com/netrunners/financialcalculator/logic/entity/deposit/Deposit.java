@@ -24,7 +24,7 @@ public abstract class Deposit implements Savable, ResultTableSender {
         return investment * (1f / 365f) * (annualPercent / 100f);
     }
 
-    public Deposit(float investment, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, boolean earlyWithdrawal, LocalDate earlyWithdrawalDate, OperationPeriodType withdrawalOption) {
+    protected Deposit(float investment, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, boolean earlyWithdrawal, LocalDate earlyWithdrawalDate, OperationPeriodType withdrawalOption) {
         this.investment = investment;
         this.currency = currency;
         this.annualPercent = annualPercent;
@@ -35,7 +35,7 @@ public abstract class Deposit implements Savable, ResultTableSender {
         this.withdrawalOption = withdrawalOption;
     }
 
-    public Deposit(float investment, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, boolean earlyWithdrawal, OperationPeriodType withdrawalOption) {
+    protected Deposit(float investment, String currency, float annualPercent, LocalDate startDate, LocalDate endDate, boolean earlyWithdrawal, OperationPeriodType withdrawalOption) {
         this.investment = investment;
         this.currency = currency;
         this.annualPercent = annualPercent;
@@ -45,7 +45,7 @@ public abstract class Deposit implements Savable, ResultTableSender {
         this.withdrawalOption = withdrawalOption;
     }
 
-    public Deposit(JsonObject jsonObject) {
+    protected Deposit(JsonObject jsonObject) {
         this.investment = jsonObject.get("investment").getAsFloat();
         this.annualPercent = jsonObject.get("annualPercent").getAsFloat();
         this.currency = jsonObject.get("currency").getAsString();

@@ -23,15 +23,6 @@ public class CapitalisedDeposit extends Deposit {
     }
 
     @Override
-    public float countProfit() {
-        return super.countProfit();
-    }
-
-    @Override
-    public void save() {
-        super.save();
-    }
-
     public JsonObject getJsonObject() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("operation", "Deposit");
