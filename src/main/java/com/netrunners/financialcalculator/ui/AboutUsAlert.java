@@ -13,10 +13,10 @@ public class AboutUsAlert {
         stage.getIcons().add(new Image(FileConstants.LOGO));
         alert.setHeaderText(null);
         alert.setContentText("""
-                    Title: Financial Calculator by Netrunners
+                    Title: Financial Calculator
 
                     Description:
-                    The "Financial Calculator by Netrunners" is a versatile and user-friendly software application designed to help individuals and businesses make informed financial decisions by calculating both deposit and credit-related parameters. With a range of powerful features, this tool simplifies financial planning and provides users with valuable insights into their financial investments and liabilities.
+                    The "Financial Calculator" is a versatile and user-friendly software application designed to help individuals and businesses make informed financial decisions by calculating both deposit and credit-related parameters. With a range of powerful features, this tool simplifies financial planning and provides users with valuable insights into their financial investments and liabilities.
 
                     Key Features:
 
@@ -38,7 +38,7 @@ public class AboutUsAlert {
 
                     Choose between dark and light themes to customize the application's appearance and enhance user experience.
 
-                    "Financial Calculator by Netrunners" empowers individuals, students, professionals, and business owners to make informed decisions about their financial affairs. Whether you're planning to save money or seeking insights into loan repayments, this versatile tool offers a comprehensive set of features to help you on your financial journey. Start making smarter financial decisions today with this powerful yet user-friendly financial calculator.""");
+                    "Financial Calculator" empowers individuals, students, professionals, and business owners to make informed decisions about their financial affairs. Whether you're planning to save money or seeking insights into loan repayments, this versatile tool offers a comprehensive set of features to help you on your financial journey. Start making smarter financial decisions today with this powerful yet user-friendly financial calculator.""");
         alert.showAndWait();
     }
 }

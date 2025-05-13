@@ -52,13 +52,13 @@
             <Insets bottom="100.0"/>
         </padding>
     </Label>
-    <Label layoutX="14.0" layoutY="350.0" text="All rights reserved 2023 © " AnchorPane.bottomAnchor="5.0"
+    <Label layoutX="14.0" layoutY="350.0" text="All rights reserved 2025 © " AnchorPane.bottomAnchor="5.0"
            AnchorPane.leftAnchor="5.0">
         <font>
             <Font size="14.0"/>
         </font>
     </Label>
-    <Label layoutX="470.0" layoutY="367.0" text="Made by netrunners" AnchorPane.bottomAnchor="5.0"
+    <Label layoutX="470.0" layoutY="367.0" text="Financial calculator 1.0.0" AnchorPane.bottomAnchor="5.0"
            AnchorPane.rightAnchor="5.0">
         <font>
             <Font size="14.0"/>
