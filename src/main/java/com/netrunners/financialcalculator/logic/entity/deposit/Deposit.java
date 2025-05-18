@@ -7,6 +7,7 @@ import com.netrunners.financialcalculator.logic.entity.ResultTableSender;
 import com.netrunners.financialcalculator.ui.FilesActions;
 import com.netrunners.financialcalculator.ui.LanguageManager;
 import com.netrunners.financialcalculator.ui.WindowsOpener;
+
 import java.time.LocalDate;
 
 public abstract class Deposit implements Savable, ResultTableSender {
@@ -57,6 +58,7 @@ public abstract class Deposit implements Savable, ResultTableSender {
             this.earlyWithdrawalDate = LocalDate.parse(jsonObject.get("earlyWithdrawalDate").getAsString());
         }
     }
+
     @Override
     public JsonObject getJsonObject() {
         JsonObject jsonObject = new JsonObject();
@@ -65,7 +67,7 @@ public abstract class Deposit implements Savable, ResultTableSender {
         jsonObject.addProperty("currency", this.currency);
         jsonObject.addProperty("startDate", this.startDate.toString());
         jsonObject.addProperty("endDate", this.endDate.toString());
-        jsonObject.addProperty("withdrawalOption", this.withdrawalOption.getKey());
+        jsonObject.addProperty("withdrawalOption", this.withdrawalOption.toString());
         if (this.earlyWithdrawal) {
             jsonObject.addProperty("earlyWithdrawalDate", this.earlyWithdrawalDate.toString());
         } else {

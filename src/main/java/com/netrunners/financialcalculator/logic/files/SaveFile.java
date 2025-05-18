@@ -21,7 +21,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-import static com.netrunners.financialcalculator.constants.StringConstants.ASTERISK;
 import static com.netrunners.financialcalculator.constants.StringConstants.SEMI_COLON;
 import static com.netrunners.financialcalculator.constants.StringConstants.ERROR_SAVING_FILE;
 import static com.netrunners.financialcalculator.constants.StringConstants.ERROR_SELECTED_FILE_IS_NULL;
@@ -95,9 +94,17 @@ public class SaveFile {
                         sheet.setColumnWidth(f, width * 2);
                     }
 
-                    boolean capitalize = deposit instanceof CapitalisedDeposit;
+                    boolean capitalize;
+                    float initialInvestment;
+                    if (deposit instanceof CapitalisedDeposit capitalisedDeposit) {
+                        capitalize = true;
+                        initialInvestment = capitalisedDeposit.getInitialInvestment();
+                    } else {
+                        capitalize = false;
+                        initialInvestment = deposit.getInvestment();
+                    }
 
-                    writeDataToXLS(data, sheet, infoStartRow, deposit.getInvestment(), daysToNextPeriod, capitalize);
+                    writeDataToXLS(data, sheet, infoStartRow, initialInvestment, daysToNextPeriod, capitalize);
 
                     Row row = sheet.createRow(infoStartRow);
                     row.createCell(0).setCellValue("Annual percent of deposit: ");
@@ -165,59 +172,79 @@ public class SaveFile {
     }
 
     // TODO: ensure everything is correct
-    public static void writeDataToXLS(List<Object[]> data, Sheet sheet, int infoStartRow, float tempInvest, List<Integer> daysToNextPeriod, boolean capitalize) {
+    public static void writeDataToXLS(
+            List<Object[]> data,
+            Sheet sheet,
+            int infoStartRow,
+            float tempInvest,
+            List<Integer> daysToNextPeriod,
+            boolean capitalize) {
+
+        String rateCell = "B" + (infoStartRow + 1);
+
+        // пробігаємося виключно по реальних елементах data: i=0..data.size()-1
         for (int i = 0; i < data.size(); i++) {
-            Row row = sheet.createRow(i + 1);
+            // Excel-рядок = i+2 (бо i=0 → рядок 2; i=1 → рядок 3; ...)
+            int excelRow = i + 2;
+            // А індекс у createRow = excelRow - 1
+            Row row = sheet.createRow(excelRow - 1);
+
+            // Номер періоду
             row.createCell(0).setCellValue((int) data.get(i)[0]);
-            if (capitalize) {
-                if (i == 0) {
-                    row.createCell(1).setCellValue(tempInvest);
-                    row.createCell(2).setCellFormula(cellFormula(i, infoStartRow, "E"));
-                    row.createCell(3).setCellFormula("B" + (i + 2));
-                } else {
-                    row.createCell(1).setCellFormula("D" + (i + 1));
-                    row.createCell(2).setCellFormula(cellFormula(i, infoStartRow, "E"));
-                    row.createCell(3).setCellFormula("D" + (i + 1) + "+C" + (i + 2));
-                }
-            } else {
-                row.createCell(1).setCellValue(tempInvest);
-                row.createCell(2).setCellFormula(cellFormula(i, infoStartRow, "E"));
-                if (i == 0) {
-                    row.createCell(3).setCellFormula("B" + (i + 2));
-                } else {
-                    row.createCell(3).setCellFormula("D" + (i + 1) + "+C" + (i + 2));
-                }
-            }
+
+            // Дні
             row.createCell(4).setCellValue(daysToNextPeriod.get(i));
+
+            // Investment у колонці B
+            if (capitalize && i > 0) {
+                // капіталізована сума з попереднього Total (D)
+                row.createCell(1).setCellFormula("D" + (excelRow - 1));
+            } else {
+                // початкова сума
+                row.createCell(1).setCellValue(tempInvest);
+            }
+
+            // Profit у колонці C
+            String profitFormula = String.format(
+                    "B%d*(%s/100)*E%d/365",
+                    excelRow, rateCell, excelRow
+            );
+            row.createCell(2).setCellFormula(profitFormula);
+
+            // TotalInvestment у колонці D
+            String totalFormula = (i == 0)
+                    ? String.format("B%d+C%d", excelRow, excelRow)
+                    : String.format("D%d+C%d", excelRow - 1, excelRow);
+            row.createCell(3).setCellFormula(totalFormula);
         }
     }
 
-    // TODO: ensure everything is correct
+
     public static void writeDataToXLS(List<Object[]> data, Sheet sheet, int infoStartRow, float loan, List<Integer> daysToNextPeriod, List<Integer> daysToNextPeriodWithHolidays) {
+        // Додаємо заголовки
+        Row headerRow = sheet.createRow(0);
+        headerRow.createCell(0).setCellValue("Період");
+        headerRow.createCell(1).setCellValue("Залишок кредиту");
+        headerRow.createCell(2).setCellValue("Платіж по тілу");
+        headerRow.createCell(3).setCellValue("Залишок після платежу");
+        headerRow.createCell(4).setCellValue("Відсотки за період");
+        headerRow.createCell(5).setCellValue("Днів до наступного платежу");
+        headerRow.createCell(6).setCellValue("Днів у періоді з урахуванням свят");
+    
         for (int i = 0; i < data.size(); i++) {
             Row row = sheet.createRow(i + 1);
-            row.createCell(0).setCellValue((int) data.get(i)[0]);
-            if (i == 0) {
-                row.createCell(1).setCellValue(loan);
-                row.createCell(2).setCellFormula(cellFormula(i, infoStartRow, "F"));
-                row.createCell(3).setCellFormula("B" + (i + 2));
-                row.createCell(4).setCellFormula(cellFormula(i, infoStartRow, "F"));
-            } else {
-                row.createCell(1).setCellFormula("D" + (i + 1));
-                row.createCell(2).setCellFormula("B" + (infoStartRow + 5) + ASTERISK + "F" + (i + 2));
-                row.createCell(3).setCellFormula("D" + (i + 1) + "-C" + (i + 2));
-                row.createCell(4).setCellFormula(cellFormula(i, infoStartRow, "G"));
-                if (i == data.size() - 1) {
-                    row.createCell(2).setCellFormula("B" + (i + 2));
-                    row.createCell(3).setCellValue(0);
-                }
-            }
-            row.createCell(5).setCellValue(daysToNextPeriod.get(i));
-            row.createCell(6).setCellValue(daysToNextPeriodWithHolidays.get(i));
+            Object[] rowData = data.get(i);
+    
+            row.createCell(0).setCellValue((Integer) rowData[0]);
+            row.createCell(1).setCellValue((String) rowData[1]);
+            row.createCell(2).setCellValue((String) rowData[2]);
+            row.createCell(3).setCellValue((String) rowData[3]);
+            row.createCell(4).setCellValue((String) rowData[4]);
+            // Якщо індекс виходить за межі — підставляємо 0
+            row.createCell(5).setCellValue(i < daysToNextPeriod.size() ? daysToNextPeriod.get(i) : 0);
+            row.createCell(6).setCellValue(i < daysToNextPeriodWithHolidays.size() ? daysToNextPeriodWithHolidays.get(i) : 0);
         }
     }
 
-    private static String cellFormula(int i, int infoStartRow, String column){
-        return "B" + (i + 2) + "*(1/365)*" + "B" + (infoStartRow + 1) + "/100" + ASTERISK + column + (i + 2);
-    }
+    
 }

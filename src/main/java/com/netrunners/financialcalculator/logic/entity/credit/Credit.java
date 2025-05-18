@@ -57,7 +57,7 @@ public class Credit implements Savable, ResultTableSender {
         jsonObject.addProperty("loan", this.loan);
         jsonObject.addProperty("annualPercent", this.annualPercent);
         jsonObject.addProperty("currency", this.currency);
-        jsonObject.addProperty("paymentType", this.paymentType.getKey());
+        jsonObject.addProperty("paymentType", this.paymentType.toString());
         jsonObject.addProperty("startDate", this.startDate.toString());
         jsonObject.addProperty("endDate", this.endDate.toString());
         return jsonObject;

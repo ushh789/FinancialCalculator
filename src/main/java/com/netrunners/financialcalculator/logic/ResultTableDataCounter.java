@@ -1,8 +1,8 @@
 package com.netrunners.financialcalculator.logic;
 
 import com.netrunners.financialcalculator.controller.ControllerUtils;
+import com.netrunners.financialcalculator.logic.entity.OperationPeriodType;
 import com.netrunners.financialcalculator.logic.entity.ResultTableSender;
-import com.netrunners.financialcalculator.logic.entity.credit.Credit;
 import com.netrunners.financialcalculator.logic.entity.credit.CreditWithHolidays;
 import com.netrunners.financialcalculator.logic.entity.credit.CreditWithoutHolidays;
 import com.netrunners.financialcalculator.logic.entity.deposit.CapitalisedDeposit;
@@ -29,15 +29,15 @@ public class ResultTableDataCounter {
         this.periodProfitLoanColumn = periodProfitLoanColumn;
     }
 
-    public List<Object[]> countData(){
+    public List<Object[]> countData() {
         daysToNextPeriod.add(0);
         List<Object[]> data = new ArrayList<>();
         LocalDate financialOperationStartDate = financialOperation.getStartDate();
         float financialOperationBody = financialOperation.getBody();
         int numbersColumnFlag = 0;
         if (financialOperation instanceof Deposit) {
-            return countData((Deposit) financialOperation, data, financialOperationStartDate,financialOperationBody, financialOperationBody, numbersColumnFlag);
-        } else{
+            return countData((Deposit) financialOperation, data, financialOperationStartDate, financialOperationBody, numbersColumnFlag);
+        } else {
             if (financialOperation instanceof CreditWithHolidays) {
                 return countData((CreditWithHolidays) financialOperation, data, financialOperationStartDate, numbersColumnFlag);
             } else {
@@ -46,156 +46,246 @@ public class ResultTableDataCounter {
         }
     }
 
-    public List<Object[]> countData(Deposit deposit, List<Object[]> data,
-                                    LocalDate depositStartDate, float depositInvestment,
-                                    float totalInvestment, int numbersColumnFlag) {
-
-        boolean capitalize = deposit instanceof CapitalisedDeposit;
-        LocalDate endOfContract = deposit.isEarlyWithdrawal() ? deposit.getEarlyWithdrawalDate() : deposit.getEndDate();
+    public List<Object[]> countData(Deposit deposit,
+                                    List<Object[]> data,
+                                    LocalDate depositStartDate,
+                                    float depositInvestment,
+                                    int numbersColumnFlag) {
 
         ControllerUtils.provideTranslation(periodColumn, deposit.getNameOfWithdrawalType());
         ControllerUtils.provideTranslation(investmentLoanColumn, "InvestInput");
         ControllerUtils.provideTranslation(periodProfitLoanColumn, "ProfitColumn");
 
+        boolean capitalize = deposit instanceof CapitalisedDeposit;
+        LocalDate endOfContract = deposit.isEarlyWithdrawal()
+                ? deposit.getEarlyWithdrawalDate()
+                : deposit.getEndDate();
         String currency = deposit.getCurrency();
 
-        while (!depositStartDate.isAfter(endOfContract.minusDays(1))) {
-            float periodProfit = 0;
-            int daysToNextPeriodCount = DateTimeUtils.countDaysToNextPeriod(deposit, depositStartDate, endOfContract);
-            daysToNextPeriod.add(daysToNextPeriodCount);
+        float initialInvestment = depositInvestment;
+        float currentInvestment = depositInvestment;
+        float cumulativeTotal = depositInvestment;
 
-            for (int i = 0; i < daysToNextPeriodCount && depositStartDate.isBefore(endOfContract); i++) {
-                float dailyProfit = deposit.countProfit();
+        data.add(new Object[]{
+                numbersColumnFlag,
+                formatCurrency(initialInvestment, currency),
+                formatCurrency(0f, currency),
+                formatCurrency(cumulativeTotal, currency)
+        });
+        numbersColumnFlag++;
+
+        while (!depositStartDate.isAfter(endOfContract.minusDays(1))) {
+            float periodProfit = 0f;
+            int days = DateTimeUtils.countDaysToNextPeriod(deposit, depositStartDate, endOfContract);
+            daysToNextPeriod.add(days);
+
+            for (int d = 0; d < days && depositStartDate.isBefore(endOfContract); d++) {
+                float dailyProfit = (capitalize ? currentInvestment : initialInvestment)
+                        * (deposit.getAnnualPercent() / 100f) / 365f;
                 periodProfit += dailyProfit;
+
                 if (capitalize) {
-                    totalInvestment += dailyProfit;
-                    deposit.setInvestment(totalInvestment);  // оновлюємо тіло під капіталізацію
+                    cumulativeTotal += dailyProfit;
+                    currentInvestment = cumulativeTotal;
+                    deposit.setInvestment(currentInvestment);
                 }
                 depositStartDate = depositStartDate.plusDays(1);
             }
 
+            if (!capitalize) {
+                cumulativeTotal += periodProfit;
+            }
+
+            float investmentForPeriod = initialInvestment;
+            float profitForPeriod = periodProfit;
+            float totalForPeriod = cumulativeTotal;
+
             data.add(new Object[]{
                     numbersColumnFlag,
-                    formatCurrency(depositInvestment, currency),
-                    formatCurrency(periodProfit, currency),
-                    formatCurrency(totalInvestment, currency)
+                    formatCurrency(investmentForPeriod, currency),
+                    formatCurrency(profitForPeriod, currency),
+                    formatCurrency(totalForPeriod, currency)
             });
 
             if (capitalize) {
-                depositInvestment = totalInvestment;
+                initialInvestment = currentInvestment;
             }
-
             numbersColumnFlag++;
         }
 
         return data;
     }
 
+    private LocalDate addPeriod(LocalDate date, OperationPeriodType type) {
+        return switch (type) {
+            case MONTHS -> date.plusMonths(1);
+            case QUARTERS -> date.plusMonths(3);
+            case YEARS -> date.plusYears(1);
+            case END_OF_TERM -> date.withDayOfYear(date.lengthOfYear());
+            default -> date.plusMonths(1);
+        };
+    }
 
+    private int countPeriods(LocalDate start, LocalDate end, OperationPeriodType type) {
+        int periods = 0;
+        LocalDate tmp = start;
+        while (tmp.isBefore(end)) {
+            periods++;
+            tmp = addPeriod(tmp, type);
+        }
+        return periods == 0 ? 1 : periods;
+    }
+
+    public List<Object[]> countData(CreditWithoutHolidays credit, List<Object[]> data, LocalDate tempDate, int numbersColumnFlag) {
+        ControllerUtils.provideTranslation(periodColumn, credit.getNameOfPaymentType());
+        ControllerUtils.provideTranslation(investmentLoanColumn, "LoanInput");
+        ControllerUtils.provideTranslation(periodProfitLoanColumn, "PaymentLoan");
+
+        String currency = credit.getCurrency();
+        float initialLoan = credit.getLoan();
+        float currentLoan = initialLoan;
+        float annualPercent = credit.getAnnualPercent();
+        LocalDate endDate = credit.getEndDate();
+        OperationPeriodType type = credit.getPaymentType();
+
+        data.add(new Object[]{
+                numbersColumnFlag,
+                formatCurrency(initialLoan, currency),
+                formatCurrency(0f, currency),
+                formatCurrency(initialLoan, currency),
+                formatCurrency(0f, currency)
+        });
+        numbersColumnFlag++;
+
+        if (type == OperationPeriodType.END_OF_TERM) {
+            int daysInPeriod = (int) java.time.temporal.ChronoUnit.DAYS.between(tempDate, endDate);
+            float interest = currentLoan * (annualPercent / 100f) * daysInPeriod / 365f;
+            float payment = currentLoan;
+            float afterPayment = 0f;
+            data.add(new Object[]{
+                    numbersColumnFlag,
+                    formatCurrency(currentLoan, currency),
+                    formatCurrency(payment, currency),
+                    formatCurrency(afterPayment, currency),
+                    formatCurrency(interest, currency)
+            });
+            return data;
+        }
+
+        int periods = countPeriods(credit.getStartDate(), endDate, type);
+        float bodyPayment = initialLoan / periods;
+
+        LocalDate currentDate = credit.getStartDate();
+
+        for (int period = 1; period <= periods; period++) {
+            LocalDate nextDate = addPeriod(currentDate, type);
+            if (nextDate.isAfter(endDate)) nextDate = endDate;
+            int daysInPeriod = (int) java.time.temporal.ChronoUnit.DAYS.between(currentDate, nextDate);
+            float interest = currentLoan * (annualPercent / 100f) * daysInPeriod / 365f;
+            float afterPayment = currentLoan - bodyPayment;
+            if (afterPayment < 0) afterPayment = 0;
+            data.add(new Object[]{
+                    numbersColumnFlag,
+                    formatCurrency(currentLoan, currency),
+                    formatCurrency(bodyPayment, currency),
+                    formatCurrency(afterPayment, currency),
+                    formatCurrency(interest, currency)
+            });
+            currentLoan = afterPayment;
+            currentDate = nextDate;
+            numbersColumnFlag++;
+        }
+
+        return data;
+    }
 
     public List<Object[]> countData(CreditWithHolidays credit, List<Object[]> data, LocalDate tempDate, int numbersColumnFlag) {
-        float dailyBodyPart = credit.countCreditBodyPerDay();
+        ControllerUtils.provideTranslation(periodColumn, credit.getNameOfPaymentType());
+        ControllerUtils.provideTranslation(investmentLoanColumn, "LoanInput");
+        ControllerUtils.provideTranslation(periodProfitLoanColumn, "PaymentLoan");
 
-        while (tempDate.isBefore(credit.getEndDate())) {
-            float tempLoan = credit.getLoan();
-            float totalLoan = tempLoan;
-            float creditBody = 0;
-            float periodPercents = 0;
+        String currency = credit.getCurrency();
+        float initialLoan = credit.getLoan();
+        float currentLoan = initialLoan;
+        float annualPercent = credit.getAnnualPercent();
+        LocalDate endDate = credit.getEndDate();
+        OperationPeriodType type = credit.getPaymentType();
 
-            int daysToNextPeriodCount = DateTimeUtils.countDaysToNextPeriod(credit, tempDate);
+        // 0-й період
+        data.add(new Object[]{
+                numbersColumnFlag,
+                formatCurrency(initialLoan, currency),
+                formatCurrency(0f, currency),
+                formatCurrency(initialLoan, currency),
+                formatCurrency(0f, currency)
+        });
+        numbersColumnFlag++;
 
-            if (numbersColumnFlag == 0) {
-                ControllerUtils.provideTranslation(periodColumn, credit.getNameOfPaymentType());
-                ControllerUtils.provideTranslation(investmentLoanColumn, "LoanInput");
-                ControllerUtils.provideTranslation(periodProfitLoanColumn, "PaymentLoan");
-            } else {
-                daysToNextPeriod.add(daysToNextPeriodCount);
-                daysToNextPeriodWithHolidays.add(daysToNextPeriodCount);
-
-                LocalDate currentDate = tempDate;
-                for (int i = 0; i < daysToNextPeriodCount && currentDate.isBefore(credit.getEndDate()); i++) {
-                    if (!DateTimeUtils.isDateBetweenDates(currentDate, credit.getHolidaysStart(), credit.getHolidaysEnd())) {
-                        creditBody += dailyBodyPart;
-                    }
-                    periodPercents += credit.countLoan();
-                    currentDate = currentDate.plusDays(1);
-                }
-
-                if (currentDate.equals(credit.getEndDate())) {
-                    creditBody = tempLoan;
-                }
-
-                totalLoan -= creditBody;
-                credit.setLoan(totalLoan);
-                tempDate = currentDate;
-            }
-
-            String currency = credit.getCurrency();
+        if (type == OperationPeriodType.END_OF_TERM) {
+            int daysInPeriod = (int) java.time.temporal.ChronoUnit.DAYS.between(tempDate, endDate);
+            float interest = currentLoan * (annualPercent / 100f) * daysInPeriod / 365f;
+            float payment = currentLoan;
+            float afterPayment = 0f;
             data.add(new Object[]{
                     numbersColumnFlag,
-                    formatCurrency(tempLoan, currency),
-                    formatCurrency(creditBody, currency),
-                    formatCurrency(totalLoan, currency),
-                    formatCurrency(periodPercents, currency)
+                    formatCurrency(currentLoan, currency),
+                    formatCurrency(payment, currency),
+                    formatCurrency(afterPayment, currency),
+                    formatCurrency(interest, currency)
+            });
+            return data;
+        }
+
+        int totalNonHolidayDays = 0;
+        LocalDate iter = credit.getStartDate();
+        while (iter.isBefore(endDate)) {
+            if (!DateTimeUtils.isDateBetweenDates(iter, credit.getHolidaysStart(), credit.getHolidaysEnd())) {
+                totalNonHolidayDays++;
+            }
+            iter = iter.plusDays(1);
+        }
+        if (totalNonHolidayDays == 0) totalNonHolidayDays = 1;
+
+        float bodyPerNonHolidayDay = initialLoan / totalNonHolidayDays;
+
+        LocalDate currentDate = credit.getStartDate();
+
+        while (currentDate.isBefore(endDate)) {
+            LocalDate nextDate = addPeriod(currentDate, type);
+            if (nextDate.isAfter(endDate)) nextDate = endDate;
+            int daysInPeriod = (int) java.time.temporal.ChronoUnit.DAYS.between(currentDate, nextDate);
+
+            int nonHolidayDays = 0;
+            LocalDate dayIter = currentDate;
+            while (dayIter.isBefore(nextDate)) {
+                if (!DateTimeUtils.isDateBetweenDates(dayIter, credit.getHolidaysStart(), credit.getHolidaysEnd())) {
+                    nonHolidayDays++;
+                }
+                dayIter = dayIter.plusDays(1);
+            }
+
+            float payment = bodyPerNonHolidayDay * nonHolidayDays;
+
+            float interest = currentLoan * (annualPercent / 100f) * daysInPeriod / 365f;
+
+            float afterPayment = currentLoan - payment;
+            if (afterPayment < 0) afterPayment = 0;
+
+            data.add(new Object[]{
+                    numbersColumnFlag,
+                    formatCurrency(currentLoan, currency),
+                    formatCurrency(payment, currency),
+                    formatCurrency(afterPayment, currency),
+                    formatCurrency(interest, currency)
             });
 
+            currentLoan = afterPayment;
+            currentDate = nextDate;
             numbersColumnFlag++;
         }
 
         return data;
     }
-
-
-    public List<Object[]> countData(Credit credit, List<Object[]> data, LocalDate tempDate, int numbersColumnFlag) {
-        float dailyBodyPart = credit.countCreditBodyPerDay();
-
-        while (tempDate.isBefore(credit.getEndDate())) {
-            float tempLoan = credit.getLoan();
-            float totalLoan = tempLoan;
-            float creditBody = 0;
-            float periodPercents = 0;
-
-            int daysToNextPeriodCount = DateTimeUtils.countDaysToNextPeriod(credit, tempDate);
-
-            if (numbersColumnFlag == 0) {
-                ControllerUtils.provideTranslation(periodColumn, credit.getNameOfPaymentType());
-                ControllerUtils.provideTranslation(investmentLoanColumn, "LoanInput");
-                ControllerUtils.provideTranslation(periodProfitLoanColumn, "PaymentLoan");
-            } else {
-                daysToNextPeriod.add(daysToNextPeriodCount);
-                daysToNextPeriodWithHolidays.add(daysToNextPeriodCount);
-
-                LocalDate currentDate = tempDate;
-                for (int i = 0; i < daysToNextPeriodCount && currentDate.isBefore(credit.getEndDate()); i++) {
-                    creditBody += dailyBodyPart;
-                    periodPercents += credit.countLoan();
-                    currentDate = currentDate.plusDays(1);
-                }
-
-                if (currentDate.equals(credit.getEndDate())) {
-                    creditBody = tempLoan;
-                }
-
-                totalLoan -= creditBody;
-                credit.setLoan(totalLoan);
-                tempDate = currentDate;
-            }
-
-            String currency = credit.getCurrency();
-            data.add(new Object[]{
-                    numbersColumnFlag,
-                    formatCurrency(tempLoan, currency),
-                    formatCurrency(creditBody, currency),
-                    formatCurrency(totalLoan, currency),
-                    formatCurrency(periodPercents, currency)
-            });
-
-            numbersColumnFlag++;
-        }
-
-        return data;
-    }
-
 
     private String formatCurrency(float amount, String currency) {
         return String.format("%.2f", amount) + currency;
