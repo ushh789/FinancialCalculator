@@ -182,36 +182,25 @@ public class SaveFile {
 
         String rateCell = "B" + (infoStartRow + 1);
 
-        // пробігаємося виключно по реальних елементах data: i=0..data.size()-1
         for (int i = 0; i < data.size(); i++) {
-            // Excel-рядок = i+2 (бо i=0 → рядок 2; i=1 → рядок 3; ...)
             int excelRow = i + 2;
-            // А індекс у createRow = excelRow - 1
             Row row = sheet.createRow(excelRow - 1);
 
-            // Номер періоду
             row.createCell(0).setCellValue((int) data.get(i)[0]);
-
-            // Дні
             row.createCell(4).setCellValue(daysToNextPeriod.get(i));
 
-            // Investment у колонці B
             if (capitalize && i > 0) {
-                // капіталізована сума з попереднього Total (D)
                 row.createCell(1).setCellFormula("D" + (excelRow - 1));
             } else {
-                // початкова сума
                 row.createCell(1).setCellValue(tempInvest);
             }
 
-            // Profit у колонці C
             String profitFormula = String.format(
                     "B%d*(%s/100)*E%d/365",
                     excelRow, rateCell, excelRow
             );
             row.createCell(2).setCellFormula(profitFormula);
 
-            // TotalInvestment у колонці D
             String totalFormula = (i == 0)
                     ? String.format("B%d+C%d", excelRow, excelRow)
                     : String.format("D%d+C%d", excelRow - 1, excelRow);
@@ -221,7 +210,6 @@ public class SaveFile {
 
 
     public static void writeDataToXLS(List<Object[]> data, Sheet sheet, int infoStartRow, float loan, List<Integer> daysToNextPeriod, List<Integer> daysToNextPeriodWithHolidays) {
-        // Додаємо заголовки
         Row headerRow = sheet.createRow(0);
         headerRow.createCell(0).setCellValue("Період");
         headerRow.createCell(1).setCellValue("Залишок кредиту");
@@ -240,7 +228,6 @@ public class SaveFile {
             row.createCell(2).setCellValue((String) rowData[2]);
             row.createCell(3).setCellValue((String) rowData[3]);
             row.createCell(4).setCellValue((String) rowData[4]);
-            // Якщо індекс виходить за межі — підставляємо 0
             row.createCell(5).setCellValue(i < daysToNextPeriod.size() ? daysToNextPeriod.get(i) : 0);
             row.createCell(6).setCellValue(i < daysToNextPeriodWithHolidays.size() ? daysToNextPeriodWithHolidays.get(i) : 0);
         }
